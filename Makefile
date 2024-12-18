@@ -21,8 +21,16 @@ SRCS = srcs/main.c srcs/ft_readline.c
 
 all: deps $(NAME)
 
-deps:
+libft:
+	@if [ -d libs/libft ]; then \
+		echo "Already cloned"; \
+	else \
+		git clone git@github.com:AfonsoMota-132/42_libft.git libs/libft; \
+	fi
+
+
+deps: libft
 	$(MAKE) -C libs/libft/
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
+	$(CC) -lreadline $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
