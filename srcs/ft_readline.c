@@ -12,22 +12,20 @@
 
 #include "../incs/minishell.h"
 
-char	*ft_addstr(char *s1, char *s2)
+char	*ft_addstr(char *s1, char s2)
 {
 	int		i;
 	int		j;
 	char	*str;
 
-	if (!s1)
-		s1 = (char *) ft_calloc(1, sizeof(char));
 	if (!s1 || !s2)
 		return (NULL);
-	if (ft_strlen(s1) + ft_strlen(s2) == 0)
+	if (ft_strlen(s1) == 0 && !s2)
 	{
 		free(s1);
 		return (NULL);
 	}
-	str = ft_calloc((ft_strlen(s1) + ft_strlen(s2) + 1),
+	str = ft_calloc((ft_strlen(s1) + 2),
 			sizeof(char));
 	if (!str)
 		return (NULL);
@@ -35,10 +33,25 @@ char	*ft_addstr(char *s1, char *s2)
 	while (s1[++i])
 		str[i] = s1[i];
 	j = 0;
-	while (s2[j])
-		str[i++] = s2[j++];
+	str[i++] = s2;
+	str[i] = '\0';
 	free(s1);
 	return (str);
+}
+char ft_get_keypress() 
+{
+    struct termios oldt, newt;
+    char ch;
+
+    tcgetattr(STDIN_FILENO, &oldt);
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON | ECHO);
+    newt.c_cc[VMIN] = 1;  
+	newt.c_cc[VTIME] = 0;
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+    read(STDIN_FILENO, &ch, 1);
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+    return (ch);
 }
 
 char	*ft_rmv_nl(char *str)
@@ -58,23 +71,40 @@ char	*ft_rmv_nl(char *str)
 	return (nstr);
 }
 
+void	ft_fill(char *line)
+{
+	if (!line)
+		printf("line is null\n");
+}
+
 char	*ft_readline(char *str)
 {
-	char	*buffer;
-	int		bytes;
+	int		keypress;
 	char	*line;
 
 	line = NULL;
-	ft_printf("%s", str);
-	buffer = malloc(sizeof(char) * 11);
+	ft_printf("%s\n", str);
 	while (1)
 	{
-		bytes = read(1, buffer, 10);
-		buffer[bytes] = '\0';
-		line = ft_addstr(line, buffer);
-		if (ft_strchr(line, '\n'))
+		keypress = ft_get_keypress();
+		if (keypress == 9)
+			ft_fill(line);
+		if (keypress == 10)
 			break ;
+		if (keypress >= 65 && keypress <= 67)
+		{
+			printf("entered\n");
+			continue ;
+		}
+		printf("keypress: %d\n", keypress);
+		if (!line)
+		{
+			line = ft_calloc(1, sizeof(char));
+			if (!line)
+				return (NULL);
+		}
+		line = ft_addstr(line, keypress);
+		printf("line: %s\n", line);
 	}
-	free (buffer);
-	return (ft_rmv_nl(line));
+	return (line);
 }

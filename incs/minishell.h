@@ -19,7 +19,8 @@
 #include <readline/history.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <stdio.h>
+#include <termios.h>
+#include <fcntl.h>
 
 typedef enum e_token_type {
 	CMD,
@@ -44,6 +45,6 @@ typedef	struct s_command {
 
 char	*ft_readline(char *str);
 char	*ft_rmv_nl(char *str);
-char	*ft_addstr(char *s1, char *s2);
+char	*ft_addstr(char *s1, char s2);
 
 #endif
