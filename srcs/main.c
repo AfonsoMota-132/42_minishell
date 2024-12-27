@@ -78,12 +78,15 @@ void	ft_check_sep(char *command, int *i, int *j)
 			(*i)++;
 		(*j)++;
 	}
-	if ((*j) && command[(*i)] != '\0' && command[(*i)] != ' ')
+	if ((*j) && command[(*i)] != '\0'
+		&& command[(*i)] != ' ' && command[(*i)] != '\t')
 	{
 		if (ft_check_quote(command, i, j))
 			return ;
-		(*j)++;
 		ft_skip_non_seps(command, i);
+		if (ft_check_quote(command, i, j))
+			return ;
+		(*j)++;
 		ft_skip_sep(command, i);
 	}
 }
@@ -106,9 +109,9 @@ int		ft_split_cmds_len(char *command)
 	return (j);
 }
 
-int		ft_seglen(char const *s)
+int		ft_quote_len(char const *s)
 {
-	int	i;
+	int		i;
 	char	quote;
 
 	i = 0;
@@ -124,8 +127,16 @@ int		ft_seglen(char const *s)
 			if (s[i] == ' ' || !s[i])
 				break ;
 		}
-		return (i);
 	}
+	return (i);
+}
+
+int		ft_seglen(char const *s)
+{
+	int	i;
+	char	quote;
+
+	i = ft_quote_len(s);
 	if (s[i] == '<' || s[i] == '>')
 	{
 		quote = s[i];
@@ -139,7 +150,12 @@ int		ft_seglen(char const *s)
 	while (s[i] && s[i] != ' '
 		&& s[i] != '\t' && s[i] != '|'
 		&& s[i] != '<' && s[i] != '>')
+	{
 		i++;
+		printf("i: %d\n", i);
+		if (s[i] == '\'' || s[i] == '"')
+			i += ft_quote_len(&s[i]);
+	}
 	while (s[i] == ' ' || s[i] == '\t')
 		i++;
 	return (i);
@@ -154,8 +170,6 @@ char	**ft_split_cmds(char *command)
 
 	i = 0;
 	k = -1;
-	j = 0;
-	commands = NULL;
 	j = ft_split_cmds_len(command);
 	printf("j: %d\n", j);
 	commands = ft_calloc(j + 1, sizeof(char *));
@@ -163,10 +177,12 @@ char	**ft_split_cmds(char *command)
 		return (NULL);
 	while (++k < j)
 	{
-		printf("seglen i: %i\n", ft_seglen(&command[i]));
+		while (command[i] == ' ' || command[i] == '\t')
+			i++;
 		commands[k] = ft_substr(&command[i], 0, ft_seglen(&command[i]));
+		printf("len: %d\n", ft_seglen(&command[i]));
+		printf"%c\n", command[i + ft_seglen(&command[i]));
 		i += ft_seglen(&command[i]);
-		printf("i: %i\n", i);
 	}
 	commands[k] = NULL;
 	return (commands);
@@ -197,7 +213,9 @@ int main(void)
 		commands = ft_split_cmds(command);
 		while (commands[i])
 		{
-			ft_printf("%s	%i\n", commands[i], i);
+			for (int j = 0; commands[i][j]; j++)
+				ft_printf("%d\n", commands[i][j]);
+			ft_printf("%s%i\n", commands[i], i);
 			i++;
 		}
 		/*ft_free_cmds(commands);*/
