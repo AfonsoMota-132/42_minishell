@@ -37,3 +37,14 @@ deps: libft
 
 $(NAME): $(OBJS)
 	$(CC) -lreadline $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
+
+clean:
+	$(RM) $(OBJS)
+
+fclean: clean
+	$(RM) $(NAME)
+	$(RM) -Rf libs/libft
+
+re: fclean all
+
+.PHONY: all clean fclean re deps valgrind
