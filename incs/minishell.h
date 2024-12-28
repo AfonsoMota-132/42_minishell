@@ -13,18 +13,26 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include "../libs/libft/libft.h"
-#include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <termios.h>
-#include <fcntl.h>
+# include "../libs/libft/libft.h"
+# include <stdio.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <termios.h>
+# include <fcntl.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <sys/wait.h>
 
 typedef enum e_token_type {
 	CMD,
-	ARG
+	ARG,
+	PIPE,
+	REDIRECT_IN,
+	D_REDIRECT_IN,
+	REDIRECT_OUT,
+	D_REDIRECT_OUT
 }	t_token_type;
 
 typedef	struct s_token {
@@ -41,10 +49,34 @@ typedef	struct s_command {
 	void		*argument;
 }	t_command;
 
+typedef	struct s_data
+{
+	t_token		*tokens;
+	t_token		*tokens_start;
+}	t_data;
 //		ft_readline		//
 
 char	*ft_readline(char *str);
 char	*ft_rmv_nl(char *str);
 char	*ft_addstr(char *s1, char s2);
+
+
+//		Ft_split_ms		//
+
+
+int		ft_quote_len(char const *s);
+int		ft_seglen(char const *s);
+char	**ft_split_cmds(char *command);
+
+//		Ft_free			//
+
+void	ft_free_cmds(char **commands);
+void	ft_free_tokens(t_token *tokens);
+int		ft_free(int i, char *command, t_data *data);
+
+//		Ft_tokens		//
+
+t_token	*ft_token_maker(char **commands);
+void	ft_tokens_cat(t_data **data);
 
 #endif

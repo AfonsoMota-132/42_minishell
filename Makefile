@@ -17,7 +17,8 @@ CC = cc
 RM = rm -f
 
 OBJS = $(SRCS:.c=.o)
-SRCS = srcs/main.c srcs/ft_readline.c
+SRCS = srcs/main.c srcs/ft_readline.c srcs/ft_split_ms.c \
+	   srcs/ft_free.c srcs/ft_tokens.c
 
 VAL_RULES = --leak-check=full --show-leak-kinds=all --suppressions=readline.supp
 all: deps $(NAME)
@@ -29,7 +30,7 @@ libft:
 		git clone git@github.com:AfonsoMota-132/42_libft.git libs/libft; \
 	fi
 
-valgrind:
+valgrind: all
 	valgrind $(VAL_RULES) ./$(NAME)
 
 deps: libft

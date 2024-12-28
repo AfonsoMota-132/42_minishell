@@ -10,4 +10,42 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../incs/minishell.h"
 
+void	ft_free_cmds(char **commands)
+{
+	int	i;
+
+	i = -1;
+	while (commands[++i])
+		free(commands[i]);
+	free(commands);
+}
+
+void	ft_free_tokens(t_token *tokens)
+{
+	t_token	*tmp;
+	
+	while (tokens)
+	{
+		tmp = tokens->next;
+		free(tokens->content);
+		free(tokens);
+		tokens = tmp;
+		if (!tokens)
+			break ;
+	}
+}
+
+int	ft_free(int i, char *command, t_data *data)
+{
+	if (command)
+		free(command);
+	if (data)
+	{
+		if (data->tokens_start)
+			ft_free_tokens(data->tokens_start);
+		free(data);
+	}
+	exit(i);
+}

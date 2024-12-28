@@ -12,213 +12,113 @@
 
 #include "../incs/minishell.h"
 
-void	ft_skip_sep(char *command, int *i)
-{
-	while (command[(*i)] == ' ' && command[(*i)] == '\t'
-		&& command[(*i)])
-		(*i)++;
-}
-
-void	ft_skip_non_seps(char *command, int *i)
-{
-	while (command[(*i)] != ' ' && command[(*i)] != '\t'
-		&& command[(*i)] && command[(*i)] != '|' && command[(*i)] != '<'
-		&& command[(*i)] != '>' && command[(*i)] != '\'' && command[(*i)] != '"')
-		(*i)++;
-}
-
-int	ft_check_quote(char *command, int *i, int *j)
-{
-	char	quote;
-
-	quote = 0;
-	if (command[(*i)] == '"' || command[(*i)] == '\'')
-	{
-		(*j)++;
-		while (command[(*i)] != ' ' && command[(*i)] != '\t'
-			&& command[(*i)] && command[(*i)] != '|' && command[(*i)] != '<'
-			&& command[(*i)] != '>')
-		{
-			quote = command[(*i)++];
-			while (command[(*i)] != quote && command[(*i)])
-				(*i)++;
-			(*i)++;
-			if (command[(*i)] == ' ' || !command[(*i)])
-				break ;
-		}
-	}
-	return (quote);
-}
-
-void	ft_first_check(char *command, int *i, int *j)
-{
-	if (!(*j) && command[*i] != ' ' && command[*i] != '\t')
-	{
-		ft_check_quote(command, i, j);
-		ft_skip_non_seps(command, i);
-		ft_check_quote(command, i, j);
-		(*j) = 1;
-		ft_skip_sep(command, i);
-	}
-}
-
-void	ft_check_sep(char *command, int *i, int *j)
-{
-	if (command[(*i)] == '|' && ++(*i))
-		(*j)++;
-	if (command[(*i)] == '<' && ++(*i))
-	{
-		if (command[(*i)] == '<')
-			(*i)++;
-		(*j)++;
-	}
-	if (command[(*i)] == '>' && ++(*i))
-	{
-		if (command[(*i)] == '>')
-			(*i)++;
-		(*j)++;
-	}
-	if ((*j) && command[(*i)] != '\0'
-		&& command[(*i)] != ' ' && command[(*i)] != '\t')
-	{
-		if (ft_check_quote(command, i, j))
-			return ;
-		ft_skip_non_seps(command, i);
-		if (ft_check_quote(command, i, j))
-			return ;
-		(*j)++;
-		ft_skip_sep(command, i);
-	}
-}
-
-int		ft_split_cmds_len(char *command)
-{
-	int	i;
-	int	j;
-
-	i = -1;
-	j = 0;
-	while (command[++i] != '\0')
-	{
-		ft_skip_sep(command, &i);
-		ft_first_check(command, &i, &j);
-		ft_check_sep(command, &i, &j);
-		if (command[i] == '\0')
-			break ;
-	}
-	return (j);
-}
-
-int		ft_quote_len(char const *s)
+int	ft_syntax(char *command)
 {
 	int		i;
 	char	quote;
 
-	i = 0;
-	if (s[i] == '"' || s[i] == '\'')
+	i = -1;
+	while (command[++i])
 	{
-		while (s[i] == '"' || s[i] == '\'')
+		if (command[i] == '"' || command[i] == '\'')
 		{
-			quote = s[i];
-			i++;
-			while (s[i] && s[i] != quote)
+			quote = command[i++];
+			while (command[i] && command[i] != quote)
 				i++;
-			i++;
-			if (s[i] == ' ' || !s[i])
-				break ;
+			if (command[i] != quote)
+				return (printf("Syntax error\nUnclosed quotes\n"));
 		}
+		if (command[i] == '|' && command[i + 1] == '|')
+			return (printf("Syntax error\nToo many pipes\n"));
+		if ((command[i] == '<' && command[i + 1] == '<'
+			&& command[i + 2] == '<')
+			|| (command[i] == '>' && command[i + 1] == '>'
+			&& command[i + 2] == '>'))
+			return (printf("Syntax error\nToo many redirects\n"));
+		if (command[i] == '\\' || command[i] == ';'
+			|| (command[i] == '&' && command[i + 1] == '&'))
+			return (printf("Syntax error\nUnrecognized intachter(s)\n"));
 	}
-	return (i);
+	return (0);
 }
 
-int		ft_seglen(char const *s)
-{
-	int	i;
-	char	quote;
 
-	i = ft_quote_len(s);
-	if (s[i] == '<' || s[i] == '>')
-	{
-		quote = s[i];
-		i++;
-		if (s[i] == quote)
-			return (2);
-		return (1);
-	}
-	if (s[i] == '|')
-		return (1);
-	while (s[i] && s[i] != ' '
-		&& s[i] != '\t' && s[i] != '|'
-		&& s[i] != '<' && s[i] != '>')
-	{
-		i++;
-		printf("i: %d\n", i);
-		if (s[i] == '\'' || s[i] == '"')
-			i += ft_quote_len(&s[i]);
-	}
-	while (s[i] == ' ' || s[i] == '\t')
-		i++;
-	return (i);
+t_data	*ft_data_init(void)
+{
+	t_data	*data;
+
+	data = malloc(sizeof(t_data));
+	data->tokens = NULL;
+	data->tokens_start = NULL;
+	return (data);
 }
 
-char	**ft_split_cmds(char *command)
+int	main(void)
 {
-	int		i;
-	int		j;
-	int		k;
-	char	**commands;
-
-	i = 0;
-	k = -1;
-	j = ft_split_cmds_len(command);
-	printf("j: %d\n", j);
-	commands = ft_calloc(j + 1, sizeof(char *));
-	if (!commands)
-		return (NULL);
-	while (++k < j)
-	{
-		while (command[i] == ' ' || command[i] == '\t')
-			i++;
-		commands[k] = ft_substr(&command[i], 0, ft_seglen(&command[i]));
-		printf("len: %d\n", ft_seglen(&command[i]));
-		printf"%c\n", command[i + ft_seglen(&command[i]));
-		i += ft_seglen(&command[i]);
-	}
-	commands[k] = NULL;
-	return (commands);
-}
-
-void	ft_free_cmds(char **commands)
-{
-	int	i;
-
-	i = -1;
-	while (commands[++i])
-		free(commands[i]);
-	free(commands);
-}
-
-int main(void)
-{
+	t_data	*data;
 	char	*command;
 	char	**commands;
 	int		i;
+	pid_t	pid;
 
+	data = ft_data_init();
+	printf("test\n");
 	while (1)
 	{
 		command = readline("Minishell: ");
 		i = 0;
+		if (ft_syntax(command))
+			continue ;
 		if (ft_strncmp(command, "exit", 4) == 0)
-			return (0);
-		commands = ft_split_cmds(command);
-		while (commands[i])
+			ft_free(0, command, data);
+		if (ft_strncmp(command, "clear", 5) == 0)
 		{
-			for (int j = 0; commands[i][j]; j++)
-				ft_printf("%d\n", commands[i][j]);
-			ft_printf("%s%i\n", commands[i], i);
-			i++;
+			printf("test1\n");
+			/*printf("pid: %d\n", pid);*/
+			pid = fork();
+			if (pid == 0)
+			{
+				system("clear");
+				exit(0);
+			}
+			else
+				waitpid(-1, NULL, 0);
 		}
-		/*ft_free_cmds(commands);*/
+		else
+			printf("test2\n");
+		commands = ft_split_cmds(command);
+		if (data->tokens_start)
+			ft_free_tokens(data->tokens_start);
+		data->tokens_start = ft_token_maker(commands);
+		data->tokens = data->tokens_start;
+		ft_tokens_cat(&data);
+		data->tokens = data->tokens_start;
+		while (data->tokens)
+		{
+			printf("%s	", data->tokens->content);
+			if (data->tokens->type == PIPE)
+				printf("Pipe\n");
+			else if (data->tokens->type == CMD)
+				printf("Command\n");
+			else if (data->tokens->type == ARG)
+				printf("Argument\n");
+			else if (data->tokens->type == REDIRECT_IN)
+				printf("Redirect In\n");
+			else if (data->tokens->type == D_REDIRECT_IN)
+				printf("Double Redirect In\n");
+			else if (data->tokens->type == REDIRECT_OUT)
+				printf("Redirect Out\n");
+			else if (data->tokens->type == D_REDIRECT_OUT)
+				printf("Double Redirect Out\n");
+			if (!data->tokens->next)
+				break ;
+			data->tokens = data->tokens->next;
+		}
+		/*while (commands[i])*/
+		/*{*/
+		/*	ft_printf("%s..	%d\n", commands[i], i);*/
+		/*	i++;*/
+		/*}*/
 		free (command);
 	}
 }
