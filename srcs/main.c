@@ -12,46 +12,15 @@
 
 #include "../incs/minishell.h"
 
-int	ft_syntax(char *command)
-{
-	int		i;
-	char	quote;
+int	sigg = 0;
 
-	i = -1;
-	while (command[++i])
-	{
-		if (command[i] == '"' || command[i] == '\'')
-		{
-			quote = command[i++];
-			while (command[i] && command[i] != quote)
-				i++;
-			if (command[i] != quote)
-				return (printf("Syntax error\nUnclosed quotes\n"));
-		}
-		if (command[i] == '|' && command[i + 1] == '|')
-			return (printf("Syntax error\nToo many pipes\n"));
-		if ((command[i] == '<' && command[i + 1] == '<'
-			&& command[i + 2] == '<')
-			|| (command[i] == '>' && command[i + 1] == '>'
-			&& command[i + 2] == '>'))
-			return (printf("Syntax error\nToo many redirects\n"));
-		if (command[i] == '\\' || command[i] == ';'
-			|| (command[i] == '&' && command[i + 1] == '&'))
-			return (printf("Syntax error\nUnrecognized intachter(s)\n"));
-	}
-	return (0);
-}
-
-
-t_data	*ft_data_init(void)
-{
-	t_data	*data;
-
-	data = malloc(sizeof(t_data));
-	data->tokens = NULL;
-	data->tokens_start = NULL;
-	return (data);
-}
+/*void	ft_signal_handler(int sig)*/
+/*{*/
+/*	while (sig == 2)*/
+/*	{*/
+/*		sigg = 1;*/
+/*	}*/
+/*}*/
 
 int	main(void)
 {
@@ -59,33 +28,25 @@ int	main(void)
 	char	*command;
 	char	**commands;
 	int		i;
-	pid_t	pid;
+	char	*path = "/bin/clear";
+	char	*idk[] = {path, "-T", "tmux-256color",NULL};
 
+	/*signal(SIGINT, &ft_signal_handler);*/
 	data = ft_data_init();
 	printf("test\n");
 	while (1)
 	{
 		command = readline("Minishell: ");
 		i = 0;
+		if (sigg == 1)
+		{
+			sigg = 0;
+			continue ;
+		}
 		if (ft_syntax(command))
 			continue ;
 		if (ft_strncmp(command, "exit", 4) == 0)
 			ft_free(0, command, data);
-		if (ft_strncmp(command, "clear", 5) == 0)
-		{
-			printf("test1\n");
-			/*printf("pid: %d\n", pid);*/
-			pid = fork();
-			if (pid == 0)
-			{
-				system("clear");
-				exit(0);
-			}
-			else
-				waitpid(-1, NULL, 0);
-		}
-		else
-			printf("test2\n");
 		commands = ft_split_cmds(command);
 		if (data->tokens_start)
 			ft_free_tokens(data->tokens_start);
@@ -93,31 +54,35 @@ int	main(void)
 		data->tokens = data->tokens_start;
 		ft_tokens_cat(&data);
 		data->tokens = data->tokens_start;
-		while (data->tokens)
+		if (data->tokens->type == CMD
+	&& ft_strncmp(data->tokens->content, "clear", 5) == 0)
 		{
-			printf("%s	", data->tokens->content);
-			if (data->tokens->type == PIPE)
-				printf("Pipe\n");
-			else if (data->tokens->type == CMD)
-				printf("Command\n");
-			else if (data->tokens->type == ARG)
-				printf("Argument\n");
-			else if (data->tokens->type == REDIRECT_IN)
-				printf("Redirect In\n");
-			else if (data->tokens->type == D_REDIRECT_IN)
-				printf("Double Redirect In\n");
-			else if (data->tokens->type == REDIRECT_OUT)
-				printf("Redirect Out\n");
-			else if (data->tokens->type == D_REDIRECT_OUT)
-				printf("Double Redirect Out\n");
-			if (!data->tokens->next)
-				break ;
-			data->tokens = data->tokens->next;
+			fork();
+			if (fork() == 0)
+				ft_execve(path, idk, NULL);
+			else
+				waitpid(-1, NULL, 0);
 		}
-		/*while (commands[i])*/
+		/*while (data->tokens)*/
 		/*{*/
-		/*	ft_printf("%s..	%d\n", commands[i], i);*/
-		/*	i++;*/
+		/*	printf("%s	", data->tokens->content);*/
+		/*	if (data->tokens->type == PIPE)*/
+		/*		printf("Pipe\n");*/
+		/*	else if (data->tokens->type == CMD)*/
+		/*		printf("Command\n");*/
+		/*	else if (data->tokens->type == ARG)*/
+		/*		printf("Argument\n");*/
+		/*	else if (data->tokens->type == REDIRECT_IN)*/
+		/*		printf("Redirect In\n");*/
+		/*	else if (data->tokens->type == D_REDIRECT_IN)*/
+		/*		printf("Double Redirect In\n");*/
+		/*	else if (data->tokens->type == REDIRECT_OUT)*/
+		/*		printf("Redirect Out\n");*/
+		/*	else if (data->tokens->type == D_REDIRECT_OUT)*/
+		/*		printf("Double Redirect Out\n");*/
+		/*	if (!data->tokens->next)*/
+		/*		break ;*/
+		/*	data->tokens = data->tokens->next;*/
 		/*}*/
 		free (command);
 	}

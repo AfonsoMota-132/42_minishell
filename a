@@ -1,9 +1,0 @@
-a
-a.out
-incs
-libs
-Makefile
-minishell
-readline.supp
-srcs
-test.c

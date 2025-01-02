@@ -53,16 +53,18 @@ typedef	struct s_data
 {
 	t_token		*tokens;
 	t_token		*tokens_start;
+	char		*command;
+	char		**args;
+	char		**envp;
 }	t_data;
+
 //		ft_readline		//
 
 char	*ft_readline(char *str);
 char	*ft_rmv_nl(char *str);
 char	*ft_addstr(char *s1, char s2);
 
-
 //		Ft_split_ms		//
-
 
 int		ft_quote_len(char const *s);
 int		ft_seglen(char const *s);
@@ -78,5 +80,18 @@ int		ft_free(int i, char *command, t_data *data);
 
 t_token	*ft_token_maker(char **commands);
 void	ft_tokens_cat(t_data **data);
+
+//		FT_Syntax		//
+
+int	ft_syntax(char *command);
+
+//		FT_data_init	//
+
+t_data	*ft_data_init(void);
+
+
+//		FT_execve		//
+
+void	ft_execve(char *path, char **argv, char **envp);
 
 #endif

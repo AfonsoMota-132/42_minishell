@@ -47,16 +47,16 @@ void	ft_tokens_cat(t_data **data)
 	{
 		if ((*data)->tokens->content[0] == '|' && !(--check))
 			(*data)->tokens->type = PIPE;
-		else if ((*data)->tokens->content[0] == '<')
-			(*data)->tokens->type = REDIRECT_IN;
 		else if ((*data)->tokens->content[0] == '<'
 			&& (*data)->tokens->content[1] == '<')
 			(*data)->tokens->type = D_REDIRECT_IN;
-		else if ((*data)->tokens->content[0] == '>')
-			(*data)->tokens->type = REDIRECT_OUT;
+		else if ((*data)->tokens->content[0] == '<')
+			(*data)->tokens->type = REDIRECT_IN;
 		else if ((*data)->tokens->content[0] == '>'
 			&& (*data)->tokens->content[1] == '>')
 			(*data)->tokens->type = D_REDIRECT_OUT;
+		else if ((*data)->tokens->content[0] == '>')
+			(*data)->tokens->type = REDIRECT_OUT;
 		else if (check != 0)
 			(*data)->tokens->type = ARG;
 		else if (++check == 1)
