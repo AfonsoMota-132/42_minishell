@@ -56,6 +56,9 @@ typedef	struct s_data
 	char		*command;
 	char		**args;
 	char		**envp;
+	char		*path;
+	char		*user;
+	char		*prompt;
 }	t_data;
 
 //		ft_readline		//
@@ -93,5 +96,14 @@ t_data	*ft_data_init(void);
 //		FT_execve		//
 
 void	ft_execve(char *path, char **argv, char **envp);
+
+
+//		FT_expander		//
+
+void	ft_expander(t_token *tokens);
+
+//		FT_Builtins		//
+
+void	ft_cd(t_token * tokens);
 
 #endif

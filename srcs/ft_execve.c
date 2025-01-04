@@ -12,9 +12,19 @@
 
 #include "../incs/minishell.h"
 
+char	*ft_get_path(t_data **envp)
+{
+	int		i;
+	char	*path;
+
+	
+}
+
 void	ft_exec_init(t_data **data)
 {
-	path = ft_get_path((*data)->envp);
+	char *path;
+
+	path = ft_get_path(data);
 	(*data)->args = ft_split((*data)->command, ' ');
 	(*data)->envp = (*data)->envp, '\n');
 	ft_execve((*data)->args[0], (*data)->args, (*data)->envp);

@@ -6,7 +6,7 @@
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 11:50:55 by afogonca          #+#    #+#             */
-/*   Updated: 2024/12/27 11:51:02 by afogonca         ###   ########.fr       */
+/*   Updated: 2025/01/04 10:44:27 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,10 @@ int	ft_free(int i, char *command, t_data *data)
 	{
 		if (data->tokens_start)
 			ft_free_tokens(data->tokens_start);
+		if (data->path)
+			free(data->path);
+		if (data->prompt)
+			free(data->prompt);
 		free(data);
 	}
 	exit(i);
