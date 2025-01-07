@@ -23,7 +23,7 @@ void	ft_signal_handler(int sig)
 	}
 }
 
-int	main(void)
+int	main(int ac, char **av, char **envp)
 {
 	t_data	*data;
 	char	*command;
@@ -33,8 +33,10 @@ int	main(void)
 	char	*path = "/bin/clear";
 	char	*idk[] = {path, "-T", "xterm-256color",NULL};
 
+	(void) ac;
+	(void) av;
 	signal(SIGINT, &ft_signal_handler);
-	data = ft_data_init();
+	data = ft_data_init(envp);
 	while (1)
 	{
 		command2 = readline(data->prompt);
@@ -70,8 +72,9 @@ int	main(void)
 				rl_redisplay();
 			}
 		}
-		ft_cd(data->tokens);
-		/*ft_expander(data->tokens);*/
+		/*ft_cd(data->tokens);*/
+		ft_env(data);
+		ft_expander(data->tokens);
 		while (data->tokens)
 		{
 			printf("%s	", data->tokens->content);

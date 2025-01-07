@@ -90,7 +90,7 @@ int	ft_syntax(char *command);
 
 //		FT_data_init	//
 
-t_data	*ft_data_init(void);
+t_data	*ft_data_init(char **envp);
 
 
 //		FT_execve		//
@@ -105,5 +105,6 @@ void	ft_expander(t_token *tokens);
 //		FT_Builtins		//
 
 void	ft_cd(t_token * tokens);
+void	ft_env(t_data *data);
 
 #endif

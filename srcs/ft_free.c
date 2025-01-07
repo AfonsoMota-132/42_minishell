@@ -12,6 +12,16 @@
 
 #include "../incs/minishell.h"
 
+void	ft_free_env(char **envp)
+{
+	int	i;
+
+	i = -1;
+	while (envp[++i])
+		free(envp[i]);
+	free(envp);
+}
+
 void	ft_free_cmds(char **commands)
 {
 	int	i;
@@ -49,6 +59,8 @@ int	ft_free(int i, char *command, t_data *data)
 			free(data->path);
 		if (data->prompt)
 			free(data->prompt);
+		if (data->envp)
+			ft_free_env(data->envp);
 		free(data);
 	}
 	exit(i);
