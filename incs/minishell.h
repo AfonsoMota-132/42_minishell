@@ -58,6 +58,7 @@ typedef	struct s_data
 	char		**envp;
 	char		*path;
 	char		*user;
+	char		*hostname;
 	char		*prompt;
 }	t_data;
 

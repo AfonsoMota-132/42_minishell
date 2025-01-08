@@ -61,6 +61,8 @@ int	ft_free(int i, char *command, t_data *data)
 			free(data->prompt);
 		if (data->envp)
 			ft_free_env(data->envp);
+		if (data->hostname)
+			free(data->hostname);
 		free(data);
 	}
 	exit(i);

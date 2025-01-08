@@ -22,7 +22,7 @@ void	ft_free_matrix(char **matrix)
 	free(matrix);
 }
 
-char	*ft_get_path(char *user)
+char	*ft_get_path(t_data *data)
 {
 	char	*path;
 	char	**dirs;
@@ -36,8 +36,8 @@ char	*ft_get_path(char *user)
 	i = 0;
 	if (ft_strcmp(dirs[i], "home") == 0
 		&& ft_strlen(dirs[i]) == 4 && ++i
-		&& ft_strcmp(dirs[i], user) == 0
-		&& ft_strlen(dirs[i]) == ft_strlen(user))
+		&& ft_strcmp(dirs[i], data->user) == 0
+		&& ft_strlen(dirs[i]) == ft_strlen(data->user))
 		path = ft_strdup("~");
 	while (dirs[++i])
 	{
@@ -55,8 +55,27 @@ void	ft_prompt_init(t_data *data)
 {
 	if (data->prompt)
 		free(data->prompt);
-	data->prompt = ft_strjoin_gnl(ft_strjoin_gnl(ft_strjoin(data->user, ":"),
-						data->path), "$> ");
+	data->prompt = ft_strjoin_gnl(ft_strjoin_gnl(ft_strjoin_gnl(ft_strjoin_gnl(
+		ft_strjoin(data->user, "@"), data->hostname), ":"), data->path), "$ ");
+}
+
+char	*ft_get_hostname(void)
+{
+	char	*hostname;
+	char	*tmp;
+	int		fd;
+	int		i;
+
+	fd = open("/etc/hostname", O_RDONLY);
+	tmp = get_next_line(fd);
+	get_next_line(fd);
+	close(fd);
+	i = 0;
+	while (tmp[i] != '\0' && tmp[i] != '.')	
+		i++;
+	hostname = ft_substr(tmp, 0, i);
+	free(tmp);
+	return (hostname);
 }
 
 char	**ft_cpyenv(char **envp)
@@ -74,6 +93,7 @@ char	**ft_cpyenv(char **envp)
 	env[i] = NULL;
 	return (env);
 }
+
 t_data	*ft_data_init(char **envp)
 {
 	t_data	*data;
@@ -85,8 +105,12 @@ t_data	*ft_data_init(char **envp)
 	data->args = NULL;
 	data->envp = ft_cpyenv(envp);
 	data->user = getenv("USER");
-	data->path = ft_get_path(data->user);
+	data->hostname = ft_get_hostname();
+	data->path = ft_get_path(data);
 	data->prompt = NULL;
+	printf("before\n");
 	ft_prompt_init(data);
+	printf("after\n");
+	printf("prompt: %s\n", data->prompt);
 	return (data);
 }
