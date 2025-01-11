@@ -29,19 +29,19 @@ int	main(int ac, char **av, char **envp)
 	char	*command;
 	char	*command2;
 	char	**commands;
-	int		i;
 	char	*path = "/bin/clear";
 	char	*idk[] = {path, "-T", "xterm-256color",NULL};
 
 	(void) ac;
 	(void) av;
 	signal(SIGINT, &ft_signal_handler);
+	printf("test\n");
 	data = ft_data_init(envp);
+	printf("test\n");
 	while (1)
 	{
 		command2 = readline(data->prompt);
 		add_history(command2);
-		i = 0;
 		command = ft_strtrim(command2, " \t\n");
 		if (sigg == 1)
 		{
@@ -68,13 +68,14 @@ int	main(int ac, char **av, char **envp)
 				execve(path, idk, NULL);
 			else
 			{
-				waitpid(-1, NULL, 0);
+				waitpid(-1, &data->exit_status, 0);
+				printf("test: %i\n", data->exit_status);
 				rl_redisplay();
 			}
 		}
-		/*ft_cd(data->tokens);*/
 		ft_env(data);
-		ft_expander(data->tokens);
+		ft_expander(data->tokens, data);
+		ft_rmv_quotes(data->tokens);
 		while (data->tokens)
 		{
 			printf("%s	", data->tokens->content);

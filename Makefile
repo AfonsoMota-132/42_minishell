@@ -17,11 +17,11 @@ CC = cc
 RM = rm -f
 
 OBJS = $(SRCS:.c=.o)
-SRCS = srcs/main.c srcs/ft_readline.c srcs/ft_split_ms.c \
+SRCS = srcs/main.c srcs/ft_split_ms.c \
 		srcs/ft_free.c srcs/ft_tokens.c srcs/ft_syntax.c \
 		srcs/ft_data_init.c srcs/ft_expander.c \
-		srcs/ft_builtins.c
-
+		srcs/ft_builtins.c srcs/ft_rmv_quotes.c
+# srcs/ft_readline.c
 #srcs/ft_execve.c
 
 VAL_RULES = --leak-check=full --show-leak-kinds=all --suppressions=readline.supp

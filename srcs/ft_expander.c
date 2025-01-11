@@ -18,19 +18,22 @@ int	ft_check_expander(t_token *tokens, size_t *i)
 	{
 		if (tokens->content[*i] == '$')
 			return (1);
-		if (tokens->content[(*i)++] == '"')
+		if (tokens->content[*i] == '"')
 		{
 			(*i)++;
-			while (tokens->content[(*i)] != '"')
+			while (tokens->content[(*i)] != '"'
+				&& tokens->content[(*i)] != '\0')
 			{
 				if (tokens->content[(*i)] == '$')
 					return (1);
 				(*i)++;
 			}
 		}
-		if (tokens->content[(*i)++] == '\'')
+		if (tokens->content[*i] == '\'')
 		{
-			while (tokens->content[(*i)] != '\'')
+			(*i)++;
+			while (tokens->content[(*i)] != '\''
+				&& tokens->content[(*i)] != '\0')
 				(*i)++;
 		}
 		(*i)++;
@@ -38,7 +41,7 @@ int	ft_check_expander(t_token *tokens, size_t *i)
 	return (0);
 }
 
-int		ft_len_env(char *str)
+int	ft_len_env(char *str)
 {
 	int	i;
 	int	check;
@@ -54,8 +57,9 @@ int		ft_len_env(char *str)
 		&& str[i] != '$' && str[i] != '"'
 		&& str[i] != '\'')
 	{
-		if (str[i++] == '\'' && !check)
+		if (str[i] == '\'' && !check)
 		{
+			i++;
 			while (str[i] != '\'')
 				i++;
 		}
@@ -88,7 +92,37 @@ char	*ft_expander_replace(char *str, char *env, int start)
 	return (new);
 }
 
-void	ft_expander(t_token *tokens)
+void	ft_expand_quest(t_token *tokens, t_data *data
+		, char *env, int start)
+{
+	char	*tmp;
+	char	*new;
+	char	*str;
+	int		i;
+	int		j;
+
+	str = tokens->content;
+	if (env[0] == '?')
+	{
+		i = start;
+		j = 0;
+		while (tokens->content[i] && tokens->content[i] != '$')
+			i++;
+		while (str[i + j] && str[i + j] != ' ' && str[i + j] != '\t'
+			&& str[i + j] != '\n' && str[i + j] != '$'
+			&& str[i + j] != '"' && str[i + j] != '\'')
+			j++;
+		tmp = ft_itoa(data->exit_status);
+		new = ft_substr(tokens->content, 0, i);
+		new = ft_strjoin_gnl(new, tmp);
+		new = ft_strjoin_gnl(new, &tokens->content[i + j + 2]);
+		free(tmp);
+		free(tokens->content);
+		tokens->content = new;
+	}
+}
+
+void	ft_expander(t_token *tokens, t_data *data)
 {
 	size_t	i;
 	char	*env;
@@ -100,15 +134,13 @@ void	ft_expander(t_token *tokens)
 		{
 			if (ft_check_expander(tokens, &i) != 0)
 			{
-				env = ft_substr(tokens->content, i + 1
-					, ft_len_env(&tokens->content[i]));
+				env = ft_substr(tokens->content, i + 1, \
+					ft_len_env(&tokens->content[i]));
+				ft_expand_quest(tokens, data, env, i);
 				if (getenv(env))
-					tokens->content = ft_expander_replace(tokens->content
-						, getenv(env), i);
-				if (tokens->content[i] == '$')
-					i++;
-				while (tokens->content[i] != '\0'
-					&& tokens->content[i] != '$'
+					tokens->content = ft_expander_replace(tokens->content, \
+											getenv(env), i++);
+				while (tokens->content[i] != '\0' && tokens->content[i] != '$'
 					&& tokens->content[i] != '\'')
 					i++;
 				free(env);

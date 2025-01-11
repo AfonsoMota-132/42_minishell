@@ -12,10 +12,10 @@
 
 #include "../incs/minishell.h"
 
-int		ft_cd_check(t_token *tokens)
+int	ft_cd_check(t_token *tokens)
 {
 	if (ft_strncmp(tokens->content, "cd", 2) != 0
-		||	tokens->type != CMD)
+		|| tokens->type != CMD)
 		return (1);
 	if (tokens->next == NULL)
 		return (0);
@@ -24,15 +24,15 @@ int		ft_cd_check(t_token *tokens)
 		return (1);
 	if (tokens->next->type == REDIRECT_IN
 		&& tokens->next->next == NULL)
-		return (ft_printf("minishell: cd: syntax error near unexpected token `newline'\n"));
-
-	if(tokens->next->next != NULL
+		return (ft_printf("minishell: cd: %s",
+				"syntax error near unexpected token `newline'\n"));
+	if (tokens->next->next != NULL
 		&& tokens->next->next->type == ARG)
 		return (printf("minishell: cd: Too many arguments\n"));
 	return (0);
 }
 
-void	ft_cd(t_token * tokens)
+void	ft_cd(t_token *tokens)
 {
 	if (ft_cd_check(tokens))
 		return ;
@@ -40,18 +40,15 @@ void	ft_cd(t_token * tokens)
 		printf("Can run\n");
 }
 
-int		ft_env_check(t_token *tokens)
+int	ft_env_check(t_token *tokens)
 {
 	while (tokens)
 	{
 		if (tokens->type == CMD
 			&& ft_strncmp(tokens->content, "env", 3) == 0
 			&& !tokens->next)
-		{
-			printf("first if\n");
 			return (1);
-		}
-		else if(tokens->type == CMD
+		else if (tokens->type == CMD
 			&& ft_strncmp(tokens->content, "env", 3) == 0
 			&& tokens->next->type != ARG
 			&& tokens->next->type != D_REDIRECT_IN
@@ -59,7 +56,6 @@ int		ft_env_check(t_token *tokens)
 			return (1);
 		tokens = tokens->next;
 	}
-	printf("outside while\n");
 	return (0);
 }
 
@@ -68,14 +64,8 @@ void	ft_env(t_data *data)
 	int	i;
 
 	if (!ft_env_check(data->tokens))
-	{
-		printf("wtf\n");
 		return ;
-	}
 	i = 0;
 	while (data->envp[i])
-	{
-		printf("%s\n", data->envp[i]);
 		i++;
-	}
 }

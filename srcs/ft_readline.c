@@ -38,20 +38,22 @@ char	*ft_addstr(char *s1, char s2)
 	free(s1);
 	return (str);
 }
-char ft_get_keypress() 
-{
-    struct termios oldt, newt;
-    char ch;
 
-    tcgetattr(STDIN_FILENO, &oldt);
-    newt = oldt;
-    newt.c_lflag &= ~(ICANON | ECHO);
-    newt.c_cc[VMIN] = 1;  
+char	ft_get_keypress(void)
+{
+	struct termios	oldt;
+	struct termios	newt;
+	char			ch;
+
+	tcgetattr(STDIN_FILENO, &oldt);
+	newt = oldt;
+	newt.c_lflag &= ~(ICANON | ECHO);
+	newt.c_cc[VMIN] = 1;
 	newt.c_cc[VTIME] = 0;
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-    read(STDIN_FILENO, &ch, 1);
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-    return (ch);
+	tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+	read(STDIN_FILENO, &ch, 1);
+	tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+	return (ch);
 }
 
 char	*ft_rmv_nl(char *str)
@@ -83,7 +85,6 @@ char	*ft_readline(char *str)
 	char	*line;
 
 	line = NULL;
-	ft_printf("%s\n", str);
 	while (1)
 	{
 		keypress = ft_get_keypress();
@@ -92,11 +93,7 @@ char	*ft_readline(char *str)
 		if (keypress == 10)
 			break ;
 		if (keypress >= 65 && keypress <= 67)
-		{
-			printf("entered\n");
 			continue ;
-		}
-		printf("keypress: %d\n", keypress);
 		if (!line)
 		{
 			line = ft_calloc(1, sizeof(char));
@@ -104,7 +101,6 @@ char	*ft_readline(char *str)
 				return (NULL);
 		}
 		line = ft_addstr(line, keypress);
-		printf("line: %s\n", line);
 	}
 	return (line);
 }

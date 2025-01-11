@@ -30,13 +30,13 @@ char	*ft_get_path(t_data *data)
 
 	path = getcwd(NULL, 0);
 	dirs = ft_split(path, '/');
+	free(path);
 	if (!dirs)
 		return (NULL);
-	free(path);
 	i = 0;
-	if (ft_strcmp(dirs[i], "home") == 0
+	if (ft_strncmp(dirs[i], "home", 4) == 0
 		&& ft_strlen(dirs[i]) == 4 && ++i
-		&& ft_strcmp(dirs[i], data->user) == 0
+		&& ft_strncmp(dirs[i], data->user, ft_strlen(data->user)) == 0
 		&& ft_strlen(dirs[i]) == ft_strlen(data->user))
 		path = ft_strdup("~");
 	while (dirs[++i])
@@ -103,14 +103,14 @@ t_data	*ft_data_init(char **envp)
 	data->tokens_start = NULL;
 	data->command = NULL;
 	data->args = NULL;
+	data->exit_status = 0;
+	printf("before\n");
 	data->envp = ft_cpyenv(envp);
 	data->user = getenv("USER");
 	data->hostname = ft_get_hostname();
 	data->path = ft_get_path(data);
-	data->prompt = NULL;
-	printf("before\n");
-	ft_prompt_init(data);
 	printf("after\n");
-	printf("prompt: %s\n", data->prompt);
+	data->prompt = NULL;
+	ft_prompt_init(data);
 	return (data);
 }

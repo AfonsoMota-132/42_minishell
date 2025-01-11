@@ -25,7 +25,8 @@
 # include <sys/stat.h>
 # include <sys/wait.h>
 
-typedef enum e_token_type {
+typedef enum e_token_type
+{
 	CMD,
 	ARG,
 	PIPE,
@@ -35,7 +36,8 @@ typedef enum e_token_type {
 	D_REDIRECT_OUT
 }	t_token_type;
 
-typedef	struct s_token {
+typedef struct s_token
+{
 	t_token_type	type;
 	char			*content;
 	size_t			len;
@@ -43,13 +45,14 @@ typedef	struct s_token {
 	struct s_token	*prev;
 }	t_token;
 
-typedef	struct s_command {
+typedef struct s_command
+{
 	void		*content;
 	void		*flags;
 	void		*argument;
 }	t_command;
 
-typedef	struct s_data
+typedef struct s_data
 {
 	t_token		*tokens;
 	t_token		*tokens_start;
@@ -60,6 +63,7 @@ typedef	struct s_data
 	char		*user;
 	char		*hostname;
 	char		*prompt;
+	int			exit_status;
 }	t_data;
 
 //		ft_readline		//
@@ -87,25 +91,27 @@ void	ft_tokens_cat(t_data **data);
 
 //		FT_Syntax		//
 
-int	ft_syntax(char *command);
+int		ft_syntax(char *command);
 
 //		FT_data_init	//
 
 t_data	*ft_data_init(char **envp);
 
-
 //		FT_execve		//
 
 void	ft_execve(char *path, char **argv, char **envp);
 
-
 //		FT_expander		//
 
-void	ft_expander(t_token *tokens);
+void	ft_expander(t_token *tokens, t_data *data);
 
 //		FT_Builtins		//
 
-void	ft_cd(t_token * tokens);
+void	ft_cd(t_token *tokens);
 void	ft_env(t_data *data);
+
+//		FT_Rmv_quotes	//
+
+void	ft_rmv_quotes(t_token *tokens);
 
 #endif
