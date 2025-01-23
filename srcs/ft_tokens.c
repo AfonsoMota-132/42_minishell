@@ -6,7 +6,7 @@
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 12:23:50 by afogonca          #+#    #+#             */
-/*   Updated: 2024/12/28 12:24:25 by afogonca         ###   ########.fr       */
+/*   Updated: 2025/01/23 11:17:45 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,30 +37,43 @@ t_token	*ft_token_maker(char **commands)
 	return (start);
 }
 
+int	ft_tokens_cat2(t_data **data, int check)
+{
+	if ((*data)->tokens->content[0] == '|' && ++check)
+		(*data)->tokens->type = PIPE;
+	else if ((*data)->tokens->content[0] == '<'
+		&& (*data)->tokens->content[1] == '<')
+		(*data)->tokens->type = D_REDIRECT_IN;
+	else if ((*data)->tokens->content[0] == '<')
+		(*data)->tokens->type = REDIRECT_IN;
+	else if ((*data)->tokens->content[0] == '>'
+		&& (*data)->tokens->content[1] == '>')
+	{
+		(*data)->tokens->type = D_REDIRECT_OUT;
+		if ((*data)->tokens->next)
+			(*data)->tokens->next->type = FILENAME;
+	}
+	else if ((*data)->tokens->content[0] == '>')
+	{
+		(*data)->tokens->type = REDIRECT_OUT;
+		if ((*data)->tokens->next)
+			(*data)->tokens->next->type = FILENAME;
+	}
+	return (check);
+}
 void	ft_tokens_cat(t_data **data)
 {
 	int	check;
 
-	check = 0;
+	check = 1;
 	(*data)->tokens = (*data)->tokens_start;
 	while ((*data)->tokens)
 	{
-		if ((*data)->tokens->content[0] == '|' && !(--check))
-			(*data)->tokens->type = PIPE;
-		else if ((*data)->tokens->content[0] == '<'
-			&& (*data)->tokens->content[1] == '<')
-			(*data)->tokens->type = D_REDIRECT_IN;
-		else if ((*data)->tokens->content[0] == '<')
-			(*data)->tokens->type = REDIRECT_IN;
-		else if ((*data)->tokens->content[0] == '>'
-			&& (*data)->tokens->content[1] == '>')
-			(*data)->tokens->type = D_REDIRECT_OUT;
-		else if ((*data)->tokens->content[0] == '>')
-			(*data)->tokens->type = REDIRECT_OUT;
-		else if (check != 0)
+		check = ft_tokens_cat2(data, check);
+		if ((*data)->tokens->type == CMD && check > 0)
+			check--;
+		else if ((*data)->tokens->type == CMD && check == 0)
 			(*data)->tokens->type = ARG;
-		else if (++check == 1)
-			(*data)->tokens->type = CMD;
 		(*data)->tokens = (*data)->tokens->next;
 	}
 }

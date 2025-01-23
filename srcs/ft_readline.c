@@ -85,6 +85,7 @@ char	*ft_readline(char *str)
 	char	*line;
 
 	line = NULL;
+	printf("%s", str);
 	while (1)
 	{
 		keypress = ft_get_keypress();

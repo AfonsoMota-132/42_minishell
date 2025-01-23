@@ -46,6 +46,7 @@ char	*ft_rmv_single_quotes(char *str, int *start)
 	printf("new: %s\n", new);
 	*start = i + ft_quote_rm_len(&str[i - 1], '\'') - 1;
 	free(str);
+	free(quote);
 	return (new);
 }
 
@@ -70,6 +71,7 @@ char	*ft_rmv_double_quotes(char *str, int *start)
 	printf("new: %s\n", new);
 	*start = i + ft_quote_rm_len(&str[i - 1], '"') - 1;
 	free(str);
+	free(quote);
 	return (new);
 }
 

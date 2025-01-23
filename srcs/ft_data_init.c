@@ -12,16 +12,6 @@
 
 #include "../incs/minishell.h"
 
-void	ft_free_matrix(char **matrix)
-{
-	int		i;
-
-	i = -1;
-	while (matrix[++i])
-		free(matrix[i]);
-	free(matrix);
-}
-
 char	*ft_get_path(t_data *data)
 {
 	char	*path;

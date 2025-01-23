@@ -12,13 +12,15 @@
 
 #include "../incs/minishell.h"
 
-int	ft_syntax(char *command)
+int	ft_quote_syntax(char *command)
 {
 	int		i;
 	char	quote;
 
 	i = -1;
-	while (command[++i])
+	while (command[++i] && \
+		(ft_strchr("\'", command[i])
+		|| ft_strchr("\"", command[i])))
 	{
 		if (command[i] == '"' || command[i] == '\'')
 		{
@@ -28,16 +30,51 @@ int	ft_syntax(char *command)
 			if (command[i] != quote)
 				return (printf("Syntax error\nUnclosed quotes\n"));
 		}
-		if (command[i] == '|' && command[i + 1] == '|')
-			return (printf("Syntax error\nToo many pipes\n"));
-		if ((command[i] == '<' && command[i + 1] == '<'
-			&& command[i + 2] == '<')
-			|| (command[i] == '>' && command[i + 1] == '>'
-			&& command[i + 2] == '>'))
-			return (printf("Syntax error\nToo many redirects\n"));
-		if (command[i] == '\\' || command[i] == ';'
-			|| (command[i] == '&' && command[i + 1] == '&'))
-			return (printf("Syntax error\nUnrecognized intachter(s)\n"));
 	}
+	return (0);
+}
+
+int	ft_pipe_syntax(char *command)
+{
+	int	i;
+
+	i = -1;
+	while (command[++i]
+		&& ft_strchr("|", command[i]))
+	{
+		if (command[i] == '|' && command[i + 1]
+			&& command[i + 1] == '|')
+			return (printf("Syntax error\nToo many pipes\n"));
+	}
+	return (0);
+}
+
+int	ft_redirect_syntax(char *command)
+{
+	int	i;
+
+	i = -1;
+	while (command[++i])
+	{
+		if ((command[i] == '>' && command[i + 1] == '<') ||
+			(command[i] == '<' && command[i + 1] == '>'))
+			return (printf("Syntax error\nToo many redirects\n"));
+		if ((command[i] == '>' || command[i] == '<') 
+			&& (command[i + 1] == '>' || command[i + 1] == '<')
+			&& (command[i + 2] == '>' || command[i + 2] == '<'))
+			return (printf("Syntax error\nToo many redirects\n"));
+	}
+	return (0);
+}
+
+int	ft_syntax(char *command)
+{
+	int		i;
+
+	i = -1;
+	if (ft_quote_syntax(command)
+		|| ft_pipe_syntax(command)
+		|| ft_redirect_syntax(command))
+		return (1);
 	return (0);
 }

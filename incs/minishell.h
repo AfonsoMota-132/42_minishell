@@ -6,7 +6,7 @@
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 19:56:43 by afogonca          #+#    #+#             */
-/*   Updated: 2024/12/18 11:13:44 by afogonca         ###   ########.fr       */
+/*   Updated: 2025/01/23 10:57:56 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ typedef enum e_token_type
 	REDIRECT_IN,
 	D_REDIRECT_IN,
 	REDIRECT_OUT,
-	D_REDIRECT_OUT
+	D_REDIRECT_OUT,
+	FILENAME
 }	t_token_type;
 
 typedef struct s_token
@@ -76,13 +77,18 @@ char	*ft_addstr(char *s1, char s2);
 
 int		ft_quote_len(char const *s);
 int		ft_seglen(char const *s);
+int		ft_count_parts(char const *s);
 char	**ft_split_cmds(char *command);
+
 
 //		Ft_free			//
 
+void	ft_free_env(char **envp);
 void	ft_free_cmds(char **commands);
 void	ft_free_tokens(t_token *tokens);
 int		ft_free(int i, char *command, t_data *data);
+void	ft_free_matrix(char **matrix);
+
 
 //		Ft_tokens		//
 
@@ -91,10 +97,17 @@ void	ft_tokens_cat(t_data **data);
 
 //		FT_Syntax		//
 
+int		ft_quote_syntax(char *command);
+int		ft_pipe_syntax(char *command);
+int		ft_redirect_syntax(char *command);
 int		ft_syntax(char *command);
 
 //		FT_data_init	//
 
+char	*ft_get_path(t_data *data);
+void	ft_prompt_init(t_data *data);
+char	*ft_get_hostname(void);
+char	**ft_cpyenv(char **envp);
 t_data	*ft_data_init(char **envp);
 
 //		FT_execve		//
@@ -104,6 +117,13 @@ void	ft_execve(char *path, char **argv, char **envp);
 //		FT_expander		//
 
 void	ft_expander(t_token *tokens, t_data *data);
+int		ft_len_env(char *str);
+char	*ft_expander_replace(char *str, char *env, int start);
+int		ft_check_expander(t_token *tokens, size_t *i);
+void	ft_expand_quest(t_token *tokens, t_data *data
+		, char *env, size_t *start);
+void	ft_expander_reset(char *str, size_t *i);
+void	ft_skip_single_quote(char *str, size_t *i);
 
 //		FT_Builtins		//
 
@@ -112,6 +132,13 @@ void	ft_env(t_data *data);
 
 //		FT_Rmv_quotes	//
 
+int		ft_quote_rm_len(char const *s, char quote);
+char	*ft_rmv_single_quotes(char *str, int *start);
+char	*ft_rmv_double_quotes(char *str, int *start);
 void	ft_rmv_quotes(t_token *tokens);
+
+//		FT_Syntax_Tokens	//
+
+int	ft_syntax_tokens(t_token *tokens);
 
 #endif
