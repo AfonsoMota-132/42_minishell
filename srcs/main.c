@@ -18,20 +18,20 @@ int	main(int ac, char **av, char **envp)
 	char	*command;
 	char	*command2;
 	char	**commands;
-	char	*path = "/bin/clear";
-	char	*idk[] = {path, "-T", "xterm-256color",NULL};
 
 	(void) ac;
 	(void) av;
+	command = NULL;
 	data = ft_data_init(envp);
 	while (1)
 	{
 		command2 = readline(data->prompt);
 		add_history(command2);
+		if (command)
+			free(command);
 		command = ft_strtrim(command2, " \t\n");
-		if (!command || ft_strlen(command) == 0)
-			continue ;
-		if (ft_syntax(command))
+		if (!command || !ft_strlen(command)
+			|| ft_syntax(command))
 			continue ;
 		if (ft_strncmp(command, "exit", 4) == 0)
 			ft_free(0, command, data);
@@ -41,24 +41,12 @@ int	main(int ac, char **av, char **envp)
 		data->tokens_start = ft_token_maker(commands);
 		data->tokens = data->tokens_start;
 		ft_tokens_cat(&data);
-		data->tokens = data->tokens_start;
-		if (ft_syntax_tokens(data->tokens))
-			continue ;
-		if (data->tokens->type == CMD
-			&& ft_strncmp(data->tokens->content, "clear", 5) == 0)
-		{
-			if (fork() == 0)
-				execve(path, idk, NULL);
-			else
-			{
-				waitpid(-1, &data->exit_status, 0);
-				printf("test: %i\n", data->exit_status);
-				rl_redisplay();
-			}
-		}
 		ft_env(data);
 		ft_expander(data->tokens, data);
 		ft_rmv_quotes(data->tokens);
+		ft_tokens_cat(&data);
+		if (ft_syntax_tokens(data->tokens))
+			continue ;
 		while (data->tokens)
 		{
 			printf("%s. ", data->tokens->content);
@@ -78,13 +66,11 @@ int	main(int ac, char **av, char **envp)
 				printf("Double Redirect Out\n");
 			else if (data->tokens->type == FILENAME)
 				printf("Filename\n");
+			else if (data->tokens->type == HERE_DOC)
+				printf("Here Doc\n");
 			if (!data->tokens->next)
 				break ;
 			data->tokens = data->tokens->next;
 		}
-		ft_free_tokens(data->tokens_start);
-		data->tokens_start = NULL;
-		data->tokens = NULL;
-		free (command);
 	}
 }

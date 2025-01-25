@@ -46,6 +46,7 @@ $(NAME): $(OBJS)
 
 clean:
 	$(RM) $(OBJS)
+	$(MAKE) -C libs/libft/ clean
 
 fclean: clean
 	$(RM) $(NAME)

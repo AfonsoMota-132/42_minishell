@@ -34,7 +34,8 @@ typedef enum e_token_type
 	D_REDIRECT_IN,
 	REDIRECT_OUT,
 	D_REDIRECT_OUT,
-	FILENAME
+	FILENAME,
+	HERE_DOC
 }	t_token_type;
 
 typedef struct s_token

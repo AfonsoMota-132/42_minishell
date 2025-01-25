@@ -105,13 +105,9 @@ void	ft_expander2(t_token *tokens, \
 	char	*env;
 
 	i = (*start);
-	printf("wtf %s\n", tokens->content);
-	printf("wtf %s\n", &tokens->content[i]);
 	ft_skip_single_quote(tokens->content, &i);
 	if (ft_check_expander(tokens, &i) != 0)
 	{
-		printf("wtf2 %s\n", tokens->content);
-		printf("wtf2 %s\n", &tokens->content[i]);
 		env = ft_substr(tokens->content, i + 1, \
 			ft_len_env(&tokens->content[i]));
 		ft_expand_quest(tokens, data, env, &i);
@@ -127,8 +123,6 @@ void	ft_expander2(t_token *tokens, \
 				&& tokens->content[i] != '\'');
 		free(env);
 	}
-	printf("wtf3 %s\n", tokens->content);
-	printf("wtf3 %s\n", &tokens->content[i]);
 	(*start) = i;
 }
 

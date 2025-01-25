@@ -28,7 +28,7 @@ int	ft_quote_syntax(char *command)
 			while (command[i] && command[i] != quote)
 				i++;
 			if (command[i] != quote)
-				return (printf("Syntax error\nUnclosed quotes\n"));
+				return (printf("Minishell: Syntax error unclosed quotes\n"));
 		}
 	}
 	return (0);
@@ -44,7 +44,7 @@ int	ft_pipe_syntax(char *command)
 	{
 		if (command[i] == '|' && command[i + 1]
 			&& command[i + 1] == '|')
-			return (printf("Syntax error\nToo many pipes\n"));
+			return (printf("Minishell: Syntax error too many pipes\n"));
 	}
 	return (0);
 }
@@ -58,11 +58,11 @@ int	ft_redirect_syntax(char *command)
 	{
 		if ((command[i] == '>' && command[i + 1] == '<') ||
 			(command[i] == '<' && command[i + 1] == '>'))
-			return (printf("Syntax error\nToo many redirects\n"));
+			return (printf("minishell: Syntax error too many redirects\n"));
 		if ((command[i] == '>' || command[i] == '<') 
 			&& (command[i + 1] == '>' || command[i + 1] == '<')
 			&& (command[i + 2] == '>' || command[i + 2] == '<'))
-			return (printf("Syntax error\nToo many redirects\n"));
+			return (printf("minishell: Syntax error too many redirects\n"));
 	}
 	return (0);
 }

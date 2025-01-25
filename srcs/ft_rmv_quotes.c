@@ -43,7 +43,6 @@ char	*ft_rmv_single_quotes(char *str, int *start)
 	quote = ft_substr(str, (*start) + 1, ft_quote_rm_len(&str[i - 1], '\''));
 	new = ft_strjoin_gnl(new, quote);
 	new = ft_strjoin_gnl(new, &str[i + 1 + ft_quote_rm_len(&str[i - 1], '\'')]);
-	printf("new: %s\n", new);
 	*start = i + ft_quote_rm_len(&str[i - 1], '\'') - 1;
 	free(str);
 	free(quote);
@@ -68,7 +67,6 @@ char	*ft_rmv_double_quotes(char *str, int *start)
 	quote = ft_substr(str, (*start) + 1, ft_quote_rm_len(&str[i - 1], '"'));
 	new = ft_strjoin_gnl(new, quote);
 	new = ft_strjoin_gnl(new, &str[i + 1 + ft_quote_rm_len(&str[i - 1], '"')]);
-	printf("new: %s\n", new);
 	*start = i + ft_quote_rm_len(&str[i - 1], '"') - 1;
 	free(str);
 	free(quote);
