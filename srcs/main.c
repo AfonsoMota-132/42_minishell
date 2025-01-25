@@ -45,11 +45,13 @@ int	main(int ac, char **av, char **envp)
 		ft_expander(data->tokens, data);
 		ft_rmv_quotes(data->tokens);
 		ft_tokens_cat(&data);
-		if (ft_syntax_tokens(data->tokens))
-			continue ;
 		while (data->tokens)
 		{
 			printf("%s. ", data->tokens->content);
+			/*if (data->tokens->has_quote == 0)*/
+			/*	printf("No quote\n");*/
+			/*else if (data->tokens->has_quote == 1)*/
+				/*printf("Has quote\n");*/
 			if (data->tokens->type == PIPE)
 				printf("Pipe\n");
 			else if (data->tokens->type == CMD)
@@ -72,5 +74,7 @@ int	main(int ac, char **av, char **envp)
 				break ;
 			data->tokens = data->tokens->next;
 		}
+		if (ft_syntax_tokens(data->tokens))
+			continue ;
 	}
 }

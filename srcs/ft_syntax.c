@@ -19,15 +19,16 @@ int	ft_quote_syntax(char *command)
 
 	i = -1;
 	while (command[++i] && \
-		(ft_strchr("\'", command[i])
-		|| ft_strchr("\"", command[i])))
+		(ft_strchr(&command[i], '\'')
+		|| ft_strchr(&command[i] , '"')))
 	{
 		if (command[i] == '"' || command[i] == '\'')
 		{
 			quote = command[i++];
 			while (command[i] && command[i] != quote)
 				i++;
-			if (command[i] != quote)
+			if ((command[i] && command[i] != quote)
+				|| !command[i])
 				return (printf("Minishell: Syntax error unclosed quotes\n"));
 		}
 	}
@@ -69,9 +70,6 @@ int	ft_redirect_syntax(char *command)
 
 int	ft_syntax(char *command)
 {
-	int		i;
-
-	i = -1;
 	if (ft_quote_syntax(command)
 		|| ft_pipe_syntax(command)
 		|| ft_redirect_syntax(command))
