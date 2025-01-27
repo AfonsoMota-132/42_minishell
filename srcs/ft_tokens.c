@@ -27,10 +27,6 @@ t_token	*ft_token_maker(char **commands)
 	{
 		token->content = ft_strdup(commands[i]);
 		token->type = CMD;
-		/*token->has_quote = 0;*/
-		/*if (ft_strchr(commands[i], '\'')*/
-		/*	|| ft_strchr(commands[i], '"'))*/
-		/*	token->has_quote = 1;*/
 		if (!commands[i + 1])
 			break ;
 		token->next = malloc(sizeof(t_token));
@@ -88,6 +84,10 @@ void	ft_tokens_cat(t_data **data)
 		}
 		else
 			check = ft_tokens_cat2(data, check);
+		if ((ft_strchr((*data)->tokens->content, '\'')
+			|| ft_strchr((*data)->tokens->content, '"'))
+			&& (*data)->tokens->type != CMD)
+			(*data)->tokens->type = ARG;
 		(*data)->tokens = (*data)->tokens->next;
 	}
 	(*data)->tokens = (*data)->tokens_start;
