@@ -98,6 +98,37 @@ void	ft_expand_quest(t_token *tokens, t_data *data
 	}
 }
 
+char	*ft_expander_replace_NULL(char *str, int start)
+{
+	int		i;
+	int		j;
+	char	*new;
+
+	j = 0;
+	i = start;
+	while (str[i] && str[i] != '$')
+		i++;
+	if (str[i] == '$')
+		i++;
+	while (str[i + j] && str[i + j] != ' '
+		&& str[i + j] != '\t' && str[i + j] != '\n'
+		&& str[i + j] != '$' && str[i + j] != '"'
+		&& str[i + j] != '\'')
+		j++;
+	printf("str: %s	i: %u\n", str, i);
+	if (str[i - 1] != '\0')
+		new = ft_substr(str, 0, i);
+	else
+		new = NULL;
+	printf("new: %s.\n", new);
+	new = ft_strjoin_gnl(new, &str[i + j]);
+	printf("new: %s.\n", new);
+	free(str);
+	printf("new: %s.\n", new);
+	return (new);
+	
+}
+
 void	ft_expander2(t_token *tokens, \
 		size_t *start, t_data *data)
 {
@@ -111,16 +142,19 @@ void	ft_expander2(t_token *tokens, \
 		env = ft_substr(tokens->content, i + 1, \
 			ft_len_env(&tokens->content[i]));
 		ft_expand_quest(tokens, data, env, &i);
-		if (getenv(env))
+		if (ft_getenv(env, data) != NULL)
 		{
 			tokens->content = ft_expander_replace(tokens->content, \
-									getenv(env), i++);
+									ft_getenv(env, data), i++);
 			ft_expander_reset(tokens->content, &i);
 		}
-		else if (ft_strchr(env, '$') != NULL)
-			while (tokens->content[++i] != '\0'
-				&& tokens->content[i] != '$'
-				&& tokens->content[i] != '\'');
+		else if (ft_strchr(tokens->content, '$') != NULL)
+		{
+			if (tokens->content[i + 1] && tokens->content[i + 1] != ' ')
+				tokens->content = ft_expander_replace_NULL(tokens->content, \
+									i++);
+			i++;
+		}
 		free(env);
 	}
 	(*start) = i;

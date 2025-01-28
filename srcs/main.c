@@ -6,11 +6,41 @@
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 20:39:29 by afogonca          #+#    #+#             */
-/*   Updated: 2025/01/23 11:03:44 by afogonca         ###   ########.fr       */
+/*   Updated: 2025/01/28 13:22:53 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/minishell.h"
+
+void	ft_print_tokens(t_token *tokens, t_data *data)
+{
+	while (data->tokens)
+	{
+		printf("%s. ", data->tokens->content);
+		if (data->tokens->type == PIPE)
+			printf("Pipe\n");
+		else if (data->tokens->type == CMD)
+			printf("Command\n");
+		else if (data->tokens->type == ARG)
+			printf("Argument\n");
+		else if (data->tokens->type == REDIRECT_IN)
+			printf("Redirect In\n");
+		else if (data->tokens->type == D_REDIRECT_IN)
+			printf("Double Redirect In\n");
+		else if (data->tokens->type == REDIRECT_OUT)
+			printf("Redirect Out\n");
+		else if (data->tokens->type == D_REDIRECT_OUT)
+			printf("Double Redirect Out\n");
+		else if (data->tokens->type == FILENAME)
+			printf("Filename\n");
+		else if (data->tokens->type == HERE_DOC)
+			printf("Here Doc\n");
+		if (!data->tokens->next)
+			break ;
+		data->tokens = data->tokens->next;
+	}
+	(void) tokens;
+}
 
 int	main(int ac, char **av, char **envp)
 {
@@ -41,35 +71,11 @@ int	main(int ac, char **av, char **envp)
 		data->tokens_start = ft_token_maker(commands);
 		data->tokens = data->tokens_start;
 		ft_tokens_cat(&data);
-		ft_env(data);
 		ft_expander(data->tokens, data);
 		ft_rmv_quotes(data->tokens);
 		if (ft_syntax_tokens(data->tokens))
 			continue ;
-		while (data->tokens)
-		{
-			printf("%s. ", data->tokens->content);
-			if (data->tokens->type == PIPE)
-				printf("Pipe\n");
-			else if (data->tokens->type == CMD)
-				printf("Command\n");
-			else if (data->tokens->type == ARG)
-				printf("Argument\n");
-			else if (data->tokens->type == REDIRECT_IN)
-				printf("Redirect In\n");
-			else if (data->tokens->type == D_REDIRECT_IN)
-				printf("Double Redirect In\n");
-			else if (data->tokens->type == REDIRECT_OUT)
-				printf("Redirect Out\n");
-			else if (data->tokens->type == D_REDIRECT_OUT)
-				printf("Double Redirect Out\n");
-			else if (data->tokens->type == FILENAME)
-				printf("Filename\n");
-			else if (data->tokens->type == HERE_DOC)
-				printf("Here Doc\n");
-			if (!data->tokens->next)
-				break ;
-			data->tokens = data->tokens->next;
-		}
+		ft_echo(data->tokens);
+		ft_print_tokens(data->tokens, data);
 	}
 }

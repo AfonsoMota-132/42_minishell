@@ -6,7 +6,7 @@
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 19:56:43 by afogonca          #+#    #+#             */
-/*   Updated: 2025/01/23 10:57:56 by afogonca         ###   ########.fr       */
+/*   Updated: 2025/01/28 13:22:30 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ typedef struct s_data
 	t_token		*tokens_start;
 	char		*command;
 	char		**args;
-	char		**envp;
+	char		**ft_envp;
 	char		*path;
 	char		*user;
 	char		*hostname;
@@ -125,11 +125,11 @@ void	ft_expand_quest(t_token *tokens, t_data *data
 		, char *env, size_t *start);
 void	ft_expander_reset(char *str, size_t *i);
 void	ft_skip_single_quote(char *str, size_t *i);
+char	*ft_getenv(char *env, t_data *data);
 
 //		FT_Builtins		//
 
-void	ft_cd(t_token *tokens);
-void	ft_env(t_data *data);
+int		ft_echo(t_token *token);
 
 //		FT_Rmv_quotes	//
 

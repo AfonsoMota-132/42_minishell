@@ -95,7 +95,7 @@ t_data	*ft_data_init(char **envp)
 	data->args = NULL;
 	data->exit_status = 0;
 	printf("before\n");
-	data->envp = ft_cpyenv(envp);
+	data->ft_envp = ft_cpyenv(envp);
 	data->user = getenv("USER");
 	data->hostname = ft_get_hostname();
 	data->path = ft_get_path(data);
