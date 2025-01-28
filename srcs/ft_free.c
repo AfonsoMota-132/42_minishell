@@ -6,7 +6,7 @@
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 11:50:55 by afogonca          #+#    #+#             */
-/*   Updated: 2025/01/04 10:44:27 by afogonca         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:13:20 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ int	ft_free(int i, char *command, t_data *data)
 			free(data->path);
 		if (data->prompt)
 			free(data->prompt);
-		if (data->envp)
-			ft_free_env(data->envp);
+		if (data->ft_envp)
+			ft_free_env(data->ft_envp);
 		if (data->hostname)
 			free(data->hostname);
 		free(data);

@@ -58,6 +58,7 @@ typedef struct s_data
 {
 	t_token		*tokens;
 	t_token		*tokens_start;
+
 	char		*command;
 	char		**args;
 	char		**ft_envp;
