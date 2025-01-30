@@ -6,7 +6,7 @@
 #    By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/17 20:41:21 by afogonca          #+#    #+#              #
-#    Updated: 2024/12/17 20:43:44 by afogonca         ###   ########.fr        #
+#    Updated: 2025/01/29 10:28:18 by afogonca         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,12 +20,16 @@ OBJS = $(SRCS:.c=.o)
 
 BUILTINS = srcs/ft_builtins/ft_echo.c
 
+REDIRS = srcs/ft_redirects/ft_redirects.c \
+			srcs/ft_redirects/ft_redirects_shorten.c \
+			srcs/ft_redirects/ft_verify_redir.c
+
 SRCS = srcs/main.c srcs/ft_split_ms.c \
 		srcs/ft_free.c srcs/ft_tokens.c srcs/ft_syntax.c \
 		srcs/ft_data_init.c srcs/ft_expander.c \
 		srcs/ft_rmv_quotes.c \
 		srcs/ft_expander2.c	srcs/ft_syntax_tokens.c \
-		srcs/ft_getenv.c $(BUILTINS)
+		srcs/ft_getenv.c $(BUILTINS) $(REDIRS)
 # srcs/ft_readline.c
 #srcs/ft_execve.c
 

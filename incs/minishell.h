@@ -6,7 +6,7 @@
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 19:56:43 by afogonca          #+#    #+#             */
-/*   Updated: 2025/01/28 13:22:30 by afogonca         ###   ########.fr       */
+/*   Updated: 2025/01/29 10:44:27 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,20 @@ typedef struct s_token
 	struct s_token	*prev;
 }	t_token;
 
+typedef	struct s_redir {
+	char			*filename;
+	int				fd;
+	t_token_type	type;
+}	t_redir;
+
 typedef struct s_command
 {
-	void		*content;
-	void		*flags;
-	void		*argument;
+	char				*command;
+	char				*path;
+	char				**args;
+	t_redir				*redir_in;
+	t_redir				*redir_out;
+	struct s_command	*next;
 }	t_command;
 
 typedef struct s_data
@@ -142,5 +151,13 @@ void	ft_rmv_quotes(t_token *tokens);
 //		FT_Syntax_Tokens	//
 
 int	ft_syntax_tokens(t_token *tokens);
+
+//		FT_redirects		//
+
+int		ft_redirects(t_token *tokens, t_data **data);
+void	ft_take_last_redir_out(t_token *tokens);
+void	ft_take_last_redir_in(t_token *tokens);
+int		ft_verify_redir_out(t_token *tokens);
+int		ft_verify_redir(t_token *tokens);
 
 #endif

@@ -115,16 +115,13 @@ char	*ft_expander_replace_NULL(char *str, int start)
 		&& str[i + j] != '$' && str[i + j] != '"'
 		&& str[i + j] != '\'')
 		j++;
-	printf("str: %s	i: %u\n", str, i);
 	if (str[i - 1] != '\0')
-		new = ft_substr(str, 0, i);
+		new = ft_substr(str, 0, i - 1);
 	else
 		new = NULL;
-	printf("new: %s.\n", new);
-	new = ft_strjoin_gnl(new, &str[i + j]);
-	printf("new: %s.\n", new);
+	if (ft_isdigit(str[i]) && ++i)
+		new = ft_strjoin_gnl(new, &str[i]);
 	free(str);
-	printf("new: %s.\n", new);
 	return (new);
 	
 }

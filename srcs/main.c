@@ -6,7 +6,7 @@
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 20:39:29 by afogonca          #+#    #+#             */
-/*   Updated: 2025/01/28 13:22:53 by afogonca         ###   ########.fr       */
+/*   Updated: 2025/01/29 10:43:34 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	main(int ac, char **av, char **envp)
 		ft_tokens_cat(&data);
 		ft_expander(data->tokens, data);
 		ft_rmv_quotes(data->tokens);
-		if (ft_syntax_tokens(data->tokens))
+		if (ft_syntax_tokens(data->tokens) || ft_redirects(data->tokens, &data))
 			continue ;
 		ft_echo(data->tokens);
 		ft_print_tokens(data->tokens, data);
