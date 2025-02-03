@@ -12,6 +12,17 @@
 
 #include "../../incs/minishell.h"
 
+void	ft_free_token(t_token *tokens)
+{
+	t_token	*tmp;
+	
+	tmp = tokens->next;
+	free(tokens->content);
+	free(tokens);
+	free(tmp->content);
+	free(tmp);
+}
+
 t_token *ft_pcmdf_first(t_token *tokens)
 {
 	t_token *prev;
@@ -59,12 +70,11 @@ t_token *ft_put_cmd_first(t_token *tokens)
 
 int	ft_redirects(t_token *tokens, t_data **data)
 {
-	if (ft_verify_redir(tokens))
-		return (1);
-	tokens = ft_put_cmd_first(tokens);
-	ft_take_last_redir_out(tokens);
-	ft_take_last_redir_in(tokens);
+	/*tokens = ft_put_cmd_first(tokens);*/
+	ft_redir_short_out_single(tokens);
+	ft_redir_short_out_double(tokens);
 	(*data)->tokens_start = tokens;
 	(*data)->tokens = tokens;
+	printf("after\n");
 	return (0);
 }

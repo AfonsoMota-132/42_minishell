@@ -20,11 +20,11 @@ OBJS = $(SRCS:.c=.o)
 
 BUILTINS = srcs/ft_builtins/ft_echo.c
 
-REDIRS = srcs/ft_redirects/ft_redirects.c \
-			srcs/ft_redirects/ft_redirects_shorten.c \
-			srcs/ft_redirects/ft_verify_redir.c
+REDIRS = 	srcs/ft_redirects/ft_redirects.c \
+			srcs/ft_redirects/ft_redir_short_out_single.c \
+			srcs/ft_redirects/ft_redir_short_out_double.c
 
-SRCS = srcs/main.c srcs/ft_split_ms.c \
+SRCS =	srcs/main.c srcs/ft_split_ms.c \
 		srcs/ft_free.c srcs/ft_tokens.c srcs/ft_syntax.c \
 		srcs/ft_data_init.c srcs/ft_expander.c \
 		srcs/ft_rmv_quotes.c \

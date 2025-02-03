@@ -78,6 +78,7 @@ typedef struct s_data
 	int			exit_status;
 }	t_data;
 
+void	ft_print_tokens(t_token *tokens, t_data *data);
 //		ft_readline		//
 
 char	*ft_readline(char *str);
@@ -155,9 +156,25 @@ int	ft_syntax_tokens(t_token *tokens);
 //		FT_redirects		//
 
 int		ft_redirects(t_token *tokens, t_data **data);
+t_token	*ft_skip_to_pipe(t_token *tokens);
+
+//		FT_redir_short__out__single		//
+
+t_token	*ft_rmv_ros_before(t_token *tokens, t_token *head);
+t_token	*ft_take_ros_out(t_token *tokens, t_token *tmp);
+void	ft_redir_short_out_single(t_token *tokens);
+
+//		FT_redir_short_out_double		//
+
+t_token	*ft_rmv_rod_before(t_token *tokens, t_token *head);
+t_token *ft_take_rod_out(t_token *tokens, t_token *tmp);
+void	ft_redir_short_out_double(t_token *tokens);
+
+
 void	ft_take_last_redir_out(t_token *tokens);
 void	ft_take_last_redir_in(t_token *tokens);
 int		ft_verify_redir_out(t_token *tokens);
 int		ft_verify_redir(t_token *tokens);
+void	ft_free_token(t_token *tokens);
 
 #endif
