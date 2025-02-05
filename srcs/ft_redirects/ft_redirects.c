@@ -68,68 +68,59 @@ t_token *ft_put_cmd_first(t_token *tokens)
 	return (head);
 }
 
-t_token	*ft_take_ro_out(t_token *head, t_token *tokens)
+t_token	*ft_take_ro_out(t_token *head, t_token *tokens, int	i)
 {
 	t_token	*tmp;
-	t_token	*tmp2;
 
-	tmp = head;
-	while (tmp && tmp->type != PIPE)
-	{
-		tmp2 = tmp->next;
-		if (tmp->next && (tmp->next->type == D_REDIRECT_OUT
-		|| tmp->next->type == REDIRECT_OUT) && tmp->next->next 
-			&& tmp->next != tokens && tmp->next->next->next)
-		{
-			tmp->next = tmp->next->next->next;
-			ft_free_token(tmp2);
-		}
-		else if (tmp->next && (tmp->next->type == D_REDIRECT_OUT
-		|| tmp->next->type == REDIRECT_OUT) && tmp->next->next 
-			&& tmp->next != tokens)
-		{
-			tmp->next = NULL;
-			ft_free_token(tmp2);
-		}
-		else
-			tmp = tmp->next;
-	}
+	if (i == -1)
+		return (tokens);
 	tokens = head;
-	return (NULL);
+	while (tokens && tokens->type != PIPE)
+	{
+		tmp = tokens->next;
+		if (tokens->next && (tokens->next->type == D_REDIRECT_OUT
+			|| tokens->next->type == REDIRECT_OUT) && tokens->next->next
+			&&	i == 1)
+		{
+			tokens->next = tokens->next->next->next;
+			ft_free_token(tmp);
+			break ;
+		}
+		else if(tokens->next && (tokens->next->type == D_REDIRECT_OUT
+			|| tokens->next->type == REDIRECT_OUT) && tokens->next->next
+			&& !(--i))
+			tokens = tokens->next;
+		else
+			tokens = tokens->next;
+	}
+	return (head);
 }
 
 void	ft_redir_short_out(t_token *tokens)
 {
 	t_token	*head;
-	t_token	*tmp;
 	int		i;
 
-	i = 0;
 	while (tokens)
 	{
-		tmp = NULL;
+		i = -1;
 		head = tokens;
 		while (tokens && tokens->type != PIPE)
 		{
 			if ((tokens->type == D_REDIRECT_OUT || tokens->type == REDIRECT_OUT))
 			{
-				i++;
-				if (access(tokens ->next->content, W_OK) == -1)
-				{
-					tmp = ft_take_ro_out(tokens, tmp);
-					break ;
-				}
-				if (tokens->type == D_REDIRECT_OUT || tokens->type == REDIRECT_OUT)
-					tmp = tokens;
+				if (access(tokens->next->content, W_OK) == -1)
+					i = 0;
+				else
+					i = 1;
+				break ;
 			}
+			else
+				tokens = tokens->next;
+		}
+		tokens = ft_take_ro_out(head, tokens, i);
+		if (tokens && tokens->next)
 			tokens = tokens->next;
-		}
-		if (tmp)
-		{
-			tokens = head;
-			tokens = ft_take_ros_out(tokens, tmp);
-			tokens = ft_take_rod_out(tokens, tmp);
-		}
 	}
 }
 
