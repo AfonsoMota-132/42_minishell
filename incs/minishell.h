@@ -6,7 +6,7 @@
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 19:56:43 by afogonca          #+#    #+#             */
-/*   Updated: 2025/01/29 10:44:27 by afogonca         ###   ########.fr       */
+/*   Updated: 2025/02/06 09:07:09 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ typedef struct s_token
 	struct s_token	*prev;
 }	t_token;
 
-typedef	struct s_redir {
+typedef struct s_redir
+{
 	char			*filename;
 	int				fd;
 	t_token_type	type;
@@ -92,7 +93,6 @@ int		ft_seglen(char const *s);
 int		ft_count_parts(char const *s);
 char	**ft_split_cmds(char *command);
 
-
 //		Ft_free			//
 
 void	ft_free_env(char **envp);
@@ -100,7 +100,6 @@ void	ft_free_cmds(char **commands);
 void	ft_free_tokens(t_token *tokens);
 int		ft_free(int i, char *command, t_data *data);
 void	ft_free_matrix(char **matrix);
-
 
 //		Ft_tokens		//
 
@@ -132,8 +131,8 @@ void	ft_expander(t_token *tokens, t_data *data);
 int		ft_len_env(char *str);
 char	*ft_expander_replace(char *str, char *env, int start);
 int		ft_check_expander(t_token *tokens, size_t *i);
-void	ft_expand_quest(t_token *tokens, t_data *data
-		, char *env, size_t *start);
+void	ft_expand_quest(t_token *tokens, t_data *data,
+			char *env, size_t *start);
 void	ft_expander_reset(char *str, size_t *i);
 void	ft_skip_single_quote(char *str, size_t *i);
 char	*ft_getenv(char *env, t_data *data);
@@ -151,7 +150,7 @@ void	ft_rmv_quotes(t_token *tokens);
 
 //		FT_Syntax_Tokens	//
 
-int	ft_syntax_tokens(t_token *tokens);
+int		ft_syntax_tokens(t_token *tokens);
 
 //		FT_redirects		//
 
@@ -167,14 +166,20 @@ void	ft_redir_short_out_single(t_token *tokens);
 //		FT_redir_short_out_double		//
 
 t_token	*ft_rmv_rod_before(t_token *tokens, t_token *head);
-t_token *ft_take_rod_out(t_token *tokens, t_token *tmp);
+t_token	*ft_take_rod_out(t_token *tokens, t_token *tmp);
 void	ft_redir_short_out_double(t_token *tokens);
 
+//		FT_redir_short_out		//
 
-void	ft_take_last_redir_out(t_token *tokens);
-void	ft_take_last_redir_in(t_token *tokens);
-int		ft_verify_redir_out(t_token *tokens);
-int		ft_verify_redir(t_token *tokens);
+t_token	*ft_take_ro_out(t_token *head, t_token *tokens, int i);
+void	ft_redir_short_out(t_token *tokens);
+
+//		FT_redir_short_in		//
+
+t_token	*ft_rmv_ris_before(t_token *tokens, t_token *head);
+t_token	*ft_take_ris_out(t_token *tokens, t_token *tmp);
+void	ft_redir_short_in_single(t_token *tokens);
+
 void	ft_free_token(t_token *tokens);
 
 #endif
