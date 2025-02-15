@@ -19,7 +19,7 @@ t_token	*ft_token_maker(char **commands)
 	int		i;
 
 	i = -1;
-	token = malloc(sizeof(t_token));
+	token = ft_calloc(sizeof(t_token), 1);
 	if (!token)
 		return (NULL);
 	start = token;
@@ -29,7 +29,7 @@ t_token	*ft_token_maker(char **commands)
 		token->type = CMD;
 		if (!commands[i + 1])
 			break ;
-		token->next = malloc(sizeof(t_token));
+		token->next = ft_calloc(sizeof(t_token), 1);
 		token = token->next;
 	}
 	token->next = NULL;
@@ -64,6 +64,7 @@ int	ft_tokens_cat2(t_data **data, int check)
 		(*data)->tokens->type = ARG;
 	return (check);
 }
+
 void	ft_tokens_cat(t_data **data)
 {
 	int	check;
@@ -72,8 +73,8 @@ void	ft_tokens_cat(t_data **data)
 	(*data)->tokens = (*data)->tokens_start;
 	while ((*data)->tokens)
 	{
-		if ((*data)->tokens->content[0] == '|' && ft_strlen((*data)->tokens->content) == 1 
-			&& ++check)
+		if ((*data)->tokens->content[0] == '|'
+			&& ft_strlen((*data)->tokens->content) == 1 && ++check)
 			(*data)->tokens->type = PIPE;
 		else if ((*data)->tokens->content[0] == '<'
 			&& (*data)->tokens->content[1] == '<')
@@ -85,7 +86,7 @@ void	ft_tokens_cat(t_data **data)
 		else
 			check = ft_tokens_cat2(data, check);
 		if ((ft_strchr((*data)->tokens->content, '\'')
-			|| ft_strchr((*data)->tokens->content, '"'))
+				|| ft_strchr((*data)->tokens->content, '"'))
 			&& (*data)->tokens->type != CMD)
 			(*data)->tokens->type = ARG;
 		(*data)->tokens = (*data)->tokens->next;

@@ -85,20 +85,17 @@ void	ft_expand_quest(t_token *tokens, t_data *data
 			i++;
 		while (str[i + j] && str[i + j] != ' ' && str[i + j] != '\t'
 			&& str[i + j] != '\n' && str[i + j] != '$'
-			&& str[i + j] != '"' && str[i + j] != '\'')
-			j++;
+			&& str[i + j] != '"' && str[i + j] != '\'' && ++j);
 		tmp = ft_itoa(data->exit_status);
 		new = ft_substr(tokens->content, 0, i - 1);
-		new = ft_strjoin_gnl(new, tmp);
-		new = ft_strjoin_gnl(new, &tokens->content[i + j]);
-		free(tmp);
+		new = ft_strjoin_gnl(ft_strjoin_gnl(new, tmp), &tokens->content[i + j]);
 		free(tokens->content);
 		tokens->content = new;
 		ft_expander_reset(tokens->content, start);
 	}
 }
 
-char	*ft_expander_replace_NULL(char *str, int start)
+char	*ft_expander_replace_null(char *str, int start)
 {
 	int		i;
 	int		j;
@@ -123,7 +120,6 @@ char	*ft_expander_replace_NULL(char *str, int start)
 		new = ft_strjoin_gnl(new, &str[i]);
 	free(str);
 	return (new);
-	
 }
 
 void	ft_expander2(t_token *tokens, \
@@ -148,25 +144,11 @@ void	ft_expander2(t_token *tokens, \
 		else if (ft_strchr(tokens->content, '$') != NULL)
 		{
 			if (tokens->content[i + 1] && tokens->content[i + 1] != ' ')
-				tokens->content = ft_expander_replace_NULL(tokens->content, \
+				tokens->content = ft_expander_replace_null(tokens->content, \
 									i++);
 			i++;
 		}
 		free(env);
 	}
 	(*start) = i;
-}
-
-void	ft_expander(t_token *tokens, t_data *data)
-{
-	size_t	i;
-
-	while (tokens)
-	{
-		i = 0;
-		while (tokens->content[i] != '\0'
-			&& ft_strchr(&tokens->content[i], '$'))
-			ft_expander2(tokens, &i, data);
-		tokens = tokens->next;
-	}
 }

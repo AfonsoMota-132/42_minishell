@@ -20,17 +20,21 @@ OBJS = $(SRCS:.c=.o)
 
 BUILTINS = srcs/ft_builtins/ft_echo.c
 
+HEREDOC = srcs/ft_redirects/ft_heredoc/ft_heredoc.c
+
 REDIRS = 	srcs/ft_redirects/ft_redirects.c \
 			srcs/ft_redirects/ft_redir_short_out_single.c \
 			srcs/ft_redirects/ft_redir_short_out_double.c \
 			srcs/ft_redirects/ft_redir_short_out.c \
-			srcs/ft_redirects/ft_redir_short_in_single.c
+			srcs/ft_redirects/ft_redir_short_in_single.c \
+			$(HEREDOC)
 
 SRCS =	srcs/main.c srcs/ft_split_ms.c \
 		srcs/ft_free.c srcs/ft_tokens.c srcs/ft_syntax.c \
 		srcs/ft_data_init.c srcs/ft_expander.c \
 		srcs/ft_rmv_quotes.c \
 		srcs/ft_expander2.c	srcs/ft_syntax_tokens.c \
+		srcs/ft_get_prompt.c \
 		srcs/ft_getenv.c $(BUILTINS) $(REDIRS)
 # srcs/ft_readline.c
 #srcs/ft_execve.c

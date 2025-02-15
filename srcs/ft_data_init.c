@@ -11,43 +11,7 @@
 /* ************************************************************************** */
 
 #include "../incs/minishell.h"
-
-char	*ft_get_path(t_data *data)
-{
-	char	*path;
-	char	**dirs;
-	int		i;
-
-	path = getcwd(NULL, 0);
-	dirs = ft_split(path, '/');
-	free(path);
-	if (!dirs)
-		return (NULL);
-	i = 0;
-	if (ft_strncmp(dirs[i], "home", 4) == 0
-		&& ft_strlen(dirs[i]) == 4 && ++i
-		&& ft_strncmp(dirs[i], data->user, ft_strlen(data->user)) == 0
-		&& ft_strlen(dirs[i]) == ft_strlen(data->user))
-		path = ft_strdup("~");
-	while (dirs[++i])
-	{
-		if (!path)
-			path = ft_strjoin(path, "/");
-		else
-			path = ft_strjoin_gnl(path, "/");
-		path = ft_strjoin_gnl(path, dirs[i]);
-	}
-	ft_free_matrix(dirs);
-	return (path);
-}
-
-void	ft_prompt_init(t_data *data)
-{
-	if (data->prompt)
-		free(data->prompt);
-	data->prompt = ft_strjoin_gnl(ft_strjoin_gnl(ft_strjoin_gnl(ft_strjoin_gnl(
-		ft_strjoin(data->user, "@"), data->hostname), ":"), data->path), "$ ");
-}
+#include <fcntl.h>
 
 char	*ft_get_hostname(void)
 {
@@ -84,6 +48,14 @@ char	**ft_cpyenv(char **envp)
 	return (env);
 }
 
+char	*ft_heredoc_path(t_data *data)
+{
+	data->heredoc_path = ft_strdup("/home/");
+	data->heredoc_path = ft_strjoin_gnl(data->heredoc_path, data->user);
+	data->heredoc_path = ft_strjoin_gnl(data->heredoc_path, "/");
+	return (data->heredoc_path);
+}
+
 t_data	*ft_data_init(char **envp)
 {
 	t_data	*data;
@@ -94,13 +66,12 @@ t_data	*ft_data_init(char **envp)
 	data->command = NULL;
 	data->args = NULL;
 	data->exit_status = 0;
-	printf("before\n");
 	data->ft_envp = ft_cpyenv(envp);
 	data->user = getenv("USER");
 	data->hostname = ft_get_hostname();
 	data->path = ft_get_path(data);
-	printf("after\n");
 	data->prompt = NULL;
 	ft_prompt_init(data);
+	data->heredoc_path = ft_heredoc_path(data);
 	return (data);
 }

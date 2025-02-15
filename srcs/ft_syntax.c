@@ -20,7 +20,7 @@ int	ft_quote_syntax(char *command)
 	i = -1;
 	while (command[++i] && \
 		(ft_strchr(&command[i], '\'')
-		|| ft_strchr(&command[i] , '"')))
+			|| ft_strchr(&command[i], '"')))
 	{
 		if (command[i] == '"' || command[i] == '\'')
 		{
@@ -57,10 +57,10 @@ int	ft_redirect_syntax(char *command)
 	i = -1;
 	while (command[++i])
 	{
-		if ((command[i] == '>' && command[i + 1] == '<') ||
-			(command[i] == '<' && command[i + 1] == '>'))
+		if ((command[i] == '>' && command[i + 1] == '<')
+			|| (command[i] == '<' && command[i + 1] == '>'))
 			return (printf("minishell: Syntax error too many redirects\n"));
-		if ((command[i] == '>' || command[i] == '<') 
+		if ((command[i] == '>' || command[i] == '<')
 			&& (command[i + 1] == '>' || command[i + 1] == '<')
 			&& (command[i + 2] == '>' || command[i + 2] == '<'))
 			return (printf("minishell: Syntax error too many redirects\n"));

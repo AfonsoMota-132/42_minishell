@@ -24,6 +24,7 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <sys/wait.h>
+# include <dirent.h>
 
 typedef enum e_token_type
 {
@@ -37,6 +38,12 @@ typedef enum e_token_type
 	FILENAME,
 	HERE_DOC
 }	t_token_type;
+
+typedef struct s_heredoc
+{
+	char	*filename;
+	char	*path;
+}	t_heredoc;
 
 typedef struct s_token
 {
@@ -68,8 +75,8 @@ typedef struct s_data
 {
 	t_token		*tokens;
 	t_token		*tokens_start;
-
 	char		*command;
+	char		*heredoc_path;
 	char		**args;
 	char		**ft_envp;
 	char		*path;
@@ -120,6 +127,9 @@ void	ft_prompt_init(t_data *data);
 char	*ft_get_hostname(void);
 char	**ft_cpyenv(char **envp);
 t_data	*ft_data_init(char **envp);
+char	*ft_get_path_with_til(char *path, char **dirs, int i);
+char	*ft_get_path_without_til(char *path, char **dirs, int i);
+char	*ft_get_path(t_data *data);
 
 //		FT_execve		//
 
@@ -136,6 +146,8 @@ void	ft_expand_quest(t_token *tokens, t_data *data,
 void	ft_expander_reset(char *str, size_t *i);
 void	ft_skip_single_quote(char *str, size_t *i);
 char	*ft_getenv(char *env, t_data *data);
+void	ft_expander2(t_token *tokens, \
+		size_t *start, t_data *data);
 
 //		FT_Builtins		//
 
@@ -179,6 +191,10 @@ void	ft_redir_short_out(t_token *tokens);
 t_token	*ft_rmv_ris_before(t_token *tokens, t_token *head);
 t_token	*ft_take_ris_out(t_token *tokens, t_token *tmp);
 void	ft_redir_short_in_single(t_token *tokens);
+
+//		FT_Heredoc		//
+
+void	ft_heredoc(t_token *tokens, t_data *data);
 
 void	ft_free_token(t_token *tokens);
 

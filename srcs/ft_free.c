@@ -45,12 +45,22 @@ void	ft_free_cmds(char **commands)
 void	ft_free_tokens(t_token *tokens)
 {
 	t_token	*tmp;
-	
+
 	while (tokens)
 	{
-		tmp = tokens->next;
-		free(tokens->content);
-		free(tokens);
+		if (tokens->type == D_REDIRECT_IN
+			&& tokens->next && tokens->next->content
+			&& tokens->next->type == HERE_DOC
+			&& access(tokens->next->content, F_OK) == 0)
+			unlink(tokens->next->content);
+		if (tokens->next)
+			tmp = tokens->next;
+		else
+			tmp = NULL;
+		if (tokens->content)
+			free(tokens->content);
+		if (tokens)
+			free(tokens);
 		tokens = tmp;
 		if (!tokens)
 			break ;
@@ -73,6 +83,8 @@ int	ft_free(int i, char *command, t_data *data)
 			ft_free_env(data->ft_envp);
 		if (data->hostname)
 			free(data->hostname);
+		if (data->heredoc_path)
+			free(data->heredoc_path);
 		free(data);
 	}
 	exit(i);

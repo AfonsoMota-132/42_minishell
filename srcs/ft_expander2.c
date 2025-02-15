@@ -76,3 +76,17 @@ int	ft_len_env(char *str)
 	}
 	return (i - j);
 }
+
+void	ft_expander(t_token *tokens, t_data *data)
+{
+	size_t	i;
+
+	while (tokens)
+	{
+		i = 0;
+		while (tokens->content[i] != '\0'
+			&& ft_strchr(&tokens->content[i], '$'))
+			ft_expander2(tokens, &i, data);
+		tokens = tokens->next;
+	}
+}

@@ -30,7 +30,6 @@ t_token	*ft_pcmdf_first(t_token *tokens)
 
 	prev = NULL;
 	head = tokens;
-	printf("tokens->content: %s\n", tokens->content);
 	while (tokens && tokens->type != PIPE)
 	{
 		if (tokens->type == CMD && prev)
@@ -75,6 +74,7 @@ int	ft_redirects(t_token *tokens, t_data **data)
 	ft_redir_short_out_double(tokens);
 	ft_redir_short_out(tokens);
 	ft_redir_short_in_single(tokens);
+	ft_heredoc(tokens, *data);
 	(*data)->tokens_start = tokens;
 	(*data)->tokens = tokens;
 	return (0);
