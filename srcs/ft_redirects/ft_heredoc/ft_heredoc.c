@@ -105,27 +105,34 @@ char	*ft_heredoc_name(t_token *tokens, t_data *data)
 
 void	ft_actual_heredoc(t_token *tokens, t_data *data)
 {
-	char	*str;
+	t_token	*str;
 	char	*tmp;
 	int		fd;
 
 	tmp = ft_heredoc_name(tokens->next->next, data);
 	fd = open(tmp, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	str = malloc(sizeof(t_token));
+	str->content = NULL;
+	str->type = CMD;
+	str->next = NULL;
 	while (1)
 	{
-		str = readline("heredoc>");
-		if (str && !ft_strncmp(str, tokens->next->next->content,
+		str->content = readline("heredoc>");
+		if (str && !ft_strncmp(str->content,
+				tokens->next->next->content,
 				ft_strlen(tokens->next->next->content) + 1))
 			break ;
-		ft_putstr_fd(str, fd);
+		ft_expander(str, data);	
+		ft_putstr_fd(str->content, fd);
 		ft_putchar_fd('\n', fd);
-		if (str)
-			free(str);
-		str = NULL;
+		if (str->content)
+			free(str->content);
+		str->content = NULL;
 	}
 	close(fd);
 	free(tokens->next->next->content);
 	tokens->next->next->content = ft_strdup(tmp);
+	free(str);
 	free(tmp);
 }
 
