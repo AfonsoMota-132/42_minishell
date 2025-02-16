@@ -31,10 +31,8 @@ char	*ft_get_path_without_til(char *path, char **dirs, int i)
 	i = -1;
 
 	path = ft_strdup("/");
-	printf("wtf\t%s\n", path);
 	while (dirs[++i])
 	{
-		printf("wtf2\t%s\n", path);
 		if (!dirs)
 			break ;
 		path = ft_strjoin_gnl(path, dirs[i]);
@@ -53,6 +51,7 @@ char	*ft_get_path(t_data *data)
 	path = getcwd(NULL, 0);
 	dirs = ft_split(path, '/');
 	free(path);
+	path = NULL;
 	if (!dirs)
 		return (NULL);
 	i = 0;

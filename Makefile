@@ -56,7 +56,7 @@ deps: libft
 	$(MAKE) -C libs/libft/
 
 $(NAME): $(OBJS)
-	$(CC) -lreadline $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME) -lreadline
 
 clean:
 	$(RM) $(OBJS)
