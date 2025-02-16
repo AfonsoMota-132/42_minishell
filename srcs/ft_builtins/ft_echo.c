@@ -33,6 +33,11 @@ int	ft_echo(t_token *token)
 	int	n;
 
 	n = 0;
+	printf("wtf1");
+	if (token->type == CMD)
+		printf("yey");
+	else
+		printf("wtf");
 	if (token->type == CMD
 		&& ft_strncmp(token->content, "echo", 4) == 0
 		&& ft_strlen(token->content) == 4)

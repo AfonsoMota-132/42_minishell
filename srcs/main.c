@@ -75,7 +75,6 @@ int	main(int ac, char **av, char **envp)
 		ft_rmv_quotes(data->tokens);
 		if (ft_syntax_tokens(data->tokens) || ft_redirects(data->tokens, &data))
 			continue ;
-		ft_echo(data->tokens);
 		ft_print_tokens(data->tokens, data);
 	}
 }
