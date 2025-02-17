@@ -16,7 +16,8 @@ int	ft_check_expander(t_token *tokens, size_t *i)
 {
 	while (tokens->content[*i] != '\0')
 	{
-		if (tokens->content[*i] == '$')
+		if (tokens->content[*i] == '$'
+			&& tokens->content[*i + 1])
 			return (1);
 		if (tokens->content[*i] == '"')
 		{
@@ -116,9 +117,9 @@ char	*ft_expander_replace_null(char *str, int start)
 	if (str[i - 1] != '\0')
 		new = ft_substr(str, 0, i - 1);
 	else
-		new = NULL;
-	if (ft_isdigit(str[i]) && ++i)
-		new = ft_strjoin_gnl(new, &str[i]);
+		new = ft_strdup("");
+	if (str[i])
+		new = ft_strjoin_gnl(new, &str[i + 1]);
 	free(str);
 	return (new);
 }
