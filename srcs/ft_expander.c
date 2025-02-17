@@ -89,6 +89,7 @@ void	ft_expand_quest(t_token *tokens, t_data *data
 		tmp = ft_itoa(data->exit_status);
 		new = ft_substr(tokens->content, 0, i - 1);
 		new = ft_strjoin_gnl(ft_strjoin_gnl(new, tmp), &tokens->content[i + j]);
+		free(tmp);
 		free(tokens->content);
 		tokens->content = new;
 		ft_expander_reset(tokens->content, start);
@@ -144,9 +145,8 @@ void	ft_expander2(t_token *tokens, \
 		else if (ft_strchr(tokens->content, '$') != NULL)
 		{
 			if (tokens->content[i + 1] && tokens->content[i + 1] != ' ')
-				tokens->content = ft_expander_replace_null(tokens->content, \
-									i++);
-			i++;
+				tokens->content = ft_expander_replace_null(tokens->content, i);
+			i = 0;
 		}
 		free(env);
 	}
