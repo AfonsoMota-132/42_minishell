@@ -42,19 +42,8 @@ void	ft_print_tokens(t_token *tokens, t_data *data)
 	(void) tokens;
 }
 
-void	ft_sigint_handler(int sig)
-{
-	if (sig == SIGINT)
-	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-	else if (sig == SIGKILL)
-	{
 
-}
+int	signal_idk;
 
 int	main(int ac, char **av, char **envp)
 {
@@ -67,10 +56,12 @@ int	main(int ac, char **av, char **envp)
 	(void) av;
 	command = NULL;
 	data = ft_data_init(envp);
-	signal(SIGINT, ft_sigint_handler);
+	ft_signals();
 	while (1)
 	{
 		command2 = readline(data->prompt);
+		if (!command2)
+			ft_free(130, NULL,data);
 		add_history(command2);
 		if (command)
 			free(command);

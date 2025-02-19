@@ -87,6 +87,12 @@ typedef struct s_data
 }	t_data;
 
 void	ft_print_tokens(t_token *tokens, t_data *data);
+
+//		FT_SIGNALS		//
+
+void	ft_signals_handler(int sig);
+void	ft_signals(void);
+
 //		ft_readline		//
 
 char	*ft_readline(char *str);

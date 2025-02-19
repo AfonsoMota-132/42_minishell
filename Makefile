@@ -18,6 +18,8 @@ RM = rm -f
 
 OBJS = $(SRCS:.c=.o)
 
+SIGNALS = srcs/ft_signals/ft_signals.c
+
 BUILTINS = srcs/ft_builtins/ft_echo.c
 
 HEREDOC = srcs/ft_redirects/ft_heredoc/ft_heredoc.c
@@ -35,7 +37,7 @@ SRCS =	srcs/main.c srcs/ft_split_ms.c \
 		srcs/ft_rmv_quotes.c \
 		srcs/ft_expander2.c	srcs/ft_syntax_tokens.c \
 		srcs/ft_get_prompt.c \
-		srcs/ft_getenv.c $(BUILTINS) $(REDIRS)
+		srcs/ft_getenv.c $(BUILTINS) $(REDIRS) $(SIGNALS)
 # srcs/ft_readline.c
 #srcs/ft_execve.c
 
