@@ -106,5 +106,4 @@ char	**ft_split_cmds(char *command)
 	}
 	commands[k] = NULL;
 	return (commands);
-	return (NULL);
 }

@@ -139,28 +139,37 @@ void	ft_actual_heredoc(t_token *tokens, t_data *data)
 void	ft_heredoc(t_token *tokens, t_data *data)
 {
 	t_token	*tmp;
+	pid_t	child_process;
 
-	while (tokens)
+	if (ft_verify_heredoc(tokens))
+		tmp = ft_verify_heredoc_is_last(tokens);
+	child_process = fork();
+	if (child_process == 0)
 	{
-		if (ft_verify_heredoc(tokens))
-			tmp = ft_verify_heredoc_is_last(tokens);
-		while (tokens && tokens->type != PIPE)
+		while (tokens)
 		{
-			if (tokens->next && tokens->next->type == D_REDIRECT_IN)
+			while (tokens && tokens->type != PIPE)
 			{
-				if (tmp && tokens->next == tmp)
-					ft_actual_heredoc(tokens, data);
-				else
+				if (tokens->next && tokens->next->type == D_REDIRECT_IN)
 				{
-					ft_pseudo_heredoc(tokens);
-					continue;
+					if (tmp && tokens->next == tmp)
+						ft_actual_heredoc(tokens, data);
+					else
+					{
+						ft_pseudo_heredoc(tokens);
+						continue;
+					}
 				}
+				if (tokens)
+					tokens = tokens->next;
 			}
-			if (tokens)
+			tokens = ft_skip_to_pipe(tokens);
+			if (tokens && tokens->type == PIPE)
 				tokens = tokens->next;
 		}
-		tokens = ft_skip_to_pipe(tokens);
-		if (tokens && tokens->type == PIPE)
-			tokens = tokens->next;
+		if (!tokens)
+			ft_free(1, NULL, data);
 	}
+	else
+		waitpid(-1, NULL, 0);
 }
