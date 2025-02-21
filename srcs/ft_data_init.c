@@ -65,12 +65,12 @@ t_data	*ft_data_init(char **envp)
 	data->tokens_start = NULL;
 	data->command = NULL;
 	data->args = NULL;
+	data->prompt = NULL;
 	data->exit_status = 0;
 	data->ft_envp = ft_cpyenv(envp);
 	data->user = getenv("USER");
 	data->hostname = ft_get_hostname();
 	data->path = ft_get_path(data);
-	data->prompt = NULL;
 	ft_prompt_init(data);
 	data->heredoc_path = ft_heredoc_path(data);
 	return (data);

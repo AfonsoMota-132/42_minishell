@@ -39,6 +39,11 @@ typedef enum e_token_type
 	HERE_DOC
 }	t_token_type;
 
+typedef	enum e_bin_token_type {
+	CMD_NODE,
+	PIPE_NODE
+}	t_bin_token_type;
+
 typedef struct s_token
 {
 	t_token_type	type;
@@ -48,6 +53,13 @@ typedef struct s_token
 	struct s_token	*next;
 	struct s_token	*prev;
 }	t_token;
+
+typedef	struct s_bin_token {
+	t_token				*tokens;
+	t_bin_token_type	type;	
+	struct s_bin_token	*right;
+	struct s_bin_token	*left;
+}	t_bin_token;
 
 typedef struct s_redir
 {
@@ -70,6 +82,7 @@ typedef struct s_data
 {
 	t_token		*tokens;
 	t_token		*tokens_start;
+	t_bin_token	*bin_tokens;
 	char		*command;
 	char		*heredoc_path;
 	char		**args;
@@ -81,7 +94,7 @@ typedef struct s_data
 	int			exit_status;
 }	t_data;
 
-void	ft_print_tokens(t_token *tokens, t_data *data);
+void	ft_print_tokens(t_token *tokens, t_data *data, int tab);
 
 //		FT_SIGNALS		//
 
@@ -198,5 +211,10 @@ void	ft_redir_short_in_single(t_token *tokens);
 void	ft_heredoc(t_token *tokens, t_data *data);
 
 void	ft_free_token(t_token *tokens);
+
+//	t_bin_tokens	//
+
+
+t_bin_token	*ft_bin_tokens(t_data *data);
 
 #endif

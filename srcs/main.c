@@ -12,38 +12,40 @@
 
 #include "../incs/minishell.h"
 
-void	ft_print_tokens(t_token *tokens, t_data *data)
+void	ft_print_tokens(t_token *tokens, t_data *data, int	tab)
 {
-	while (data->tokens)
+	while (tokens)
 	{
-		printf("%s. ", data->tokens->content);
-		if (data->tokens->type == PIPE)
+		for (int i = 0; i < tab; i++)
+			printf("\t");
+		printf("%s. ", tokens->content);
+		if (tokens->type == PIPE)
 			printf("Pipe");
-		else if (data->tokens->type == CMD)
+		else if (tokens->type == CMD)
 			printf("Command");
-		else if (data->tokens->type == ARG)
+		else if (tokens->type == ARG)
 			printf("Argument");
-		else if (data->tokens->type == REDIRECT_IN)
+		else if (tokens->type == REDIRECT_IN)
 			printf("Redirect In");
-		else if (data->tokens->type == D_REDIRECT_IN)
+		else if (tokens->type == D_REDIRECT_IN)
 			printf("Double Redirect In");
-		else if (data->tokens->type == REDIRECT_OUT)
+		else if (tokens->type == REDIRECT_OUT)
 			printf("Redirect Out");
-		else if (data->tokens->type == D_REDIRECT_OUT)
+		else if (tokens->type == D_REDIRECT_OUT)
 			printf("Double Redirect Out");
-		else if (data->tokens->type == FILENAME)
+		else if (tokens->type == FILENAME)
 			printf("Filename");
-		else if (data->tokens->type == HERE_DOC)
+		else if (tokens->type == HERE_DOC)
 			printf("Here Doc");
-		if (data->tokens->heredoc)
-			printf("\thmmm\t%s\n",data->tokens->heredoc);
+		if (tokens->heredoc)
+			printf("\thmmm\t%s\n",tokens->heredoc);
 		else
 			printf("\n");
-		if (!data->tokens->next)
+		if (!tokens->next)
 			break ;
-		data->tokens = data->tokens->next;
+		tokens = tokens->next;
 	}
-	(void) tokens;
+	(void) data;
 }
 
 
@@ -73,6 +75,38 @@ char	**ft_command_init(t_data *data)
 	free(command);
 	return (command_list);
 }
+
+void treeprint(t_bin_token *cur, int depth)
+{
+    if(cur== 0)
+    {
+        return;
+    }
+    for(int i = 0; i <= depth; i++)
+    {
+        if(depth - i > 1)
+        {
+            printf("  ");
+        }
+        else if (depth - i == 1)
+        {
+            printf("|-");
+        }
+        else if (depth - i == 0)
+        {
+			if (cur->type == CMD_NODE)
+				printf("0");
+			else
+				printf("1");
+			if (cur->tokens)
+			{
+				ft_print_tokens(cur->tokens, NULL, depth);
+			}
+        }
+    }
+    treeprint(cur->left, depth + 1);
+    treeprint(cur->right, depth + 1);
+}
 int	main(int ac, char **av, char **envp)
 {
 	t_data	*data;
@@ -97,6 +131,10 @@ int	main(int ac, char **av, char **envp)
 		if (ft_syntax_tokens(data->tokens) || ft_redirects(data->tokens, &data))
 			continue ;
 		ft_echo(data->tokens);
-		ft_print_tokens(data->tokens, data);
+		/*ft_print_tokens(data->tokens, data);*/
+		data->bin_tokens = ft_bin_tokens(data);
+		t_bin_token	*tmp;
+		tmp = data->bin_tokens;
+		treeprint(tmp, 0);
 	}
 }
