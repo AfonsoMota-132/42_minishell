@@ -18,23 +18,27 @@ void	ft_print_tokens(t_token *tokens, t_data *data)
 	{
 		printf("%s. ", data->tokens->content);
 		if (data->tokens->type == PIPE)
-			printf("Pipe\n");
+			printf("Pipe");
 		else if (data->tokens->type == CMD)
-			printf("Command\n");
+			printf("Command");
 		else if (data->tokens->type == ARG)
-			printf("Argument\n");
+			printf("Argument");
 		else if (data->tokens->type == REDIRECT_IN)
-			printf("Redirect In\n");
+			printf("Redirect In");
 		else if (data->tokens->type == D_REDIRECT_IN)
-			printf("Double Redirect In\n");
+			printf("Double Redirect In");
 		else if (data->tokens->type == REDIRECT_OUT)
-			printf("Redirect Out\n");
+			printf("Redirect Out");
 		else if (data->tokens->type == D_REDIRECT_OUT)
-			printf("Double Redirect Out\n");
+			printf("Double Redirect Out");
 		else if (data->tokens->type == FILENAME)
-			printf("Filename\n");
+			printf("Filename");
 		else if (data->tokens->type == HERE_DOC)
-			printf("Here Doc\n");
+			printf("Here Doc");
+		if (data->tokens->heredoc)
+			printf("\thmmm\t%s\n",data->tokens->heredoc);
+		else
+			printf("\n");
 		if (!data->tokens->next)
 			break ;
 		data->tokens = data->tokens->next;
@@ -53,7 +57,7 @@ char	**ft_command_init(t_data *data)
 
 	command_in = readline(data->prompt);
 	if (!command_in)
-		ft_free(130, NULL,data);
+		ft_free(130, NULL,data, 1);
 	add_history(command_in);
 	command = ft_strtrim(command_in, " \t\n");
 	if (!command || !ft_strlen(command)
@@ -64,7 +68,7 @@ char	**ft_command_init(t_data *data)
 		return (NULL);
 	}
 	if (ft_strncmp(command, "exit", 4) == 0)
-		ft_free(0, command, data);
+		ft_free(0, command, data, 1);
 	command_list = ft_split_cmds(command);
 	free(command);
 	return (command_list);
@@ -84,7 +88,7 @@ int	main(int ac, char **av, char **envp)
 		if (!commands)
 			continue ;
 		if (data->tokens_start)
-			ft_free_tokens(data->tokens_start);
+			ft_free_tokens(data->tokens_start, 1);
 		data->tokens_start = ft_token_maker(commands);
 		data->tokens = data->tokens_start;
 		ft_tokens_cat(&data);

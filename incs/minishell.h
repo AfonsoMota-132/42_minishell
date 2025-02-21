@@ -39,16 +39,11 @@ typedef enum e_token_type
 	HERE_DOC
 }	t_token_type;
 
-typedef struct s_heredoc
-{
-	char	*filename;
-	char	*path;
-}	t_heredoc;
-
 typedef struct s_token
 {
 	t_token_type	type;
 	char			*content;
+	char			*heredoc;
 	size_t			len;
 	struct s_token	*next;
 	struct s_token	*prev;
@@ -110,8 +105,8 @@ char	**ft_split_cmds(char *command);
 
 void	ft_free_env(char **envp);
 void	ft_free_cmds(char **commands);
-void	ft_free_tokens(t_token *tokens);
-int		ft_free(int i, char *command, t_data *data);
+void	ft_free_tokens(t_token *tokens, int del_heredoc);
+int		ft_free(int i, char *command, t_data *data, int del_heredoc);
 void	ft_free_matrix(char **matrix);
 
 //		Ft_tokens		//

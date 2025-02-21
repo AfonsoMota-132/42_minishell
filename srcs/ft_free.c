@@ -42,17 +42,20 @@ void	ft_free_cmds(char **commands)
 	free(commands);
 }
 
-void	ft_free_tokens(t_token *tokens)
+void	ft_free_tokens(t_token *tokens, int	del_heredoc)
 {
 	t_token	*tmp;
 
 	while (tokens)
 	{
-		if (tokens->type == D_REDIRECT_IN
+		if (del_heredoc != 0 && tokens->type == D_REDIRECT_IN
 			&& tokens->next && tokens->next->content
 			&& tokens->next->type == HERE_DOC
-			&& access(tokens->next->content, F_OK) == 0)
-			unlink(tokens->next->content);
+			&& tokens->next->heredoc
+			&& access(tokens->next->heredoc, F_OK) == 0)
+			unlink(tokens->next->heredoc);
+		if (tokens->heredoc)
+			free(tokens->heredoc);
 		if (tokens->next)
 			tmp = tokens->next;
 		else
@@ -67,14 +70,14 @@ void	ft_free_tokens(t_token *tokens)
 	}
 }
 
-int	ft_free(int i, char *command, t_data *data)
+int	ft_free(int i, char *command, t_data *data, int del_heredoc)
 {
 	if (command)
 		free(command);
 	if (data)
 	{
 		if (data->tokens_start)
-			ft_free_tokens(data->tokens_start);
+			ft_free_tokens(data->tokens_start, del_heredoc);
 		if (data->path)
 			free(data->path);
 		if (data->prompt)

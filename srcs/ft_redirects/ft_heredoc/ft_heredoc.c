@@ -50,8 +50,8 @@ void	ft_pseudo_heredoc(t_token *tokens)
 	while (1)
 	{
 		str = readline("heredoc>");
-		if (str && !ft_strncmp(str, tokens->next->next->content,
-				ft_strlen(tokens->next->next->content) + 1))
+		if ((!str) || (str && !ft_strncmp(str, tokens->next->next->content,
+				ft_strlen(tokens->next->next->content) + 1)))
 			break ;
 		free(str);
 		str = NULL;
@@ -106,11 +106,10 @@ char	*ft_heredoc_name(t_token *tokens, t_data *data)
 void	ft_actual_heredoc(t_token *tokens, t_data *data)
 {
 	t_token	*str;
-	char	*tmp;
 	int		fd;
 
-	tmp = ft_heredoc_name(tokens->next->next, data);
-	fd = open(tmp, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	fd = open(tokens->next->next->heredoc,
+		   O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	str = malloc(sizeof(t_token));
 	str->content = NULL;
 	str->type = CMD;
@@ -118,6 +117,8 @@ void	ft_actual_heredoc(t_token *tokens, t_data *data)
 	while (1)
 	{
 		str->content = readline("heredoc>");
+		if (!str->content)
+			break ;
 		if (str && !ft_strncmp(str->content,
 				tokens->next->next->content,
 				ft_strlen(tokens->next->next->content) + 1))
@@ -130,21 +131,43 @@ void	ft_actual_heredoc(t_token *tokens, t_data *data)
 		str->content = NULL;
 	}
 	close(fd);
-	free(tokens->next->next->content);
-	tokens->next->next->content = ft_strdup(tmp);
 	free(str);
-	free(tmp);
+}
+
+void	ft_define_heredoc_paths(t_token *tokens, t_data *data, t_token *tmp)
+{
+	while (tokens)
+	{
+		while (tokens && tokens->type != PIPE)
+		{
+			if (tokens->next && tokens->next->type == D_REDIRECT_IN)
+			{
+				if (tmp && tokens->next == tmp)
+					tokens->next->next->heredoc = \
+						ft_heredoc_name(tokens->next->next, data);
+			}
+			if (tokens)
+				tokens = tokens->next;
+		}
+		tokens = ft_skip_to_pipe(tokens);
+		if (tokens && tokens->type == PIPE)
+			tokens = tokens->next;
+	}
+
 }
 
 void	ft_heredoc(t_token *tokens, t_data *data)
 {
 	t_token	*tmp;
-	pid_t	child_process;
+	pid_t	c_pid;
 
 	if (ft_verify_heredoc(tokens))
 		tmp = ft_verify_heredoc_is_last(tokens);
-	child_process = fork();
-	if (child_process == 0)
+	else
+		return ;
+	ft_define_heredoc_paths(tokens, data, tmp);
+	c_pid = fork();
+	if (c_pid == 0)
 	{
 		while (tokens)
 		{
@@ -167,9 +190,9 @@ void	ft_heredoc(t_token *tokens, t_data *data)
 			if (tokens && tokens->type == PIPE)
 				tokens = tokens->next;
 		}
-		if (!tokens)
-			ft_free(1, NULL, data);
+		ft_free(0, NULL, data, 0);
 	}
 	else
 		waitpid(-1, NULL, 0);
+	/*ft_signals();*/
 }

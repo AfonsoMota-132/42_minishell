@@ -27,6 +27,7 @@ t_token	*ft_token_maker(char **commands)
 	{
 		token->content = ft_strdup(commands[i]);
 		token->type = CMD;
+		token->heredoc = NULL;
 		if (!commands[i + 1])
 			break ;
 		token->next = ft_calloc(sizeof(t_token), 1);
