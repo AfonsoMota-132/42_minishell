@@ -12,6 +12,8 @@
 
 #include "../incs/minishell.h"
 
+int	signal_received = 0;
+
 void	ft_print_tokens(t_token *tokens, t_data *data, int	tab)
 {
 	while (tokens)
@@ -48,9 +50,6 @@ void	ft_print_tokens(t_token *tokens, t_data *data, int	tab)
 	(void) data;
 }
 
-
-int	signal_idk;
-
 char	**ft_command_init(t_data *data)
 {
 	char	*command_in;
@@ -59,8 +58,7 @@ char	**ft_command_init(t_data *data)
 
 	command_in = readline(data->prompt);
 	if (!command_in)
-		ft_free(130, NULL,data, 1);
-	add_history(command_in);
+		ft_free(0, NULL,data, 1);
 	command = ft_strtrim(command_in, " \t\n");
 	if (!command || !ft_strlen(command)
 		|| ft_syntax(command))
@@ -69,10 +67,12 @@ char	**ft_command_init(t_data *data)
 			free (command);
 		return (NULL);
 	}
+	add_history(command_in);
 	if (ft_strncmp(command, "exit", 4) == 0)
 		ft_free(0, command, data, 1);
 	command_list = ft_split_cmds(command);
 	free(command);
+	free(command_in);
 	return (command_list);
 }
 
@@ -95,17 +95,26 @@ void treeprint(t_bin_token *cur, int depth)
         else if (depth - i == 0)
         {
 			if (cur->type == CMD_NODE)
-				printf("0");
+				printf("0\t");
 			else
-				printf("1");
-			if (cur->tokens)
-			{
-				ft_print_tokens(cur->tokens, NULL, depth);
-			}
+				printf("1\t");
+			if (cur->args)
+				for (int i = 0; cur->args[i]; i++)
+					printf("%s\t", cur->args[i]);
+			printf("\n");
+			if (cur->redir_in)
+				ft_print_tokens(cur->redir_in, NULL, depth + ((depth == 0) * 1));
+			if (cur->redir_out)
+				ft_print_tokens(cur->redir_out, NULL, depth + ((depth == 0) * 1));
         }
     }
     treeprint(cur->left, depth + 1);
     treeprint(cur->right, depth + 1);
+}
+
+void	SignalHandler(int sig)
+{
+	printf("%i\n", sig);
 }
 int	main(int ac, char **av, char **envp)
 {
@@ -115,10 +124,15 @@ int	main(int ac, char **av, char **envp)
 	(void) ac;
 	(void) av;
 	data = ft_data_init(envp);
-	ft_signals();
+	/*ft_signals();*/
 	while (1)
 	{
 		commands = ft_command_init(data);
+		if (signal_received)
+		{
+			data->exit_status = signal_received;
+			signal_received = 0;
+		}
 		if (!commands)
 			continue ;
 		if (data->tokens_start)
@@ -130,11 +144,12 @@ int	main(int ac, char **av, char **envp)
 		ft_rmv_quotes(data->tokens);
 		if (ft_syntax_tokens(data->tokens) || ft_redirects(data->tokens, &data))
 			continue ;
+		if (!data->tokens_start)
+			continue ;
 		ft_echo(data->tokens);
-		/*ft_print_tokens(data->tokens, data);*/
+		if (data->bin_tokens)
+			ft_free_tree(data->bin_tokens, 1);
 		data->bin_tokens = ft_bin_tokens(data);
-		t_bin_token	*tmp;
-		tmp = data->bin_tokens;
-		treeprint(tmp, 0);
+		treeprint(data->bin_tokens, 0);
 	}
 }

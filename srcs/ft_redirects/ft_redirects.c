@@ -74,7 +74,8 @@ int	ft_redirects(t_token *tokens, t_data **data)
 	ft_redir_short_out_double(tokens);
 	ft_redir_short_out(tokens);
 	ft_redir_short_in_single(tokens);
-	ft_heredoc(tokens, *data);
+	if (ft_heredoc(tokens, *data) == 130)
+		return (1);
 	(*data)->tokens_start = tokens;
 	(*data)->tokens = tokens;
 	return (0);

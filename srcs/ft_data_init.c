@@ -71,6 +71,7 @@ t_data	*ft_data_init(char **envp)
 	data->user = getenv("USER");
 	data->hostname = ft_get_hostname();
 	data->path = ft_get_path(data);
+	data->bin_tokens = NULL;
 	ft_prompt_init(data);
 	data->heredoc_path = ft_heredoc_path(data);
 	return (data);

@@ -69,17 +69,18 @@ void	ft_free_tokens(t_token *tokens, int	del_heredoc)
 			break ;
 	}
 }
-void treeprint(t_bin_token *cur, int depth);
 
 void ft_free_tree(t_bin_token *tokens, int del_heredoc)
 {
 	if (tokens != NULL)
 	{
-		treeprint(tokens, 0);
-		printf("\n\nwtf\n\n");
+		if (tokens->redir_in)
+			ft_free_tokens(tokens->redir_in, del_heredoc);
+		if (tokens->redir_out)
+			ft_free_tokens(tokens->redir_out, del_heredoc);
+		if (tokens->args)
+			ft_free_matrix(tokens->args);
 		ft_free_tree(tokens->right, del_heredoc);
-		if (tokens->tokens)
-			ft_free_tokens(tokens->tokens, del_heredoc);
 		ft_free_tree(tokens->left, del_heredoc);
 		free(tokens);
 	}
@@ -107,5 +108,8 @@ int	ft_free(int i, char *command, t_data *data, int del_heredoc)
 			free(data->heredoc_path);
 		free(data);
 	}
-	exit(i);
+	if (i == -1)
+		return (0);
+	else
+		exit(i);
 }

@@ -11,7 +11,8 @@
 /* ************************************************************************** */
 
 #include "../../../incs/minishell.h"
-#include <readline/readline.h>
+
+extern	int signal_received;
 
 int		ft_verify_heredoc(t_token *tokens)
 {
@@ -103,22 +104,20 @@ char	*ft_heredoc_name(t_token *tokens, t_data *data)
 	return (tmp2);
 }
 
-void	ft_actual_heredoc(t_token *tokens, t_data *data)
+void	ft_actual_heredoc_loop(t_token *tokens, t_data *data, t_token *str, int fd)
 {
-	t_token	*str;
-	int		fd;
-
-	fd = open(tokens->next->next->heredoc,
-		   O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	str = malloc(sizeof(t_token));
-	str->content = NULL;
-	str->type = CMD;
-	str->next = NULL;
 	while (1)
 	{
 		str->content = readline("heredoc>");
-		if (!str->content)
+		if (!str->content && signal_received != 130)
 			break ;
+		if (!str->content && signal_received == 130)
+		{
+			if (str)
+				free(str);
+			close (fd);
+			ft_free(130, NULL, data, 1);
+		}
 		if (str && !ft_strncmp(str->content,
 				tokens->next->next->content,
 				ft_strlen(tokens->next->next->content) + 1))
@@ -130,6 +129,21 @@ void	ft_actual_heredoc(t_token *tokens, t_data *data)
 			free(str->content);
 		str->content = NULL;
 	}
+
+}
+
+void	ft_actual_heredoc(t_token *tokens, t_data *data)
+{
+	t_token	*str;
+	int		fd;
+
+	fd = open(tokens->next->next->heredoc,
+		   O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	str = malloc(sizeof(t_token));
+	str->content = NULL;
+	str->type = CMD;
+	str->next = NULL;
+	ft_actual_heredoc_loop(tokens, data, str, fd);
 	close(fd);
 	free(str);
 }
@@ -156,19 +170,33 @@ void	ft_define_heredoc_paths(t_token *tokens, t_data *data, t_token *tmp)
 
 }
 
-void	ft_heredoc(t_token *tokens, t_data *data)
+void	ft_heredoc_signal_handler(int sig)
+{
+	if (sig == SIGINT)
+	{
+		signal_received = 130;
+		close(0);
+	}
+}
+
+int	ft_heredoc(t_token *tokens, t_data *data)
 {
 	t_token	*tmp;
 	pid_t	c_pid;
+	int		exit;
 
 	if (ft_verify_heredoc(tokens))
 		tmp = ft_verify_heredoc_is_last(tokens);
 	else
-		return ;
+		return (0);
 	ft_define_heredoc_paths(tokens, data, tmp);
+	signal(SIGINT, SIG_IGN);
+	signal(127, SIG_IGN);
 	c_pid = fork();
+	signal_received = 0;
 	if (c_pid == 0)
 	{
+		signal(SIGINT, &ft_heredoc_signal_handler);
 		while (tokens)
 		{
 			while (tokens && tokens->type != PIPE)
@@ -193,6 +221,9 @@ void	ft_heredoc(t_token *tokens, t_data *data)
 		ft_free(0, NULL, data, 0);
 	}
 	else
-		waitpid(-1, NULL, 0);
-	/*ft_signals();*/
+		waitpid(-1 ,&exit, 0);
+	if (exit)
+		return (130);
+	ft_signals();
+	return (0);
 }

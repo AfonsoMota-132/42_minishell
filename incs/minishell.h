@@ -55,7 +55,9 @@ typedef struct s_token
 }	t_token;
 
 typedef	struct s_bin_token {
-	t_token				*tokens;
+	char	**args;
+	t_token	*redir_in;
+	t_token	*redir_out;
 	t_bin_token_type	type;	
 	struct s_bin_token	*right;
 	struct s_bin_token	*left;
@@ -121,6 +123,7 @@ void	ft_free_cmds(char **commands);
 void	ft_free_tokens(t_token *tokens, int del_heredoc);
 int		ft_free(int i, char *command, t_data *data, int del_heredoc);
 void	ft_free_matrix(char **matrix);
+void ft_free_tree(t_bin_token *tokens, int del_heredoc);
 
 //		Ft_tokens		//
 
@@ -208,7 +211,7 @@ void	ft_redir_short_in_single(t_token *tokens);
 
 //		FT_Heredoc		//
 
-void	ft_heredoc(t_token *tokens, t_data *data);
+int		ft_heredoc(t_token *tokens, t_data *data);
 
 void	ft_free_token(t_token *tokens);
 

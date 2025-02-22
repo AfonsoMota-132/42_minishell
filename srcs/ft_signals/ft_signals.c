@@ -12,6 +12,8 @@
 
 #include "../../incs/minishell.h"
 
+extern int	signal_received;
+
 void	ft_signals_handler(int sig)
 {
 	if (sig == SIGINT)
@@ -20,6 +22,7 @@ void	ft_signals_handler(int sig)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
+		signal_received = 130;
 	}
 }
 
