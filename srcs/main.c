@@ -124,7 +124,7 @@ int	main(int ac, char **av, char **envp)
 	(void) ac;
 	(void) av;
 	data = ft_data_init(envp);
-	/*ft_signals();*/
+	ft_signals();
 	while (1)
 	{
 		commands = ft_command_init(data);

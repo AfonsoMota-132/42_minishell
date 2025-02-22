@@ -148,10 +148,13 @@ void	ft_actual_heredoc(t_token *tokens, t_data *data)
 	free(str);
 }
 
-void	ft_define_heredoc_paths(t_token *tokens, t_data *data, t_token *tmp)
+void	ft_define_heredoc_paths(t_token *tokens, t_data *data)
 {
+	t_token	*tmp;
+
 	while (tokens)
 	{
+		tmp = ft_verify_heredoc_is_last(tokens);
 		while (tokens && tokens->type != PIPE)
 		{
 			if (tokens->next && tokens->next->type == D_REDIRECT_IN)
@@ -185,20 +188,20 @@ int	ft_heredoc(t_token *tokens, t_data *data)
 	pid_t	c_pid;
 	int		exit;
 
-	if (ft_verify_heredoc(tokens))
-		tmp = ft_verify_heredoc_is_last(tokens);
-	else
+	if (!ft_verify_heredoc(tokens))
 		return (0);
-	ft_define_heredoc_paths(tokens, data, tmp);
+	ft_define_heredoc_paths(tokens, data);
 	signal(SIGINT, SIG_IGN);
 	signal(127, SIG_IGN);
 	c_pid = fork();
 	signal_received = 0;
 	if (c_pid == 0)
 	{
+		tmp = ft_verify_heredoc_is_last(tokens);
 		signal(SIGINT, &ft_heredoc_signal_handler);
 		while (tokens)
 		{
+			tmp = ft_verify_heredoc_is_last(tokens);
 			while (tokens && tokens->type != PIPE)
 			{
 				if (tokens->next && tokens->next->type == D_REDIRECT_IN)
@@ -222,8 +225,23 @@ int	ft_heredoc(t_token *tokens, t_data *data)
 	}
 	else
 		waitpid(-1 ,&exit, 0);
+	ft_signals();
 	if (exit)
 		return (130);
-	ft_signals();
+
+	t_token	*tmp2;
+	while (tokens)
+	{
+		if (tokens->next &&
+			tokens->next->type == D_REDIRECT_IN &&
+			tokens->next->next && !tokens->next->next->heredoc)
+		{
+			tmp2 = tokens->next;
+			tokens->next = tokens->next->next->next;
+			ft_free_token(tmp2);
+
+		}
+		tokens = tokens->next;
+	}
 	return (0);
 }

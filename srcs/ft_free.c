@@ -74,6 +74,10 @@ void ft_free_tree(t_bin_token *tokens, int del_heredoc)
 {
 	if (tokens != NULL)
 	{
+		if (tokens->redir_in &&
+			tokens->redir_in->type == HERE_DOC
+			&& tokens->redir_in->heredoc)
+			unlink(tokens->redir_in->heredoc);
 		if (tokens->redir_in)
 			ft_free_tokens(tokens->redir_in, del_heredoc);
 		if (tokens->redir_out)
