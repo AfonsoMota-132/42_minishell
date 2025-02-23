@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+//* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
@@ -147,10 +147,6 @@ t_data	*ft_data_init(char **envp);
 char	*ft_get_path_with_til(char *path, char **dirs, int i);
 char	*ft_get_path_without_til(char *path, char **dirs, int i);
 char	*ft_get_path(t_data *data);
-
-//		FT_execve		//
-
-void	ft_execve(char *path, char **argv, char **envp);
 
 //		FT_expander		//
 
