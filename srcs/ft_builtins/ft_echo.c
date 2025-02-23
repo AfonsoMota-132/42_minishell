@@ -46,8 +46,8 @@ int	ft_echo(t_token *token)
 	while (token && token->type == ARG)
 	{
 		ft_putstr_fd(token->content, STDOUT_FILENO);
-		if (token->next && 
-			token->next->type == ARG)
+		if (token->next
+			&& token->next->type == ARG)
 			write(STDOUT_FILENO, " ", 1);
 		token = token->next;
 	}

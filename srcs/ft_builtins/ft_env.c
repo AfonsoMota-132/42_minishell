@@ -17,5 +17,4 @@ void	ft_env(t_data *data, t_token *tokens)
 	int	i;
 
 	i = -1;
-
 }

@@ -12,7 +12,7 @@
 
 #include "../incs/minishell.h"
 
-int	signal_received = 0;
+int	g_signal_received = 0;
 
 void	ft_print_tokens(t_token *tokens, t_data *data, int	tab)
 {
@@ -127,10 +127,10 @@ int	main(int ac, char **av, char **envp)
 	while (1)
 	{
 		commands = ft_command_init(data);
-		if (signal_received)
+		if (g_signal_received)
 		{
-			data->exit_status = signal_received;
-			signal_received = 0;
+			data->exit_status = g_signal_received;
+			g_signal_received = 0;
 		}
 		if (!commands)
 			continue ;
@@ -154,13 +154,20 @@ int	main(int ac, char **av, char **envp)
 		/*	int	pid_c = fork();*/
 		/*	if (pid_c == 0)*/
 		/*	{*/
+		/*		raise(SIGINT);*/
+		/*		raise(127);*/
 		/*		ft_execve(data, data->bin_tokens);*/
 		/*	}*/
 		/*	else*/
+		/*	{*/
+		/*		signal(SIGINT, SIG_IGN);*/
+		/*		signal(127, SIG_IGN);*/
 		/*		waitpid(-1, &data->exit_status, 0);*/
+		/*	}*/
+		/*	ft_signals();*/
 		/*}*/
 		/*else*/
 		/*	ft_pipes_creator(data, data->bin_tokens);*/
-		/*treeprint(data->bin_tokens, 0);*/
+		treeprint(data->bin_tokens, 0);
 	}
 }

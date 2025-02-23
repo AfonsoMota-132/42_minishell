@@ -12,7 +12,7 @@
 
 #include "../../incs/minishell.h"
 
-extern int	signal_received;
+extern int	g_signal_received;
 
 void	ft_signals_handler(int sig)
 {
@@ -22,7 +22,7 @@ void	ft_signals_handler(int sig)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		signal_received = 130;
+		g_signal_received = 130;
 	}
 }
 
@@ -30,4 +30,13 @@ void	ft_signals(void)
 {
 	signal(SIGINT, ft_signals_handler);
 	signal(SIGQUIT, SIG_IGN);
+}
+
+void	ft_heredoc_signal_handler(int sig)
+{
+	if (sig == SIGINT)
+	{
+		g_signal_received = 130;
+		close(0);
+	}
 }

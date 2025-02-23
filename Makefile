@@ -26,7 +26,9 @@ SIGNALS = srcs/ft_signals/ft_signals.c
 
 BUILTINS = srcs/ft_builtins/ft_echo.c
 
-HEREDOC = srcs/ft_redirects/ft_heredoc/ft_heredoc.c
+HEREDOC = srcs/ft_redirects/ft_heredoc/ft_heredoc.c \
+		  srcs/ft_redirects/ft_heredoc/ft_actual_heredoc.c \
+		  srcs/ft_redirects/ft_heredoc/ft_pseudo_heredoc.c
 
 REDIRS = 	srcs/ft_redirects/ft_redirects.c \
 			srcs/ft_redirects/ft_redir_short_out_single.c \
@@ -46,7 +48,7 @@ SRCS =	srcs/main.c srcs/ft_split_ms.c \
 # srcs/ft_readline.c
 #srcs/ft_execve.c
 
-VAL_RULES = --leak-check=full --show-leak-kinds=all --suppressions=readline.supp
+VAL_RULES = --leak-check=full --show-leak-kinds=all --suppressions=readline.supp --trace-children=yes
 all: deps $(NAME)
 
 libft:
