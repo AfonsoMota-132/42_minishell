@@ -48,7 +48,8 @@ SRCS =	srcs/main.c srcs/ft_split_ms.c \
 # srcs/ft_readline.c
 #srcs/ft_execve.c
 
-VAL_RULES = --leak-check=full --show-leak-kinds=all --suppressions=readline.supp --trace-children=yes
+VAL_RULES = --leak-check=full --show-leak-kinds=all --suppressions=readline.supp
+#--trace-children=yes
 all: deps $(NAME)
 
 libft:

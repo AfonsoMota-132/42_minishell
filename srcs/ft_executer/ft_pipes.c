@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../incs/minishell.h"
+#include <unistd.h>
 
 char	*ft_execve_get_path(char *cmd, t_data *data)
 {
@@ -39,6 +40,25 @@ char	*ft_execve_get_path(char *cmd, t_data *data)
 	return (NULL);
 }
 
+void	ft_handle_redirects(t_bin_token *tokens)
+{
+	int		fd;
+
+	if (tokens->redir_out)
+	{
+		fd = open(tokens->redir_out->content, O_WRONLY | O_CREAT, 0644);
+		dup2(fd, STDOUT_FILENO);
+	}
+	// Need to add fail safe in case file perms/file doesnt exist
+}
+
+void	ft_command_not_found(t_data *data, t_bin_token *tokens,char *path)
+{
+	printf("%s: command not found\n", tokens->args[0]);
+	free(path);
+	ft_free(127, NULL, data, 1);
+}
+
 void	ft_execve(t_data *data, t_bin_token *tokens)
 {
 	char	*path;
@@ -48,7 +68,7 @@ void	ft_execve(t_data *data, t_bin_token *tokens)
 	if (!path && tokens->args[0])
 		path = ft_strdup(tokens->args[0]);
 	if (path && access(path, F_OK) == -1)
-		ft_free(127, NULL, data, 1);
+		ft_command_not_found(data, tokens, path);
 	if (path)
 	{
 		free(tokens->args[0]);
@@ -56,6 +76,8 @@ void	ft_execve(t_data *data, t_bin_token *tokens)
 		result = execve(path, tokens->args, NULL);
 		if (result == -1)
 		{
+			printf("%s: command not found\n", tokens->args[0]);
+			free(path);
 			exit (127);
 		}
 	}
