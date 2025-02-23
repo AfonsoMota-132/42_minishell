@@ -18,7 +18,10 @@ RM = rm -f
 
 OBJS = $(SRCS:.c=.o)
 
+EXECUTER = srcs/ft_executer/ft_pipes.c
+
 BIN_TOKENS = srcs/ft_bin_tokens/ft_bin_tokens.c
+
 SIGNALS = srcs/ft_signals/ft_signals.c
 
 BUILTINS = srcs/ft_builtins/ft_echo.c
@@ -39,7 +42,7 @@ SRCS =	srcs/main.c srcs/ft_split_ms.c \
 		srcs/ft_expander2.c	srcs/ft_syntax_tokens.c \
 		srcs/ft_get_prompt.c \
 		srcs/ft_getenv.c $(BUILTINS) $(REDIRS) $(SIGNALS) \
-		$(BIN_TOKENS)
+		$(BIN_TOKENS) $(EXECUTER)
 # srcs/ft_readline.c
 #srcs/ft_execve.c
 

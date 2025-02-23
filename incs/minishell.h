@@ -220,4 +220,9 @@ void	ft_free_token(t_token *tokens);
 
 t_bin_token	*ft_bin_tokens(t_data *data);
 
+
+//		ft_executer	test		//
+void	ft_pipes_creator(t_data *data, t_bin_token *tokens);
+void	ft_handle_pipe(t_data *data, t_bin_token *tokens, int fd[2]);
+void	ft_pipe_parent(t_data *data, t_bin_token *tokens, int fd[2]);
 #endif

@@ -6,11 +6,12 @@
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:21:20 by afogonca          #+#    #+#             */
-/*   Updated: 2025/02/11 09:33:47 by afogonca         ###   ########.fr       */
+/*   Updated: 2025/02/23 10:13:06 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../incs/minishell.h"
+#include <stdlib.h>
 
 extern	int signal_received;
 
@@ -226,7 +227,8 @@ int	ft_heredoc(t_token *tokens, t_data *data)
 	else
 		waitpid(-1 ,&exit, 0);
 	ft_signals();
-	if (exit)
+	data->exit_status = WEXITSTATUS(exit);
+	if (data->exit_status == 130)
 		return (130);
 
 	t_token	*tmp2;

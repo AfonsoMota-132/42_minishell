@@ -6,7 +6,7 @@
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 20:39:29 by afogonca          #+#    #+#             */
-/*   Updated: 2025/01/29 10:43:34 by afogonca         ###   ########.fr       */
+/*   Updated: 2025/02/23 10:34:50 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,7 @@ int	main(int ac, char **av, char **envp)
 		if (data->bin_tokens)
 			ft_free_tree(data->bin_tokens, 1);
 		data->bin_tokens = ft_bin_tokens(data);
-		treeprint(data->bin_tokens, 0);
+		ft_pipes_creator(data, data->bin_tokens);
+		/*treeprint(data->bin_tokens, 0);*/
 	}
 }
