@@ -15,30 +15,22 @@
 void	ft_run_cmds(t_data *data)
 {
 	int	status;
-	int	pid_c;
+	int	child_pid;
+	int	fd[2];
 
 	if (!data->bin_tokens->right && !data->bin_tokens->left)
 	{
-		pid_c = fork();
-		if (pid_c == 0)
-		{
-			raise(SIGINT);
-			raise(127);
-			ft_pipes_creator(data, data->bin_tokens);
-			ft_execve(data, data->bin_tokens);
-			exit(0);
-		}
+		if (pipe(fd) == -1)
+			printf("error creating pipe\n");
 		else
 		{
-			signal(SIGINT, SIG_IGN);
-			signal(127, SIG_IGN);
+			child_pid = fork();
+			if (child_pid == 0)
+				ft_execve(data, data->bin_tokens);
 			waitpid(-1, &status, 0);
-			if (WIFEXITED(status))
-			{
-				data->exit_status = WEXITSTATUS(status);
-				printf("data->exit_status: %i\n", data->exit_status);
-			}
-			ft_signals();
+			data->exit_status = WEXITSTATUS(status);
+			close(fd[0]);
+			close(fd[1]);
 		}
 	}
 	else

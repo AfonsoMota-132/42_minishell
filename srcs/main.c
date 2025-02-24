@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../incs/minishell.h"
+#include <readline/readline.h>
 #include <unistd.h>
 
 int	g_signal_received = 0;
@@ -57,7 +58,8 @@ char	**ft_command_init(t_data *data)
 	char	*command;
 	char	**command_list;
 
-	command_in = readline("minishell:");
+	rl_redisplay();
+	command_in = readline(data->prompt);
 	if (!command_in)
 		ft_free(0, NULL,data, 1);
 	command = ft_strtrim(command_in, " \t\n");
@@ -143,11 +145,12 @@ int	main(int ac, char **av, char **envp)
 			continue ;
 		if (!data->tokens_start)
 			continue ;
-		ft_echo(data->tokens);
 		if (data->bin_tokens)
 			ft_free_tree(data->bin_tokens, 1);
 		data->bin_tokens = ft_bin_tokens(data);
 		ft_run_cmds(data);
+		dup2(1, STDOUT_FILENO);
+		dup2(0, STDIN_FILENO);
 		/*treeprint(data->bin_tokens, 0);*/
 	}
 }

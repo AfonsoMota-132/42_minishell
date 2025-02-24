@@ -77,6 +77,7 @@ int	ft_heredoc(t_token *tokens, t_data *data)
 	t_token	*tmp;
 	int		exit;
 
+	exit = 0;
 	if (!ft_verify_heredoc(tokens))
 		return (0);
 	ft_define_heredoc_paths(tokens, data);

@@ -14,6 +14,8 @@
 
 int	ft_check_expander(t_token *tokens, size_t *i)
 {
+	if (tokens && tokens->content && ft_strlen(tokens->content) < (*i))
+		return (0);
 	while (tokens->content[*i] != '\0')
 	{
 		if (tokens->content[*i] == '$'
@@ -22,8 +24,8 @@ int	ft_check_expander(t_token *tokens, size_t *i)
 		if (tokens->content[*i] == '"')
 		{
 			(*i)++;
-			while (tokens->content[(*i)] != '"'
-				&& tokens->content[(*i)] != '\0')
+			while (tokens->content[(*i)] != '\0' &&
+				tokens->content[(*i)] != '"')
 			{
 				if (tokens->content[(*i)] == '$')
 					return (1);
@@ -37,7 +39,8 @@ int	ft_check_expander(t_token *tokens, size_t *i)
 				&& tokens->content[(*i)] != '\0')
 				(*i)++;
 		}
-		(*i)++;
+		if (tokens->content[(*i)])
+			(*i)++;
 	}
 	return (0);
 }
@@ -93,33 +96,31 @@ void	ft_expand_quest(t_token *tokens, t_data *data
 		free(tmp);
 		free(tokens->content);
 		tokens->content = new;
-		ft_expander_reset(tokens->content, start);
+		ft_expander2(tokens, start, data);
 	}
 }
 
 char	*ft_expander_replace_null(char *str, int start)
 {
 	int		i;
-	int		j;
 	char	*new;
 
-	j = 0;
 	i = start;
 	while (str[i] && str[i] != '$')
 		i++;
 	if (str[i] == '$')
 		i++;
-	while (str[i + j] && str[i + j] != ' '
-		&& str[i + j] != '\t' && str[i + j] != '\n'
-		&& str[i + j] != '$' && str[i + j] != '"'
-		&& str[i + j] != '\'')
-		j++;
-	if (str[i - 1] != '\0')
-		new = ft_substr(str, 0, i - 1);
+	while (str[i] && str[i] != ' '
+		&& str[i] != '\t' && str[i] != '\n'
+		&& str[i] != '$' && str[i] != '"'
+		&& str[i] != '\'' && ft_isdigit(str[i]))
+		i++;
+	if (str[i] != '\0')
+		new = ft_strdup("");
 	else
 		new = ft_strdup("");
 	if (str[i])
-		new = ft_strjoin_gnl(new, &str[i + 1]);
+		new = ft_strjoin_gnl(new, &str[i]);
 	free(str);
 	return (new);
 }
@@ -141,7 +142,7 @@ void	ft_expander2(t_token *tokens, \
 		{
 			tokens->content = ft_expander_replace(tokens->content, \
 									ft_getenv(env, data), i++);
-			ft_expander_reset(tokens->content, &i);
+			ft_expander2(tokens, start, data);
 		}
 		else if (ft_strchr(tokens->content, '$') != NULL)
 		{

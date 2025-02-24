@@ -79,7 +79,6 @@ void	ft_redir_short_in_single(t_token *tokens)
 				if (access(tokens->next->content, F_OK) == -1
 					|| access(tokens->next->content, R_OK) == -1)
 				{
-					printf("tokens->next->content: %s\n", tokens->next->content);
 					tmp = ft_rmv_ris_before(tokens, head);
 					break ;
 				}
