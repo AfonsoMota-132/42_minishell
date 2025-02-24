@@ -25,7 +25,8 @@ BIN_TOKENS = srcs/ft_bin_tokens/ft_bin_tokens.c
 
 SIGNALS = srcs/ft_signals/ft_signals.c
 
-BUILTINS = srcs/ft_builtins/ft_echo.c
+BUILTINS = srcs/ft_builtins/ft_echo.c \
+					 srcs/ft_builtins/ft_cd.c \
 
 HEREDOC = srcs/ft_redirects/ft_heredoc/ft_heredoc.c \
 		  srcs/ft_redirects/ft_heredoc/ft_actual_heredoc.c \

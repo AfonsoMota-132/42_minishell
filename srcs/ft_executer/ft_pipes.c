@@ -61,13 +61,22 @@ void	ft_handle_redirects(t_data *data, t_bin_token *tokens, char *path)
 		fd = open(tokens->redir_out->content, O_WRONLY | O_APPEND, 0);
 		dup2(fd, STDOUT_FILENO);
 	}
-	if (tokens->redir_in)
+	if (tokens->redir_in && tokens->redir_in->type == FILENAME)
 	{
 		if (access(tokens->redir_in->content, F_OK) == -1)	
 			ft_error_msg_redir(data, 1, tokens->redir_in->content, path);
 		if (access(tokens->redir_in->content, R_OK) == -1)
 			ft_error_msg_redir(data, 0, tokens->redir_in->content, path);
 		fd = open(tokens->redir_in->content, O_RDONLY, 0);
+		dup2(fd, STDIN_FILENO);
+	}
+	else if (tokens->redir_in && tokens->redir_in->type == HERE_DOC)
+	{
+		if (access(tokens->redir_in->heredoc, F_OK) == -1)	
+			ft_error_msg_redir(data, 1, tokens->redir_in->heredoc, path);
+		if (access(tokens->redir_in->heredoc, R_OK) == -1)
+			ft_error_msg_redir(data, 0, tokens->redir_in->heredoc, path);
+		fd = open(tokens->redir_in->heredoc, O_RDONLY, 0);
 		dup2(fd, STDIN_FILENO);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 12:59:45 by afogonca          #+#    #+#             */
-/*   Updated: 2025/02/23 13:02:54 by afogonca         ###   ########.fr       */
+/*   Updated: 2025/02/24 19:48:01 by palexand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,11 @@ void		ft_expander2(t_token *tokens, \
 
 //		FT_Builtins		//
 
-int			ft_echo(t_token *token);
+void	ft_echo(t_data *data, t_bin_token *token);
+void	ft_builtin_choice(t_data *data, t_bin_token *token);
+int	ft_cd(t_data *data, t_bin_token *token);
+/*int	ft_update_pwd(t_data *data);*/
+/*int	ft_go_to_path(t_data *data, int option);*/
 
 //		FT_Rmv_quotes	//
 
