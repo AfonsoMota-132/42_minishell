@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../incs/minishell.h"
+#include <unistd.h>
 
 int	g_signal_received = 0;
 
@@ -112,9 +113,6 @@ void treeprint(t_bin_token *cur, int depth)
     treeprint(cur->right, depth + 1);
 }
 
-
-void	ft_execve(t_data *data, t_bin_token *tokens);
-
 int	main(int ac, char **av, char **envp)
 {
 	t_data	*data;
@@ -126,6 +124,8 @@ int	main(int ac, char **av, char **envp)
 	ft_signals();
 	while (1)
 	{
+		dup2(0, STDIN_FILENO);
+		dup2(1, STDOUT_FILENO);
 		commands = ft_command_init(data);
 		if (g_signal_received)
 		{

@@ -44,10 +44,9 @@ void	ft_handle_redirects(t_bin_token *tokens)
 {
 	int		fd;
 
-	printf("wtf1\n");
 	if (tokens->redir_out)
 	{
-		fd = open(tokens->redir_out->content, O_WRONLY, 0);
+		fd = open(tokens->redir_out->content, O_WRONLY | O_APPEND, 0);
 		dup2(fd, STDOUT_FILENO);
 	}
 	// Need to add fail safe in case file perms file doesnt exist
@@ -60,7 +59,7 @@ void	ft_command_not_found(t_data *data, t_bin_token *tokens, char *path)
 	ft_free(127, NULL, data, 1);
 }
 
-void	ft_execve(t_data *data, t_bin_token *tokens, int fd[2])
+void	ft_execve(t_data *data, t_bin_token *tokens)
 {
 	char	*path;
 	int		result;
@@ -86,7 +85,6 @@ void	ft_execve(t_data *data, t_bin_token *tokens, int fd[2])
 	}
 	if (path)
 		free(path);
-	(void) fd;
 }
 
 void	ft_pipe_child(t_data *data, t_bin_token *tokens, int fd[2])
@@ -94,7 +92,7 @@ void	ft_pipe_child(t_data *data, t_bin_token *tokens, int fd[2])
 	close(fd[1]);
 	dup2(fd[0], STDIN_FILENO);
 	close(fd[0]);
-	ft_execve(data, tokens, fd);
+	ft_execve(data, tokens);
 }
 
 void	ft_pipe_parent(t_data *data, t_bin_token *tokens, int fd[2])
@@ -142,7 +140,7 @@ void	ft_pipes_creator(t_data *data, t_bin_token *tokens)
 		if (tokens->type == PIPE_NODE)
 			ft_handle_pipe(data, tokens, fd);
 		else
-			ft_execve(data, tokens, NULL);
+			ft_execve(data, tokens);
 	}
 	waitpid(-1 , &exit_status, 0);
 	data->exit_status = WEXITSTATUS(exit_status);

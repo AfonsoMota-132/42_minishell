@@ -38,7 +38,6 @@ char	*ft_get_path_without_til(char *path, char **dirs, int i)
 		path = ft_strjoin_gnl(path, dirs[i]);
 		path = ft_strjoin_gnl(path, "/");
 	}
-	printf("wtf3\t%s\n", path);
 	return (path);
 }
 
