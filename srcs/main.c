@@ -124,8 +124,6 @@ int	main(int ac, char **av, char **envp)
 	ft_signals();
 	while (1)
 	{
-		dup2(0, STDIN_FILENO);
-		dup2(1, STDOUT_FILENO);
 		commands = ft_command_init(data);
 		if (g_signal_received)
 		{
@@ -150,6 +148,6 @@ int	main(int ac, char **av, char **envp)
 			ft_free_tree(data->bin_tokens, 1);
 		data->bin_tokens = ft_bin_tokens(data);
 		ft_run_cmds(data);
-		treeprint(data->bin_tokens, 0);
+		/*treeprint(data->bin_tokens, 0);*/
 	}
 }

@@ -110,6 +110,7 @@ void	ft_pipe_parent(t_data *data, t_bin_token *tokens, int fd[2])
 		exit(0);
 	}
 	else
+	
 		close(fd[1]);
 	waitpid(pid, &status, 0);
 }

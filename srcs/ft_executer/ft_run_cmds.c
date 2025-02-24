@@ -15,15 +15,17 @@
 void	ft_run_cmds(t_data *data)
 {
 	int	status;
+	int	pid_c;
 
 	if (!data->bin_tokens->right && !data->bin_tokens->left)
 	{
-		int	pid_c = fork();
+		pid_c = fork();
 		if (pid_c == 0)
 		{
 			raise(SIGINT);
 			raise(127);
-			ft_execve(data, data->bin_tokens, NULL);
+			ft_pipes_creator(data, data->bin_tokens);
+			ft_execve(data, data->bin_tokens);
 			exit(0);
 		}
 		else
