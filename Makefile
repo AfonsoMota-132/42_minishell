@@ -18,7 +18,8 @@ RM = rm -f
 
 OBJS = $(SRCS:.c=.o)
 
-EXECUTER = srcs/ft_executer/ft_pipes.c
+EXECUTER = srcs/ft_executer/ft_pipes.c \
+		   srcs/ft_executer/ft_run_cmds.c
 
 BIN_TOKENS = srcs/ft_bin_tokens/ft_bin_tokens.c
 

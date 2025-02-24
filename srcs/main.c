@@ -149,25 +149,7 @@ int	main(int ac, char **av, char **envp)
 		if (data->bin_tokens)
 			ft_free_tree(data->bin_tokens, 1);
 		data->bin_tokens = ft_bin_tokens(data);
-		if (!data->bin_tokens->right && !data->bin_tokens->left)
-		{
-			int	pid_c = fork();
-			if (pid_c == 0)
-			{
-				raise(SIGINT);
-				raise(127);
-				ft_execve(data, data->bin_tokens);
-			}
-			else
-			{
-				signal(SIGINT, SIG_IGN);
-				signal(127, SIG_IGN);
-				waitpid(-1, &data->exit_status, 0);
-			}
-			ft_signals();
-		}
-		else
-			ft_pipes_creator(data, data->bin_tokens);
-		/*treeprint(data->bin_tokens, 0);*/
+		ft_run_cmds(data);
+		treeprint(data->bin_tokens, 0);
 	}
 }

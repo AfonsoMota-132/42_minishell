@@ -6,12 +6,12 @@
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 10:07:23 by afogonca          #+#    #+#             */
-/*   Updated: 2025/02/23 10:37:17 by afogonca         ###   ########.fr       */
+/*   Updated: 2025/02/24 05:57:55 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incs/minishell.h"
-#include <unistd.h>
+#include <fcntl.h>
 
 char	*ft_execve_get_path(char *cmd, t_data *data)
 {
@@ -44,22 +44,23 @@ void	ft_handle_redirects(t_bin_token *tokens)
 {
 	int		fd;
 
+	printf("wtf1\n");
 	if (tokens->redir_out)
 	{
-		fd = open(tokens->redir_out->content, O_WRONLY | O_CREAT, 0644);
+		fd = open(tokens->redir_out->content, O_WRONLY, 0);
 		dup2(fd, STDOUT_FILENO);
 	}
-	// Need to add fail safe in case file perms/file doesnt exist
+	// Need to add fail safe in case file perms file doesnt exist
 }
 
-void	ft_command_not_found(t_data *data, t_bin_token *tokens,char *path)
+void	ft_command_not_found(t_data *data, t_bin_token *tokens, char *path)
 {
 	printf("%s: command not found\n", tokens->args[0]);
 	free(path);
 	ft_free(127, NULL, data, 1);
 }
 
-void	ft_execve(t_data *data, t_bin_token *tokens)
+void	ft_execve(t_data *data, t_bin_token *tokens, int fd[2])
 {
 	char	*path;
 	int		result;
@@ -71,6 +72,7 @@ void	ft_execve(t_data *data, t_bin_token *tokens)
 		ft_command_not_found(data, tokens, path);
 	if (path)
 	{
+		ft_handle_redirects(tokens);
 		free(tokens->args[0]);
 		tokens->args[0] = ft_strdup(path);
 		result = execve(path, tokens->args, NULL);
@@ -78,11 +80,13 @@ void	ft_execve(t_data *data, t_bin_token *tokens)
 		{
 			printf("%s: command not found\n", tokens->args[0]);
 			free(path);
+			printf("it should be 127");
 			exit (127);
 		}
 	}
 	if (path)
 		free(path);
+	(void) fd;
 }
 
 void	ft_pipe_child(t_data *data, t_bin_token *tokens, int fd[2])
@@ -90,7 +94,7 @@ void	ft_pipe_child(t_data *data, t_bin_token *tokens, int fd[2])
 	close(fd[1]);
 	dup2(fd[0], STDIN_FILENO);
 	close(fd[0]);
-	ft_execve(data, tokens);
+	ft_execve(data, tokens, fd);
 }
 
 void	ft_pipe_parent(t_data *data, t_bin_token *tokens, int fd[2])
@@ -138,7 +142,7 @@ void	ft_pipes_creator(t_data *data, t_bin_token *tokens)
 		if (tokens->type == PIPE_NODE)
 			ft_handle_pipe(data, tokens, fd);
 		else
-			ft_execve(data, tokens);
+			ft_execve(data, tokens, NULL);
 	}
 	waitpid(-1 , &exit_status, 0);
 	data->exit_status = WEXITSTATUS(exit_status);
