@@ -66,13 +66,14 @@ char	**ft_command_init(t_data *data)
 	if (!command || !ft_strlen(command)
 		|| ft_syntax(command))
 	{
+		data->exit_status = 1;
 		if (command)
 			free (command);
 		return (NULL);
 	}
 	add_history(command_in);
 	if (ft_strncmp(command, "exit", 4) == 0)
-		ft_free(0, command, data, 1);
+		ft_free(data->exit_status, command, data, 1);
 	command_list = ft_split_cmds(command);
 	free(command);
 	free(command_in);
@@ -142,7 +143,10 @@ int	main(int ac, char **av, char **envp)
 		ft_expander(data->tokens, data);
 		ft_rmv_quotes(data->tokens);
 		if (ft_syntax_tokens(data->tokens) || ft_redirects(data->tokens, &data))
+		{
+			data->exit_status = 1;
 			continue ;
+		}
 		if (!data->tokens_start)
 			continue ;
 		if (data->bin_tokens)
@@ -151,6 +155,5 @@ int	main(int ac, char **av, char **envp)
 		ft_run_cmds(data);
 		dup2(1, STDOUT_FILENO);
 		dup2(0, STDIN_FILENO);
-		/*treeprint(data->bin_tokens, 0);*/
 	}
 }

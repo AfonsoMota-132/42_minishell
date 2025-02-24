@@ -31,9 +31,10 @@ int	ft_syntax_tokens(t_token *tokens)
 				&& tokens->next->type == PIPE)
 			|| (tokens->type == D_REDIRECT_OUT && tokens->next == NULL
 				&& tokens->next->type == PIPE)
-			|| (tokens->type == REDIRECT_OUT && tokens->next->type == PIPE))
-			return (printf("minishell: syntax error \
-				near unexpected token `|'\n"));
+			|| (tokens->type == REDIRECT_OUT && tokens->next->type == PIPE)
+			|| (tokens->type == PIPE && tokens->next->type == PIPE))
+			return (printf("minishell: syntax error %s",
+				"near unexpected token `|'\n"));
 		tokens = tokens->next;
 	}
 	return (0);
