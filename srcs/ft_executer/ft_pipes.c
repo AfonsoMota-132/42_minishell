@@ -87,12 +87,21 @@ void	ft_execve(t_data *data, t_bin_token *tokens)
 {
 	char	*path;
 	int		result;
+	int		i;
 
-	path = ft_execve_get_path(tokens->args[0], data);
-	if (!path && tokens->args[0])
-		path = ft_strdup(tokens->args[0]);
-	if (path && access(path, F_OK) == -1)
-		ft_command_not_found(data, tokens, path);
+	i = 0;
+	while(!tokens->args[i] && i < tokens->nbr_args)
+		i++;
+	if (tokens->args[i])
+	{
+		path = ft_execve_get_path(tokens->args[i], data);
+		if (!path && tokens->args[i])
+			path = ft_strdup(tokens->args[0]);
+		if (path && access(path, F_OK) == -1)
+			ft_command_not_found(data, tokens, path);
+	}
+	else
+		ft_free(1, NULL, data, 1);
 	if (path)
 	{
 		ft_handle_redirects(data, tokens, path);

@@ -58,6 +58,7 @@ typedef struct s_token
 typedef struct s_bin_token
 {
 	char				**args;
+	int					nbr_args;
 	t_token				*redir_in;
 	t_token				*redir_out;
 	t_bin_token_type	type;	
