@@ -73,7 +73,7 @@ char	**ft_command_init(t_data *data)
 	}
 	add_history(command_in);
 	if (ft_strncmp(command, "exit", 4) == 0)
-		ft_free(data->exit_status, command, data, 1);
+		ft_free(0, command, data, 1);
 	command_list = ft_split_cmds(command);
 	free(command);
 	free(command_in);

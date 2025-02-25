@@ -114,7 +114,8 @@ int			ft_bin_count_args(t_token *tokens)
 	i = 0;
 	while (tokens)
 	{
-		i++;
+		if (tokens->content || i == 0)
+			i++;
 		tokens = tokens->next;
 	}
 	return (i);
@@ -136,14 +137,11 @@ void		ft_update_bin_token(t_bin_token	*bin_token, t_token *tokens)
 	{
 		tmp = tokens->next;
 		if (tokens->content)
-			bin_token->args[i] = ft_strdup(tokens->content);
-		else
-			bin_token->args[i] = NULL;
+			bin_token->args[i++] = ft_strdup(tokens->content);
 		free(tokens->content);
 		free(tokens);
 		if (!tmp)
 			break ;
-		i++;
 		tokens = tmp;
 	}
 }
