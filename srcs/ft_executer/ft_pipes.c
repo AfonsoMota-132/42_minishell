@@ -12,14 +12,6 @@
 
 #include "../../incs/minishell.h"
 
-void	ft_error_exit(t_data * data, char *exact_path)
-{
-	ft_putstr_fd("Bash: ", 1);
-	ft_putstr_fd(exact_path, 1);
-	ft_putstr_fd(" command not found\n", 1);
-	ft_free(127, NULL, data, 0);
-}
-
 void	ft_pipe_child(t_bin_token *tokens, int *fd, t_data *data)
 {
 	close(fd[1]);
@@ -30,12 +22,12 @@ void	ft_pipe_child(t_bin_token *tokens, int *fd, t_data *data)
 
 void	ft_pipe_parent(t_bin_token *tokens, int *fd, t_data *data)
 {
-	pid_t	pid;
+	pid_t	child_pid;
 	int		status;
 
 	close(fd[0]);
-	pid = fork();
-	if (pid == 0)
+	child_pid = fork();
+	if (child_pid == 0)
 	{
 		dup2(fd[1], STDOUT_FILENO);
 		ft_create_pipe(tokens->left, data);
@@ -44,19 +36,8 @@ void	ft_pipe_parent(t_bin_token *tokens, int *fd, t_data *data)
 	}
 	else
 		close(fd[1]);
-	waitpid(pid, &status, 0);
-}
-
-void	ft_execute_node(t_bin_token *tree, t_data *data)
-{
-	pid_t	pid;
-
-	pid = fork();
-	if (pid == 0)
-	{
-		// handle builtins
-		ft_execve(tree, data);
-	}
+	waitpid(child_pid, &status, 0);
+	data->exit_status = WIFEXITED(status);
 }
 
 void	ft_handle_pipe(t_bin_token *tokens, t_data *data, int fd[2])
@@ -76,6 +57,7 @@ void	ft_handle_pipe(t_bin_token *tokens, t_data *data, int fd[2])
 	else
 		ft_execute_node(tokens, data);
 }
+
 void	ft_create_pipe(t_bin_token *tokens, t_data *data)
 {
 	int		status;

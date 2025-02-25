@@ -104,6 +104,9 @@ void	ft_create_pipe(t_bin_token *tokens, t_data *data);
 void	ft_run_cmds(t_data *data);
 void	ft_execute_node(t_bin_token *tree, t_data *data);
 void	ft_execve(t_bin_token *tokens, t_data *data);
+void	ft_command_not_found(t_data *data, char *path);
+void	ft_error_msg_redir(t_data *data, int type, char *redir, char *path);
+void	ft_handle_redirects(t_data *data, t_bin_token *tokens, char *path);
 
 void		ft_print_tokens(t_token *tokens, t_data *data, int tab);
 
