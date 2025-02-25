@@ -11,123 +11,95 @@
 /* ************************************************************************** */
 
 #include "../../incs/minishell.h"
-#include <fcntl.h>
 
-char	*ft_execve_get_path(char *cmd, t_data *data)
+void	ft_error_exit(t_data * data, char *exact_path)
 {
-	int	i;
-	char	*value;
-	char	**paths;
+	ft_putstr_fd("Bash: ", 1);
+	ft_putstr_fd(exact_path, 1);
+	ft_putstr_fd(" command not found\n", 1);
+	ft_free(127, NULL, data, 0);
+}
+
+char	*ft_exact_path(char *cmd, char **paths_array)
+{
+	int		i;
 	char	*tmp;
 
-	value = ft_getenv("PATH", data);
-	if (!value)
+	i = 0;
+	if (!cmd)
 		return (NULL);
-	paths = ft_split(value, ':');
-	i = -1;
-	while (ft_strlen(cmd) && paths[++i])
+	while (paths_array[i])
 	{
-		paths[i] = ft_strjoin_gnl(paths[i], "/");
-		paths[i] = ft_strjoin_gnl(paths[i], cmd);
-		if (access(paths[i], F_OK) != -1)
-		{
-			tmp = ft_strdup(paths[i]);
-			ft_free_matrix(paths);
+		tmp = ft_strjoin(paths_array[i], cmd);
+		if (access(tmp, F_OK) == 0)
 			return (tmp);
-		}
+		free(tmp);
+		i++;
 	}
-	ft_free_matrix(paths);
 	return (NULL);
 }
 
-void	ft_error_msg_redir(t_data *data, int type, char *redir, char *path)
+void	ft_execution(t_bin_token *tokens, t_data *data, char **paths_array)
 {
-	free(path);
-	if (type == 0)
-		printf("bash: %s: permission denied\n", redir);
-	else if (type == 1)
-		printf("bash: %s: No such file or directory\n", redir);
-	ft_free(1, NULL, data, 0);
-}
-
-void	ft_handle_redirects(t_data *data, t_bin_token *tokens, char *path)
-{
-	int		fd;
-
-	if (tokens->redir_out)
-	{
-		if (access(tokens->redir_out->content, F_OK | W_OK) == -1)
-			ft_error_msg_redir(data, 0, tokens->redir_out->content, path);
-		fd = open(tokens->redir_out->content, O_WRONLY | O_APPEND, 0);
-		dup2(fd, STDOUT_FILENO);
-	}
-	if (tokens->redir_in)
-	{
-		if (access(tokens->redir_in->content, F_OK) == -1)	
-			ft_error_msg_redir(data, 1, tokens->redir_in->content, path);
-		if (access(tokens->redir_in->content, R_OK) == -1)
-			ft_error_msg_redir(data, 0, tokens->redir_in->content, path);
-		fd = open(tokens->redir_in->content, O_RDONLY, 0);
-		dup2(fd, STDIN_FILENO);
-	}
-}
-
-void	ft_command_not_found(t_data *data, t_bin_token *tokens, char *path)
-{
-	if (ft_strlen(path) == 0)
-		printf("\'\' : command not found\n");
-	else
-		printf("%s: command not found\n", path);
-	free(path);
-	ft_free(127, NULL, data, 1);
-	(void) tokens;
-}
-
-void	ft_execve(t_data *data, t_bin_token *tokens)
-{
-	char	*path;
 	int		result;
-	int		i;
+	char	*exact_path;
 
-	i = 0;
-	while(!tokens->args[i] && i < tokens->nbr_args)
-		i++;
-	if (tokens->args[i])
+	result = 0;
+	exact_path = ft_exact_path(tokens->args[0], paths_array);
+	if (!exact_path && tokens->args[0])
+		exact_path = ft_strdup(tokens->args[0]);
+	if (exact_path && access(exact_path, F_OK) != 0)
+		ft_error_exit(data, exact_path);
+	if (exact_path)
 	{
-		path = ft_execve_get_path(tokens->args[i], data);
-		if (!path && tokens->args[i])
-			path = ft_strdup(tokens->args[0]);
-		if (path && access(path, F_OK) == -1)
-			ft_command_not_found(data, tokens, path);
-	}
-	else
-		ft_free(1, NULL, data, 1);
-	if (path)
-	{
-		ft_handle_redirects(data, tokens, path);
-		free(tokens->args[0]);
-		tokens->args[0] = ft_strdup(path);
-		result = execve(path, tokens->args, NULL);
+		result = execve(exact_path, tokens->args, NULL);
 		if (result == -1)
 		{
-			printf("%s: command not found\n", tokens->args[0]);
-			free(path);
-			exit (127);
+			ft_putstr_fd(exact_path, 2);
+			perror(": Minishell");
+			free(exact_path);
+			exit(126);
 		}
 	}
-	if (path)
-		free(path);
+	if (exact_path)
+		free(exact_path);
 }
 
-void	ft_pipe_child(t_data *data, t_bin_token *tokens, int fd[2])
+void	ft_execve(t_bin_token *tokens, t_data *data)
+{
+	char	*paths_str;
+	char	**paths_array;
+	int		i;
+	char	*tmp;
+
+	i = 0;
+	paths_array = NULL;
+	paths_str = ft_getenv("PATH", data);
+	if (paths_str)
+	{
+		paths_array = ft_split(paths_str, ':');
+		while (paths_array[i])
+		{
+			tmp = paths_array[i];
+			paths_array[i] = ft_strjoin(paths_array[i], "/");
+			free(tmp);
+			i++;
+		}
+	}
+	else
+		ft_error_exit(data, data->args[0]);
+	ft_execution(tokens, data,paths_array);
+}
+
+void	ft_pipe_child(t_bin_token *tokens, int *fd, t_data *data)
 {
 	close(fd[1]);
 	dup2(fd[0], STDIN_FILENO);
 	close(fd[0]);
-	ft_execve(data, tokens);
+	ft_execve(tokens, data);
 }
 
-void	ft_pipe_parent(t_data *data, t_bin_token *tokens, int fd[2])
+void	ft_pipe_parent(t_bin_token *tokens, int *fd, t_data *data)
 {
 	pid_t	pid;
 	int		status;
@@ -137,45 +109,55 @@ void	ft_pipe_parent(t_data *data, t_bin_token *tokens, int fd[2])
 	if (pid == 0)
 	{
 		dup2(fd[1], STDOUT_FILENO);
-		ft_pipes_creator(data, tokens->left);
+		ft_create_pipe(tokens->left, data);
 		close(fd[1]);
 		ft_free(0, NULL, data, 0);
 	}
-	else	
+	else
 		close(fd[1]);
 	waitpid(pid, &status, 0);
 }
 
-void	ft_handle_pipe(t_data *data, t_bin_token *tokens, int fd[2])
+void	ft_execute_node(t_bin_token *tree, t_data *data)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		// handle builtins
+		ft_execve(tree, data);
+	}
+}
+
+void	ft_handle_pipe(t_bin_token *tokens, t_data *data, int fd[2])
 {
 	pid_t	child_pid;
 
-	child_pid = fork();
-	if (child_pid < 0)
-		printf("error creating fork!");
-	if (child_pid == 0)
-		ft_pipe_child(data, tokens->right, fd);
+	if (tokens->type == PIPE_NODE)
+	{
+		child_pid = fork();
+		if (child_pid < 0)
+			ft_putstr_fd("Bash: Failed creating fork.\n", 2);
+		if (child_pid == 0)
+			ft_pipe_child(tokens->right, fd, data);
+		else
+			ft_pipe_parent(tokens, fd, data);
+	}
 	else
-		ft_pipe_parent(data, tokens, fd);
-
+		ft_execute_node(tokens, data);
 }
-
-void	ft_pipes_creator(t_data *data, t_bin_token *tokens)
+void	ft_create_pipe(t_bin_token *tokens, t_data *data)
 {
-	int		exit_status;
+	int		status;
 	int		fd[2];
 
 	if (pipe(fd) == -1)
-		printf("error creating pipe\n");
+		ft_putstr_fd("Bash: Failed creating pipe.\n", 1);
 	else
-	{
-		if (tokens->type == PIPE_NODE)
-			ft_handle_pipe(data, tokens, fd);
-		else
-			ft_execve(data, tokens);
-	}
-	waitpid(-1 , &exit_status, 0);
-	data->exit_status = WEXITSTATUS(exit_status);
+		ft_handle_pipe(tokens, data, fd);
+	waitpid(-1, &status, 0);
+	data->exit_status = WIFEXITED(status);
 	close(fd[0]);
 	close(fd[1]);
 }

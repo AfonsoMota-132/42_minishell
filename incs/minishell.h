@@ -13,6 +13,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+
 # include "../libs/libft/libft.h"
 # include <stdio.h>
 # include <readline/readline.h>
@@ -98,6 +99,11 @@ typedef struct s_data
 	char		*prompt;
 	int			exit_status;
 }	t_data;
+
+void	ft_create_pipe(t_bin_token *tokens, t_data *data);
+void	ft_run_cmds(t_data *data);
+void	ft_execute_node(t_bin_token *tree, t_data *data);
+void	ft_execve(t_bin_token *tokens, t_data *data);
 
 void		ft_print_tokens(t_token *tokens, t_data *data, int tab);
 
@@ -228,11 +234,5 @@ void		ft_del_pseudo_heredocs(t_token *tokens);
 t_bin_token	*ft_bin_tokens(t_data *data);
 
 //		ft_executer	test		//
-
-void		ft_pipes_creator(t_data *data, t_bin_token *tokens);
-void		ft_handle_pipe(t_data *data, t_bin_token *tokens, int fd[2]);
-void		ft_pipe_parent(t_data *data, t_bin_token *tokens, int fd[2]);
-void		ft_execve(t_data *data, t_bin_token *tokens);
-void		ft_run_cmds(t_data *data);
 
 #endif
