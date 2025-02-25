@@ -97,6 +97,7 @@ void	ft_execve(t_data *data, t_bin_token *tokens)
 	char	*path;
 	int		result;
 
+	ft_builtin_choice(data, tokens);
 	path = ft_execve_get_path(tokens->args[0], data);
 	if (!path && tokens->args[0])
 		path = ft_strdup(tokens->args[0]);

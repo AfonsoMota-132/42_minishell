@@ -80,5 +80,5 @@ int	ft_cd(t_data *data, t_bin_token *token)
 			ft_putstr_fd(": No such file or directory\n", 2);
 		}
 	}
-	return (return_value);
+	return(ft_free(return_value, NULL, data, 0), 0);
 }
