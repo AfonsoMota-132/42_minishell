@@ -147,6 +147,7 @@ int	main(int ac, char **av, char **envp)
 			continue ;
 		if (data->bin_tokens)
 			ft_free_tree(data->bin_tokens, 1);
+		ft_print_tokens(data->tokens_start, data, 0);
 		data->bin_tokens = ft_bin_tokens(data);
 		ft_run_cmds(data);
 		ft_putstr_fd("data->bin_tokens \n", 2);

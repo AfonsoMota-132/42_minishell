@@ -142,7 +142,7 @@ void	ft_expander2(t_token *tokens, \
 		{
 			tokens->content = ft_expander_replace(tokens->content, \
 									ft_getenv(env, data), i++);
-			ft_expander2(tokens, start, data);
+			ft_expander_reset(tokens->content, &i);
 		}
 		else if (ft_strchr(tokens->content, '$') != NULL)
 		{

@@ -43,6 +43,7 @@ void	ft_echo(t_data *data, t_bin_token *token)
 (void)data;
 
 	n = 1;
+	flag = 1;
 	if (ft_flag_check(token) != 1)
 	{
 		flag = ft_flag_check(token);

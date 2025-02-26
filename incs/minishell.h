@@ -26,6 +26,13 @@
 # include <sys/wait.h>
 # include <dirent.h>
 
+typedef struct s_envp
+{
+	char				*name;
+	char				*value;
+	struct s_envp		*next;
+}	t_envp;
+
 typedef enum e_token_type
 {
 	CMD,
@@ -90,12 +97,13 @@ typedef struct s_data
 	char		*command;
 	char		*heredoc_path;
 	char		**args;
-	char		**ft_envp;
+	char		**ft_envp; // we use this one in execve;
 	char		*path;
 	char		*user;
 	char		*hostname;
 	char		*prompt;
 	int			exit_status;
+	s_envp	*envp;
 }	t_data;
 
 void		ft_print_tokens(t_token *tokens, t_data *data, int tab);
