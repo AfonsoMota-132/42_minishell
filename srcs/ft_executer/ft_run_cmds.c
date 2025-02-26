@@ -89,24 +89,19 @@ char	**ft_envp_list2array(t_envp *env)
 
 	tmp = env;
 	i = 0;
-	while (tmp)
-	{
+	if (!env)
+		return (NULL);
+	while (tmp && ++i)
 		tmp = tmp->next;
-		i++;
-	}
-	array = malloc(sizeof(char *) * i + 1);
-	i = 0;
+	array = malloc(sizeof(char *) * i);
+	i = -1;
 	tmp = env;
 	while (tmp)
 	{
-		array[i] = ft_strdup(tmp->key);
+		array[++i] = ft_strdup(tmp->key);
 		if (tmp->value)
-		{
-			array[i] = ft_strjoin_gnl(array[i], "=");
-			array[i] = ft_strjoin_gnl(array[i], "\"");
-			array[i] = ft_strjoin_gnl(array[i], tmp->value);
-			array[i] = ft_strjoin_gnl(array[i], "\"");
-		}
+			array[i] = ft_strjoin_gnl(ft_strjoin_gnl(array[i]
+						, "="), tmp->value);
 		tmp = tmp->next;
 	}
 	array[i] = NULL;
@@ -115,13 +110,11 @@ char	**ft_envp_list2array(t_envp *env)
 
 void	ft_execve(t_bin_token *tokens, t_data *data)
 {
-	int		ex_code;
 	char	*path;
 	char	**envp;
 	int		i;
 
 	i = 0;
-	ex_code = 0;
 	while (!tokens->args[i] && i < tokens->nbr_args)
 		i++;
 	if (!tokens->args[i])
@@ -130,15 +123,12 @@ void	ft_execve(t_bin_token *tokens, t_data *data)
 	path = ft_execve_get_path(tokens->args[i], data);
 	if (!path && tokens->args[i])
 		path = ft_strdup(tokens->args[i]);
-	if (path && access(path, F_OK) != 0)
-		ft_command_not_found(data, path);
 	ft_handle_redirects(data, tokens, path);
 	if (path)
 	{
-		printf("wtf: %s\t%s\n", path, tokens->args[0]);
 		envp = ft_envp_list2array(data->ft_envp);
-		ex_code = execve(path, tokens->args, envp);
-		if (ex_code == -1)
+		i = execve(path, tokens->args, envp);
+		if (i == -1)
 			ft_command_not_found(data, path);
 	}
 	if (path)

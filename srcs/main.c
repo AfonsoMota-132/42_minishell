@@ -58,7 +58,6 @@ char	**ft_command_init(t_data *data)
 	char	*command;
 	char	**command_list;
 
-	rl_redisplay();
 	command_in = readline(data->prompt);
 	if (!command_in)
 		ft_free(0, NULL,data, 1);

@@ -49,8 +49,7 @@ SRCS =	srcs/main.c srcs/ft_split_ms.c \
 		srcs/ft_getenv.c $(BUILTINS) $(REDIRS) $(SIGNALS) \
 		$(BIN_TOKENS) $(EXECUTER)
 
-VAL_RULES = --leak-check=full --show-leak-kinds=all --suppressions=readline.supp 
-#--trace-children=yes
+VAL_RULES = --leak-check=full --show-leak-kinds=all --suppressions=readline.supp --trace-children=yes
 all: deps $(NAME)
 
 libft:

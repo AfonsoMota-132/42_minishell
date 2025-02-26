@@ -22,7 +22,8 @@ char	*ft_get_hostname(void)
 
 	fd = open("/etc/hostname", O_RDONLY);
 	tmp = get_next_line(fd);
-	get_next_line(fd);
+	if (!tmp)
+		return (NULL);
 	close(fd);
 	i = 0;
 	while (tmp[i] != '\0' && tmp[i] != '.')	
@@ -50,9 +51,14 @@ char	**ft_cpyenv(char **envp)
 
 char	*ft_heredoc_path(t_data *data)
 {
-	data->heredoc_path = ft_strdup("/home/");
-	data->heredoc_path = ft_strjoin_gnl(data->heredoc_path, data->user);
-	data->heredoc_path = ft_strjoin_gnl(data->heredoc_path, "/");
+	if (data->user)
+	{
+		data->heredoc_path = ft_strdup("/home/");
+		data->heredoc_path = ft_strjoin_gnl(data->heredoc_path, data->user);
+		data->heredoc_path = ft_strjoin_gnl(data->heredoc_path, "/");
+	}
+	else
+		data->heredoc_path = ft_strdup("/.tmp");
 	return (data->heredoc_path);
 }
 
@@ -117,12 +123,18 @@ t_data	*ft_data_init(char **envp)
 	data->args = NULL;
 	data->prompt = NULL;
 	data->exit_status = 0;
-	ft_envlist_init(data, envp);
+	data->user = NULL;
 	data->user = getenv("USER");
 	data->hostname = ft_get_hostname();
 	data->path = ft_get_path(data);
+	if (data->user && data->path && data->hostname)
+	{
+		ft_envlist_init(data, envp);
+		ft_prompt_init(data);
+	}
+	else
+		data->prompt= ft_strdup("minishell(prompt not found😡):");
 	data->bin_tokens = NULL;
-	ft_prompt_init(data);
 	data->heredoc_path = ft_heredoc_path(data);
 	return (data);
 }
