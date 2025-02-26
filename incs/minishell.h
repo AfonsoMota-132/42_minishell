@@ -18,6 +18,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdlib.h>
+# include <stdbool.h>
 # include <unistd.h>
 # include <termios.h>
 # include <fcntl.h>
@@ -28,8 +29,9 @@
 
 typedef struct s_envp
 {
-	char				*name;
+	char				*key;
 	char				*value;
+	bool				print;
 	struct s_envp		*next;
 }	t_envp;
 
@@ -103,10 +105,14 @@ typedef struct s_data
 	char		*hostname;
 	char		*prompt;
 	int			exit_status;
-	s_envp	*envp;
+	t_envp	*envp;
 }	t_data;
 
 void		ft_print_tokens(t_token *tokens, t_data *data, int tab);
+//		FT_ENVP_LIST		//
+
+t_envp	*ft_new_env_node(t_data *data, char *envp);
+
 
 //		FT_SIGNALS		//
 
