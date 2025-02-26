@@ -56,6 +56,56 @@ char	*ft_heredoc_path(t_data *data)
 	return (data->heredoc_path);
 }
 
+t_envp	*ft_new_env_node(t_data *data, char *envp)
+{
+	t_envp	*new;
+	int		tmp;
+
+	new = malloc(sizeof(t_envp));
+	if (!new)
+		return (NULL);
+	tmp = ft_strchr_len(envp, '=');
+	if (tmp)
+	{
+		new->key = ft_substr(envp, 0, tmp);
+		new->value = ft_strdup(&envp[tmp + 1]);
+		new->print = true;
+	}
+	else
+	{
+		new->key = ft_strdup(envp);
+		new->value = NULL;
+		new->print = false;
+	}
+	new->next = NULL;
+	return (new);
+	(void) data;
+}
+
+void	ft_envlist_init(t_data *data, char **env)
+{
+	t_envp	*envp;
+	t_envp	*head;
+	int		i;
+
+	i = 0;
+	head = ft_new_env_node(data, env[0]);
+	envp = head;
+	while (env[++i])
+	{
+		envp->next = ft_new_env_node(data, env[i]);
+		if (!envp) 
+		{
+			perror("Failed to allocate memory for envp");
+			//free
+			//data->envp = NULL;
+			exit(EXIT_FAILURE);
+		}
+		envp = envp->next;
+	}
+	data->ft_envp = head;
+}
+
 t_data	*ft_data_init(char **envp)
 {
 	t_data	*data;
@@ -67,7 +117,7 @@ t_data	*ft_data_init(char **envp)
 	data->args = NULL;
 	data->prompt = NULL;
 	data->exit_status = 0;
-	data->ft_envp = ft_cpyenv(envp);
+	ft_envlist_init(data, envp);
 	data->user = getenv("USER");
 	data->hostname = ft_get_hostname();
 	data->path = ft_get_path(data);

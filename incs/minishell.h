@@ -26,14 +26,16 @@
 # include <sys/stat.h>
 # include <sys/wait.h>
 # include <dirent.h>
+# include <stdbool.h>
 
 typedef struct s_envp
 {
-	char	*name;
-	char	*value;
-	struct	*next;
-	t_envp;
-}
+	char				*key;
+	char				*value;
+	bool				print;
+	struct s_envp		*next;
+}	t_envp;
+
 typedef enum e_token_type
 {
 	CMD,
@@ -133,7 +135,7 @@ char		**ft_split_cmds(char *command);
 
 //		Ft_free			//
 
-void		ft_free_env(char **envp);
+void		ft_free_env(t_envp *envp);
 void		ft_free_cmds(char **commands);
 void		ft_free_tokens(t_token *tokens, int del_heredoc);
 int			ft_free(int i, char *command, t_data *data, int del_heredoc);

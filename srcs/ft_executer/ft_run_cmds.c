@@ -81,10 +81,43 @@ void	ft_execute_node(t_bin_token *tree, t_data *data)
 	}
 }
 
+char	**ft_envp_list2array(t_envp *env)
+{
+	char	**array;
+	t_envp	*tmp;
+	int		i;
+
+	tmp = env;
+	i = 0;
+	while (tmp)
+	{
+		tmp = tmp->next;
+		i++;
+	}
+	array = malloc(sizeof(char *) * i + 1);
+	i = 0;
+	tmp = env;
+	while (tmp)
+	{
+		array[i] = ft_strdup(tmp->key);
+		if (tmp->value)
+		{
+			array[i] = ft_strjoin_gnl(array[i], "=");
+			array[i] = ft_strjoin_gnl(array[i], "\"");
+			array[i] = ft_strjoin_gnl(array[i], tmp->value);
+			array[i] = ft_strjoin_gnl(array[i], "\"");
+		}
+		tmp = tmp->next;
+	}
+	array[i] = NULL;
+	return (array);
+}
+
 void	ft_execve(t_bin_token *tokens, t_data *data)
 {
 	int		ex_code;
 	char	*path;
+	char	**envp;
 	int		i;
 
 	i = 0;
@@ -102,7 +135,9 @@ void	ft_execve(t_bin_token *tokens, t_data *data)
 	ft_handle_redirects(data, tokens, path);
 	if (path)
 	{
-		ex_code = execve(path, tokens->args, NULL);
+		printf("wtf: %s\t%s\n", path, tokens->args[0]);
+		envp = ft_envp_list2array(data->ft_envp);
+		ex_code = execve(path, tokens->args, envp);
 		if (ex_code == -1)
 			ft_command_not_found(data, path);
 	}

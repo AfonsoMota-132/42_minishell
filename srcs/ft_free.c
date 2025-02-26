@@ -22,14 +22,20 @@ void	ft_free_matrix(char **matrix)
 	free(matrix);
 }
 
-void	ft_free_env(char **envp)
+void	ft_free_env(t_envp *env)
 {
-	int	i;
+	t_envp	*tmp;
 
-	i = -1;
-	while (envp[++i])
-		free(envp[i]);
-	free(envp);
+	while (env)
+	{
+		tmp = env->next;
+		if (env->key)
+			free(env->key);
+		if (env->value)
+			free(env->value);
+		free(env);
+		env = tmp;
+	}
 }
 
 void	ft_free_cmds(char **commands)

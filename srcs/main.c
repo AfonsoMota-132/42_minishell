@@ -120,9 +120,16 @@ int	main(int ac, char **av, char **envp)
 {
 	t_data	*data;
 	char	**commands;
+	int		fd_in;
+	int		fd_out;
+
 
 	(void) ac;
-	(void) av;
+	(void) av;	
+	fd_in = dup(STDIN_FILENO);
+	fd_out = dup(STDOUT_FILENO);
+	dup2(fd_in, STDIN_FILENO);
+	dup2(fd_out, STDOUT_FILENO);
 	data = ft_data_init(envp);
 	ft_signals();
 	while (1)
