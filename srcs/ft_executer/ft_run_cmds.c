@@ -63,6 +63,12 @@ char	*ft_execve_get_path(char *cmd, t_data *data)
 	return (NULL);
 }
 
+void	ft_handle_builtins(t_bin_token *tokens, t_data *data, int i)
+{
+	if (ft_strncmp("cd", tokens->args[i], 3) == 0)
+		ft_free(1, NULL, data, 0);
+}
+
 void	ft_execute_node(t_bin_token *tree, t_data *data)
 {
 	pid_t	pid;
@@ -87,6 +93,7 @@ void	ft_execve(t_bin_token *tokens, t_data *data)
 		i++;
 	if (!tokens->args[i])
 		ft_free(1, NULL, data, 0);
+	ft_handle_builtins(tokens,data, i);
 	path = ft_execve_get_path(tokens->args[i], data);
 	if (!path && tokens->args[0])
 		path = ft_strdup(tokens->args[0]);
