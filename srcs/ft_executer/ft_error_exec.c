@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../incs/minishell.h"
+#include "ft_executer.h"
 
 void	ft_command_not_found(t_data *data, char *path)
 {

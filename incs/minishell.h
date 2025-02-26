@@ -27,6 +27,13 @@
 # include <sys/wait.h>
 # include <dirent.h>
 
+typedef struct s_envp
+{
+	char	*name;
+	char	*value;
+	struct	*next;
+	t_envp;
+}
 typedef enum e_token_type
 {
 	CMD,
@@ -92,7 +99,7 @@ typedef struct s_data
 	char		*command;
 	char		*heredoc_path;
 	char		**args;
-	char		**ft_envp;
+	t_envp		*ft_envp;
 	char		*path;
 	char		*user;
 	char		*hostname;
@@ -100,14 +107,9 @@ typedef struct s_data
 	int			exit_status;
 }	t_data;
 
-void	ft_create_pipe(t_bin_token *tokens, t_data *data);
-void	ft_run_cmds(t_data *data);
-void	ft_execute_node(t_bin_token *tree, t_data *data);
-void	ft_execve(t_bin_token *tokens, t_data *data);
-void	ft_command_not_found(t_data *data, char *path);
-void	ft_error_msg_redir(t_data *data, int type, char *redir, char *path);
-void	ft_handle_redirects(t_data *data, t_bin_token *tokens, char *path);
-
+# ifndef FT_EXECUTER_H
+#  include "../srcs/ft_executer/ft_executer.h"
+# endif
 void		ft_print_tokens(t_token *tokens, t_data *data, int tab);
 
 //		FT_SIGNALS		//

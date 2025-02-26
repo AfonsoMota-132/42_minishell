@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../incs/minishell.h"
+#include "ft_executer.h"
 
 void	ft_handle_redirects2(t_data *data, t_bin_token *tokens, char *path)
 {

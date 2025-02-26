@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../incs/minishell.h"
+#include "ft_executer.h"
 
 void	ft_pipe_child(t_bin_token *tokens, int *fd, t_data *data)
 {

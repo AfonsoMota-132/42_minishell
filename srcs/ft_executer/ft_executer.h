@@ -27,4 +27,14 @@ void	ft_pipe_child(t_bin_token *tokens, int *fd, t_data *data);
 void	ft_handle_pipe(t_bin_token *tokens, t_data *data, int fd[2]);
 void	ft_create_pipe(t_bin_token *tokens, t_data *data);
 
+//			ft_run_cmds			//
+void	ft_run_cmds(t_data *data);
+char	*ft_execve_get_path(char *cmd, t_data *data);
+void	ft_handle_builtins(t_bin_token *tokens, t_data *data, int i);
+void	ft_execute_node(t_bin_token *tree, t_data *data);
+void	ft_execve(t_bin_token *tokens, t_data *data);
+
+//			ft_redirects_exec	//
+void	ft_handle_redirects2(t_data *data, t_bin_token *tokens, char *path);
+void	ft_handle_redirects(t_data *data, t_bin_token *tokens, char *path);
 #endif

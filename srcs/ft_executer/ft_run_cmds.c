@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../incs/minishell.h"
+#include "ft_executer.h"
 
 void	ft_run_cmds(t_data *data)
 {
@@ -95,8 +95,8 @@ void	ft_execve(t_bin_token *tokens, t_data *data)
 		ft_free(1, NULL, data, 0);
 	ft_handle_builtins(tokens,data, i);
 	path = ft_execve_get_path(tokens->args[i], data);
-	if (!path && tokens->args[0])
-		path = ft_strdup(tokens->args[0]);
+	if (!path && tokens->args[i])
+		path = ft_strdup(tokens->args[i]);
 	if (path && access(path, F_OK) != 0)
 		ft_command_not_found(data, path);
 	ft_handle_redirects(data, tokens, path);
