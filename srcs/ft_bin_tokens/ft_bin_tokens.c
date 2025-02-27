@@ -32,6 +32,7 @@ t_bin_token	*ft_calloc_bin_token(t_bin_token_type type)
 	t_bin_token	*new;
 
 	new = malloc(sizeof(t_bin_token));
+	new->nbr_args = 0;
 	new->args = NULL;
 	new->redir_in = NULL;
 	new->redir_out = NULL;
@@ -113,7 +114,8 @@ int			ft_bin_count_args(t_token *tokens)
 	i = 0;
 	while (tokens)
 	{
-		i++;
+		if (tokens->content || i == 0)
+			i++;
 		tokens = tokens->next;
 	}
 	return (i);
@@ -128,17 +130,18 @@ void		ft_update_bin_token(t_bin_token	*bin_token, t_token *tokens)
 	bin_token->redir_in = ft_bin_redir(tokens, REDIRECT_IN, D_REDIRECT_IN);
 	bin_token->redir_out = ft_bin_redir(tokens, REDIRECT_OUT, D_REDIRECT_OUT);
 	arg_len = ft_bin_count_args(tokens);
+	bin_token->nbr_args = arg_len;
 	bin_token->args = ft_calloc(sizeof(char *), arg_len + 1);
 	i = 0;
 	while (i < arg_len && tokens)
 	{
 		tmp = tokens->next;
-		bin_token->args[i] = ft_strdup(tokens->content);
+		if (tokens->content)
+			bin_token->args[i++] = ft_strdup(tokens->content);
 		free(tokens->content);
 		free(tokens);
 		if (!tmp)
 			break ;
-		i++;
 		tokens = tmp;
 	}
 }

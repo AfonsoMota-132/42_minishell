@@ -58,7 +58,6 @@ char	**ft_command_init(t_data *data)
 	char	*command;
 	char	**command_list;
 
-	rl_redisplay();
 	command_in = readline(data->prompt);
 	if (!command_in)
 		ft_free(0, NULL,data, 1);
@@ -66,6 +65,7 @@ char	**ft_command_init(t_data *data)
 	if (!command || !ft_strlen(command)
 		|| ft_syntax(command))
 	{
+		data->exit_status = 1;
 		if (command)
 			free (command);
 		return (NULL);
@@ -119,9 +119,16 @@ int	main(int ac, char **av, char **envp)
 {
 	t_data	*data;
 	char	**commands;
+	int		fd_in;
+	int		fd_out;
+
 
 	(void) ac;
-	(void) av;
+	(void) av;	
+	fd_in = dup(STDIN_FILENO);
+	fd_out = dup(STDOUT_FILENO);
+	dup2(fd_in, STDIN_FILENO);
+	dup2(fd_out, STDOUT_FILENO);
 	data = ft_data_init(envp);
 	ft_signals();
 	while (1)
@@ -142,7 +149,10 @@ int	main(int ac, char **av, char **envp)
 		ft_expander(data->tokens, data);
 		ft_rmv_quotes(data->tokens);
 		if (ft_syntax_tokens(data->tokens) || ft_redirects(data->tokens, &data))
+		{
+			data->exit_status = 1;
 			continue ;
+		}
 		if (!data->tokens_start)
 			continue ;
 		if (data->bin_tokens)
@@ -153,8 +163,11 @@ int	main(int ac, char **av, char **envp)
 		ft_putstr_fd("data->bin_tokens \n", 2);
 		dup2(1, STDOUT_FILENO);
 		dup2(0, STDIN_FILENO);
+<<<<<<< HEAD
 		/*ft_cd(data, data->bin_tokens);*/
 		/*treeprint(data->bin_tokens, 0);*/
+=======
+>>>>>>> origin/afonso
 	}
 
 }

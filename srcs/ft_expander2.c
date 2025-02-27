@@ -81,10 +81,12 @@ void	ft_expander(t_token *tokens, t_data *data)
 {
 	size_t	i;
 
+	if (data->ft_envp == NULL)
+		return ;
 	while (tokens)
 	{
 		i = 0;
-		while (tokens->content[i] 
+		while (tokens->content && tokens->content[i] 
 			&& ft_strchr(&tokens->content[i], '$'))
 			ft_expander2(tokens, &i, data);
 		tokens = tokens->next;

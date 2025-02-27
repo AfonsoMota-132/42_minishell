@@ -14,16 +14,16 @@
 
 char	*ft_getenv(char *env, t_data *data)
 {
-	int	i;
+	t_envp	*tmp;
 
-	i = -1;
+	tmp = data->ft_envp;
 	if (!env || !env[0])
 		return (NULL);
-	while (data->ft_envp[++i])
+	while (tmp)
 	{
-		if (ft_strncmp(data->ft_envp[i], env, ft_strlen(env)) == 0
-			&& data->ft_envp[i][ft_strlen(env)] == '=')
-			return (&data->ft_envp[i][ft_strlen(env) + 1]);
+		if (ft_strncmp(tmp->key, env, ft_strlen(env) + 1) == 0)
+			return (tmp->value);
+		tmp = tmp->next;
 	}
 	return (NULL);
 }

@@ -110,15 +110,13 @@ char	*ft_expander_replace_null(char *str, int start)
 		i++;
 	if (str[i] == '$')
 		i++;
-	while (str[i] && str[i] != ' '
-		&& str[i] != '\t' && str[i] != '\n'
-		&& str[i] != '$' && str[i] != '"'
-		&& str[i] != '\'' && ft_isdigit(str[i]))
-		i++;
-	if (str[i] != '\0')
-		new = ft_strdup("");
-	else
-		new = ft_strdup("");
+	if (str[i + 1] && !ft_isdigit(str[i + 1]))
+		while (str[i] && str[i] != ' '
+			&& str[i] != '\t' && str[i] != '\n'
+			&& str[i] != '$' && str[i] != '"'
+			&& str[i] != '\'')
+			i++;
+	new = NULL;
 	if (str[i])
 		new = ft_strjoin_gnl(new, &str[i]);
 	free(str);

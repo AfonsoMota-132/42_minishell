@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../incs/minishell.h"
-#include <fcntl.h>
+#include "ft_executer.h"
 
+<<<<<<< HEAD
 char	*ft_execve_get_path(char *cmd, t_data *data)
 {
 	int	i;
@@ -121,62 +121,65 @@ void	ft_execve(t_data *data, t_bin_token *tokens)
 }
 
 void	ft_pipe_child(t_data *data, t_bin_token *tokens, int fd[2])
+=======
+void	ft_pipe_child(t_bin_token *tokens, int *fd, t_data *data)
+>>>>>>> origin/afonso
 {
 	close(fd[1]);
 	dup2(fd[0], STDIN_FILENO);
 	close(fd[0]);
-	ft_execve(data, tokens);
+	ft_execve(tokens, data);
 }
 
-void	ft_pipe_parent(t_data *data, t_bin_token *tokens, int fd[2])
+void	ft_pipe_parent(t_bin_token *tokens, int *fd, t_data *data)
 {
-	pid_t	pid;
+	pid_t	child_pid;
 	int		status;
 
 	close(fd[0]);
-	pid = fork();
-	if (pid == 0)
+	child_pid = fork();
+	if (child_pid == 0)
 	{
 		dup2(fd[1], STDOUT_FILENO);
-		ft_pipes_creator(data, tokens->left);
+		ft_create_pipe(tokens->left, data);
 		close(fd[1]);
 		ft_free(0, NULL, data, 0);
 	}
-	else	
+	else
 		close(fd[1]);
-	waitpid(pid, &status, 0);
+	waitpid(child_pid, &status, 0);
+	data->exit_status = WIFEXITED(status);
 }
 
-void	ft_handle_pipe(t_data *data, t_bin_token *tokens, int fd[2])
+void	ft_handle_pipe(t_bin_token *tokens, t_data *data, int fd[2])
 {
 	pid_t	child_pid;
 
-	child_pid = fork();
-	if (child_pid < 0)
-		printf("error creating fork!");
-	if (child_pid == 0)
-		ft_pipe_child(data, tokens->right, fd);
+	if (tokens->type == PIPE_NODE)
+	{
+		child_pid = fork();
+		if (child_pid < 0)
+			ft_putstr_fd("Bash: Failed creating fork.\n", 2);
+		if (child_pid == 0)
+			ft_pipe_child(tokens->right, fd, data);
+		else
+			ft_pipe_parent(tokens, fd, data);
+	}
 	else
-		ft_pipe_parent(data, tokens, fd);
-
+		ft_execute_node(tokens, data);
 }
 
-void	ft_pipes_creator(t_data *data, t_bin_token *tokens)
+void	ft_create_pipe(t_bin_token *tokens, t_data *data)
 {
-	int		exit_status;
+	int		status;
 	int		fd[2];
 
 	if (pipe(fd) == -1)
-		printf("error creating pipe\n");
+		ft_putstr_fd("Bash: Failed creating pipe.\n", 1);
 	else
-	{
-		if (tokens->type == PIPE_NODE)
-			ft_handle_pipe(data, tokens, fd);
-		else
-			ft_execve(data, tokens);
-	}
-	waitpid(-1 , &exit_status, 0);
-	data->exit_status = WEXITSTATUS(exit_status);
+		ft_handle_pipe(tokens, data, fd);
+	waitpid(-1, &status, 0);
+	data->exit_status = WIFEXITED(status);
 	close(fd[0]);
 	close(fd[1]);
 }

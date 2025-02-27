@@ -48,13 +48,15 @@ char	*ft_get_path(t_data *data)
 	int		i;
 
 	path = getcwd(NULL, 0);
+	if (!path)
+		return (NULL);
 	dirs = ft_split(path, '/');
 	free(path);
 	path = NULL;
 	if (!dirs)
 		return (NULL);
 	i = 0;
-	if (dirs[i] && ft_strncmp(dirs[i], "home", 4) == 0
+	if (dirs[i] && data->user && ft_strncmp(dirs[i], "home", 4) == 0
 		&& ft_strlen(dirs[i]) == 4 && ++i && dirs[i]
 		&& ft_strncmp(dirs[i], data->user, ft_strlen(data->user)) == 0
 		&& ft_strlen(dirs[i]) == ft_strlen(data->user))

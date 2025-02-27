@@ -13,6 +13,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+
 # include "../libs/libft/libft.h"
 # include <stdio.h>
 # include <readline/readline.h>
@@ -26,6 +27,15 @@
 # include <sys/stat.h>
 # include <sys/wait.h>
 # include <dirent.h>
+# include <stdbool.h>
+
+typedef struct s_envp
+{
+	char				*key;
+	char				*value;
+	bool				print;
+	struct s_envp		*next;
+}	t_envp;
 
 typedef struct s_envp
 {
@@ -67,6 +77,7 @@ typedef struct s_token
 typedef struct s_bin_token
 {
 	char				**args;
+	int					nbr_args;
 	t_token				*redir_in;
 	t_token				*redir_out;
 	t_bin_token_type	type;	
@@ -99,7 +110,11 @@ typedef struct s_data
 	char		*command;
 	char		*heredoc_path;
 	char		**args;
+<<<<<<< HEAD
 	char		**ft_envp; // we use this one in execve;
+=======
+	t_envp		*ft_envp;
+>>>>>>> origin/afonso
 	char		*path;
 	char		*user;
 	char		*hostname;
@@ -108,6 +123,9 @@ typedef struct s_data
 	t_envp	*envp;
 }	t_data;
 
+# ifndef FT_EXECUTER_H
+#  include "../srcs/ft_executer/ft_executer.h"
+# endif
 void		ft_print_tokens(t_token *tokens, t_data *data, int tab);
 //		FT_ENVP_LIST		//
 
@@ -135,7 +153,7 @@ char		**ft_split_cmds(char *command);
 
 //		Ft_free			//
 
-void		ft_free_env(char **envp);
+void		ft_free_env(t_envp *envp);
 void		ft_free_cmds(char **commands);
 void		ft_free_tokens(t_token *tokens, int del_heredoc);
 int			ft_free(int i, char *command, t_data *data, int del_heredoc);
@@ -245,11 +263,5 @@ void		ft_del_pseudo_heredocs(t_token *tokens);
 t_bin_token	*ft_bin_tokens(t_data *data);
 
 //		ft_executer	test		//
-
-void		ft_pipes_creator(t_data *data, t_bin_token *tokens);
-void		ft_handle_pipe(t_data *data, t_bin_token *tokens, int fd[2]);
-void		ft_pipe_parent(t_data *data, t_bin_token *tokens, int fd[2]);
-void		ft_execve(t_data *data, t_bin_token *tokens);
-void		ft_run_cmds(t_data *data);
 
 #endif

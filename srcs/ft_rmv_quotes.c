@@ -93,7 +93,7 @@ void	ft_rmv_quotes(t_token *tokens)
 	while (tokens)
 	{
 		i = 0;
-		while (tokens->content[i] != '\0')
+		while (tokens->content && tokens->content[i] != '\0')
 		{
 			ft_empty_quotes(tokens, i);
 			if (ft_strlen(tokens->content) == 0)
