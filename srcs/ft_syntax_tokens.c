@@ -15,14 +15,14 @@
 int	ft_syntax_tokens(t_token *tokens)
 {
 	if (tokens->type == PIPE)
-		return (printf("minishell: syntax error near unexpected token `|'\n"));
+		return (ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2), 1);
 	while (tokens)
 	{
 		if ((tokens->type == REDIRECT_IN || tokens->type == D_REDIRECT_IN
 				|| tokens->type == D_REDIRECT_OUT
 				|| tokens->type == REDIRECT_OUT) && tokens->next == NULL)
-			return (printf("minishell: syntax error %s"
-					, "near unexpected token `newline'idk\n"));
+			return (ft_putstr_fd("minishell: syntax error ", 2),
+					ft_putstr_fd("near unexpected token `newline'idk\n", 2), 1);
 		else if ((tokens->type == PIPE && tokens->next == NULL)
 			|| (tokens->type == PIPE && tokens->next == NULL
 				&& tokens->next->type == PIPE) || (tokens->type == REDIRECT_IN
@@ -33,8 +33,8 @@ int	ft_syntax_tokens(t_token *tokens)
 				&& tokens->next->type == PIPE)
 			|| (tokens->type == REDIRECT_OUT && tokens->next->type == PIPE)
 			|| (tokens->type == PIPE && tokens->next->type == PIPE))
-			return (printf("minishell: syntax error %s",
-				"near unexpected token `|'\n"));
+			return (ft_putstr_fd("minishell: syntax error ", 2),
+				ft_putstr_fd("near unexpected token `|'\n", 2), 1);
 		tokens = tokens->next;
 	}
 	return (0);
