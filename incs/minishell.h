@@ -37,14 +37,6 @@ typedef struct s_envp
 	struct s_envp		*next;
 }	t_envp;
 
-typedef struct s_envp
-{
-	char				*key;
-	char				*value;
-	bool				print;
-	struct s_envp		*next;
-}	t_envp;
-
 typedef enum e_token_type
 {
 	CMD,
@@ -110,11 +102,7 @@ typedef struct s_data
 	char		*command;
 	char		*heredoc_path;
 	char		**args;
-<<<<<<< HEAD
 	char		**ft_envp; // we use this one in execve;
-=======
-	t_envp		*ft_envp;
->>>>>>> origin/afonso
 	char		*path;
 	char		*user;
 	char		*hostname;

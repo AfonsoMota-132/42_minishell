@@ -163,11 +163,8 @@ int	main(int ac, char **av, char **envp)
 		ft_putstr_fd("data->bin_tokens \n", 2);
 		dup2(1, STDOUT_FILENO);
 		dup2(0, STDIN_FILENO);
-<<<<<<< HEAD
 		/*ft_cd(data, data->bin_tokens);*/
 		/*treeprint(data->bin_tokens, 0);*/
-=======
->>>>>>> origin/afonso
 	}
 
 }
