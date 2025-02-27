@@ -71,7 +71,8 @@ typedef struct s_bin_token
 	int					nbr_args;
 	t_token				*redir_in;
 	t_token				*redir_out;
-	t_bin_token_type	type;	
+	t_bin_token_type	type;
+	int					first_redir;
 	struct s_bin_token	*right;
 	struct s_bin_token	*left;
 }	t_bin_token;
@@ -181,7 +182,7 @@ void		ft_expander2(t_token *tokens, \
 
 //		FT_Builtins		//
 
-int			ft_echo(t_token *token);
+int			ft_echo(t_data *data, t_bin_token *token, int exit);
 
 //		FT_Rmv_quotes	//
 

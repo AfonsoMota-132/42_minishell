@@ -18,7 +18,7 @@
 # endif
 
 //		ft_error_executer		//
-void	ft_command_not_found(t_data *data, char *path);
+void	ft_command_not_found(t_data *data, char *path, char **array);
 void	ft_error_msg_redir(t_data *data, int type, char *redir, char *path);
 
 //			ft_pipes			//

@@ -60,12 +60,13 @@ char	**ft_command_init(t_data *data)
 
 	command_in = readline(data->prompt);
 	if (!command_in)
-		ft_free(0, NULL,data, 1);
+		ft_free(0, NULL, data, 1);
 	command = ft_strtrim(command_in, " \t\n");
 	if (!command || !ft_strlen(command)
 		|| ft_syntax(command))
 	{
-		data->exit_status = 1;
+		if (command && ft_strlen(command))
+			data->exit_status = 1;
 		if (command)
 			free (command);
 		return (NULL);
@@ -157,8 +158,10 @@ int	main(int ac, char **av, char **envp)
 			continue ;
 		if (data->bin_tokens)
 			ft_free_tree(data->bin_tokens, 1);
+		/*ft_print_tokens(data->tokens, NULL, 0);*/
 		data->bin_tokens = ft_bin_tokens(data);
 		ft_run_cmds(data);
+		/*treeprint(data->bin_tokens, 0);*/
 		dup2(1, STDOUT_FILENO);
 		dup2(0, STDIN_FILENO);
 	}

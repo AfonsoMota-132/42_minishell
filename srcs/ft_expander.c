@@ -92,7 +92,7 @@ void	ft_expand_quest(t_token *tokens, t_data *data
 			&& str[i + j] != '"' && str[i + j] != '\'' && ++j);
 		tmp = ft_itoa(data->exit_status);
 		new = ft_substr(tokens->content, 0, i - 1);
-		new = ft_strjoin_gnl(ft_strjoin_gnl(new, tmp), &tokens->content[i + j]);
+		new = ft_strjoin_gnl(ft_strjoin_gnl(new, tmp), &tokens->content[i + 1]);
 		free(tmp);
 		free(tokens->content);
 		tokens->content = new;
@@ -110,14 +110,21 @@ char	*ft_expander_replace_null(char *str, int start)
 		i++;
 	if (str[i] == '$')
 		i++;
-	if (str[i + 1] && !ft_isdigit(str[i + 1]))
+	start = i;
+	if (str[i] && !ft_isdigit(str[i])
+		&& str[i] != '$')
 		while (str[i] && str[i] != ' '
 			&& str[i] != '\t' && str[i] != '\n'
 			&& str[i] != '$' && str[i] != '"'
 			&& str[i] != '\'')
 			i++;
-	new = NULL;
-	if (str[i])
+	else
+		i++;
+	if (start != 1)
+		new = ft_substr(str, 0, start - 1);
+	else
+		new = NULL;
+	if (str[i] && str[i] != ' ')
 		new = ft_strjoin_gnl(new, &str[i]);
 	free(str);
 	return (new);
@@ -144,9 +151,14 @@ void	ft_expander2(t_token *tokens, \
 		}
 		else if (ft_strchr(tokens->content, '$') != NULL)
 		{
-			if (tokens->content[i + 1] && tokens->content[i + 1] != ' ')
+			if (tokens->content[i + 1] && tokens->content[i + 1] != ' '
+				&& tokens->content[i + 1] != '"')
+			{
 				tokens->content = ft_expander_replace_null(tokens->content, i);
-			i = 0;
+				i = 0;
+			}
+			else if (tokens->content[i + 1])
+				i++;
 		}
 		free(env);
 	}

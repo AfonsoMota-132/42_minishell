@@ -65,19 +65,30 @@ char	*ft_execve_get_path(char *cmd, t_data *data)
 
 void	ft_handle_builtins(t_bin_token *tokens, t_data *data, int i)
 {
-	if (ft_strncmp("cd", tokens->args[i], 3) == 0)
-		ft_free(1, NULL, data, 0);
+	if (ft_strncmp("echo", tokens->args[i], 5) == 0)
+		ft_echo(data, tokens, 1);
+	/*if (ft_strncmp("cd", tokens->args[i], 3) == 0))*/
+	/*	ft_cd(data, tokens);*/
+	/*if (ft_strncmp("exit", tokens->args[i], 5) == 0)*/
+	/*	ft_exit(data, tokens);*/
+	/*if (ft_strncmp("export", tokens->args[i], 7) == 0)*/
+	/*	ft_export(data, tokens);*/
+	/*if (ft_strncmp("unset", tokens->args[i], 6) == 0)*/
+	/*	ft_unset(data, tokens);*/
+	/*if (ft_strncmp("cd", tokens->args[i], 3) == 0)*/
+	/*	ft_free(1, NULL, data, 0);*/
 }
 
-void	ft_execute_node(t_bin_token *tree, t_data *data)
+void	ft_execute_node(t_bin_token *tokens, t_data *data)
 {
 	pid_t	pid;
 
 	pid = fork();
 	if (pid == 0)
 	{
-		// handle builtins
-		ft_execve(tree, data);
+		ft_handle_redirects(data, tokens, NULL);
+		ft_handle_builtins(tokens, data, 0);
+		ft_execve(tokens, data);
 	}
 }
 
@@ -93,16 +104,17 @@ char	**ft_envp_list2array(t_envp *env)
 		return (NULL);
 	while (tmp && ++i)
 		tmp = tmp->next;
-	array = malloc(sizeof(char *) * i);
-	i = -1;
+	array = ft_calloc(sizeof(char *), i + 1);
+	i = 0;
 	tmp = env;
 	while (tmp)
 	{
-		array[++i] = ft_strdup(tmp->key);
+		array[i] = ft_strdup(tmp->key);
 		if (tmp->value)
 			array[i] = ft_strjoin_gnl(ft_strjoin_gnl(array[i]
 						, "="), tmp->value);
 		tmp = tmp->next;
+		i++;
 	}
 	array[i] = NULL;
 	return (array);
@@ -115,21 +127,21 @@ void	ft_execve(t_bin_token *tokens, t_data *data)
 	int		i;
 
 	i = 0;
+	ft_handle_redirects(data, tokens, NULL);
 	while (!tokens->args[i] && i < tokens->nbr_args)
 		i++;
 	if (!tokens->args[i])
-		ft_free(1, NULL, data, 0);
+		ft_free(0, NULL, data, 0);
 	ft_handle_builtins(tokens,data, i);
 	path = ft_execve_get_path(tokens->args[i], data);
 	if (!path && tokens->args[i])
 		path = ft_strdup(tokens->args[i]);
-	ft_handle_redirects(data, tokens, path);
 	if (path)
 	{
 		envp = ft_envp_list2array(data->ft_envp);
 		i = execve(path, tokens->args, envp);
 		if (i == -1)
-			ft_command_not_found(data, path);
+			ft_command_not_found(data, path, envp);
 	}
 	if (path)
 		free(path);

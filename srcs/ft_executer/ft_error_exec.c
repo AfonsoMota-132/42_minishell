@@ -12,12 +12,51 @@
 
 #include "ft_executer.h"
 
-void	ft_command_not_found(t_data *data, char *path)
+void	ft_command_not_found(t_data *data, char *path, char **array)
 {
+	DIR	*dir;
+
+	dir = opendir(path);
+	if (array)
+		ft_free_matrix(array);
+	if (dir)
+	{
+		closedir(dir);
+		if (path[0] == '/' || path [0] == '~'
+			|| (path[0] == '.' && path[1] == '/'))
+		{
+			ft_putstr_fd("\"", 2);
+			ft_putstr_fd(path, 2);
+			ft_putstr_fd("\": Is a directory\n", 2);
+			free(path);
+			ft_free(126, NULL, data, 1);
+		}
+	}
+	if (access(path, F_OK) == -1 && (path[0] == '/' || path [0] == '~'
+			|| (path[0] == '.' && path[1] == '/')))
+	{
+		ft_putstr_fd(path, 2);
+		ft_putstr_fd(" : No such file or directory\n", 2);
+		free(path);
+		ft_free(127, NULL, data, 1);
+	}
+	if (access(path, X_OK) == -1 && (path[0] == '/' || path [0] == '~'
+			|| (path[0] == '.' && path[1] == '/')))
+	{
+		ft_putstr_fd(path, 2);
+		ft_putstr_fd(" : Permission denied\n", 2);
+		free(path);
+		ft_free(126, NULL, data, 1);
+	}
 	if (ft_strlen(path) == 0)
-		printf("\'\' : command not found\n");
+	{
+		ft_putstr_fd("\'\' : command not found\n", 2);
+	}
 	else
-		printf("%s: command not found\n", path);
+	{
+		ft_putstr_fd(path, 2);
+		ft_putstr_fd(" : command not found\n", 2);
+	}
 	free(path);
 	ft_free(127, NULL, data, 1);
 }
@@ -27,8 +66,14 @@ void	ft_error_msg_redir(t_data *data, int type, char *redir, char *path)
 	if (path)
 		free(path);
 	if (type == 0)
-		printf("bash: %s: permission denied\n", redir);
+	{
+		ft_putstr_fd(redir, 2);
+		ft_putstr_fd(" : Permission denied\n", 2);
+	}
 	else if (type == 1)
-		printf("bash: %s: No such file or directory\n", redir);
+	{
+		ft_putstr_fd(redir, 2);
+		ft_putstr_fd(" : No such file or directory\n", 2);
+	}
 	ft_free(1, NULL, data, 0);
 }

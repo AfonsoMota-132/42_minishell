@@ -88,7 +88,8 @@ void	ft_tokens_cat(t_data **data)
 			check = ft_tokens_cat2(data, check);
 		if ((ft_strchr((*data)->tokens->content, '\'')
 				|| ft_strchr((*data)->tokens->content, '"'))
-			&& (*data)->tokens->type != CMD)
+			&& (*data)->tokens->type != CMD && (*data)->tokens->type != HERE_DOC
+			&& (*data)->tokens->type != FILENAME)
 			(*data)->tokens->type = ARG;
 		(*data)->tokens = (*data)->tokens->next;
 	}

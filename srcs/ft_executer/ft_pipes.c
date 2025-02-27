@@ -68,7 +68,7 @@ void	ft_create_pipe(t_bin_token *tokens, t_data *data)
 	else
 		ft_handle_pipe(tokens, data, fd);
 	waitpid(-1, &status, 0);
-	data->exit_status = WIFEXITED(status);
+	data->exit_status = WEXITSTATUS(status);
 	close(fd[0]);
 	close(fd[1]);
 }

@@ -22,6 +22,7 @@ char	*ft_get_hostname(void)
 
 	fd = open("/etc/hostname", O_RDONLY);
 	tmp = get_next_line(fd);
+	get_next_line(fd);
 	if (!tmp)
 		return (NULL);
 	close(fd);
@@ -119,11 +120,13 @@ t_data	*ft_data_init(char **envp)
 	data = malloc(sizeof(t_data));
 	data->tokens = NULL;
 	data->tokens_start = NULL;
+	data->bin_tokens = NULL;
 	data->command = NULL;
 	data->args = NULL;
 	data->prompt = NULL;
-	data->exit_status = 0;
+	data->ft_envp = NULL;
 	data->user = NULL;
+	data->exit_status = 0;
 	data->user = getenv("USER");
 	data->hostname = ft_get_hostname();
 	data->path = ft_get_path(data);

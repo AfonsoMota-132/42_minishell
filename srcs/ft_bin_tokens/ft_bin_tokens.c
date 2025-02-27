@@ -121,12 +121,28 @@ int			ft_bin_count_args(t_token *tokens)
 	return (i);
 }
 
+int			ft_first_redir(t_token *tokens)
+{
+	while (tokens)
+	{
+		if (tokens->type == REDIRECT_IN
+			|| tokens->type == D_REDIRECT_IN)
+			return (1);
+		else if (tokens->type == REDIRECT_OUT
+			|| tokens->type == D_REDIRECT_OUT)
+			return (0);
+		tokens = tokens->next;
+	}
+	return (0);
+}
+
 void		ft_update_bin_token(t_bin_token	*bin_token, t_token *tokens)
 {
 	t_token	*tmp;
 	int	arg_len;
 	int	i;
 
+	bin_token->first_redir = ft_first_redir(tokens);
 	bin_token->redir_in = ft_bin_redir(tokens, REDIRECT_IN, D_REDIRECT_IN);
 	bin_token->redir_out = ft_bin_redir(tokens, REDIRECT_OUT, D_REDIRECT_OUT);
 	arg_len = ft_bin_count_args(tokens);
