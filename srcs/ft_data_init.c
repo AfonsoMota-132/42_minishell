@@ -62,7 +62,7 @@ char	*ft_heredoc_path(t_data *data)
 	return (data->heredoc_path);
 }
 
-t_envp	*ft_new_env_node(t_data *data, char *envp)
+t_envp	*ft_new_env_node(char *envp)
 {
 	t_envp	*new;
 	int		tmp;
@@ -85,21 +85,21 @@ t_envp	*ft_new_env_node(t_data *data, char *envp)
 	}
 	new->next = NULL;
 	return (new);
-	(void) data;
 }
 
 void	ft_envlist_init(t_data *data, char **env)
 {
 	t_envp	*envp;
 	t_envp	*head;
+	t_envp	*last;
 	int		i;
 
 	i = 0;
-	head = ft_new_env_node(data, env[0]);
-	envp = head;
-	while (env[++i])
+	head = NULL;
+	last = NULL;
+	while (env[i])
 	{
-		envp->next = ft_new_env_node(data, env[i]);
+		envp = ft_new_env_node(env[i++]);
 		if (!envp) 
 		{
 			perror("Failed to allocate memory for envp");
@@ -107,9 +107,13 @@ void	ft_envlist_init(t_data *data, char **env)
 			//data->envp = NULL;
 			exit(EXIT_FAILURE);
 		}
-		envp = envp->next;
+		if (!head)
+			head = envp;
+		else
+			last->next = envp;
+		last = envp;
 	}
-	data->ft_envp = head;
+	data->envp = head;
 }
 
 t_data	*ft_data_init(char **envp)

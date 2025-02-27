@@ -65,8 +65,14 @@ char	*ft_execve_get_path(char *cmd, t_data *data)
 
 void	ft_handle_builtins(t_bin_token *tokens, t_data *data, int i)
 {
+	printf("tokens->args[i]: %s\n", tokens->args[i]);
 	if (ft_strncmp("cd", tokens->args[i], 3) == 0)
-		ft_free(1, NULL, data, 0);
+		ft_cd(data, tokens);
+	else if (ft_strncmp("echo", tokens->args[i], 5) == 0)
+		ft_echo(data, tokens);	
+	else if (ft_strncmp("env", tokens->args[i], 4) == 0)
+			ft_print_envp(data);
+	
 }
 
 void	ft_execute_node(t_bin_token *tree, t_data *data)
@@ -126,7 +132,8 @@ void	ft_execve(t_bin_token *tokens, t_data *data)
 	ft_handle_redirects(data, tokens, path);
 	if (path)
 	{
-		envp = ft_envp_list2array(data->ft_envp);
+		envp = ft_envp_list2array(data->envp);
+		printf("path: %s\n", path);
 		i = execve(path, tokens->args, envp);
 		if (i == -1)
 			ft_command_not_found(data, path);

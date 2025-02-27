@@ -11,56 +11,77 @@
 /* ************************************************************************** */
 
 #include "../../incs/minishell.h"
+#include <unistd.h>
 
-void	ft_envlist_init(t_data *data, char **env)
+void	ft_print_envp(t_data *data)
 {
 	t_envp	*envp;
-	t_envp	*last;
-	t_envp	*head;
-	int		i;
 
-	i = 0;
-	while (env[i++])
+	ft_putstr_fd("AAAAAAAAAAAAAAAAAAAAAAAA", STDOUT_FILENO);
+	envp = data->envp;
+	while (envp)
 	{
-		envp = ft_new_env_node(data, env[i]);
-		if (!envp) 
+		if (envp->print)
 		{
-			perror("Failed to allocate memory for envp");
-			//free
-			//data->envp = NULL;
-			exit(EXIT_FAILURE);
+			ft_putstr_fd(envp->key, STDOUT_FILENO);
+			ft_putchar_fd('=', STDOUT_FILENO);
+			ft_putstr_fd(envp->value, STDOUT_FILENO);
+			ft_putchar_fd('\n', STDOUT_FILENO);
 		}
-		if (!head)
-			head = envp;
-		else
-			last->next = envp;
-		last = envp;
+		envp = envp->next;
 	}
-	data->envp = head;
 }
+/**/
+/*void	ft_envlist_init(t_data *data, char **env)*/
+/*{*/
+/*	t_envp	*envp;*/
+/*	t_envp	*last;*/
+/*	t_envp	*head;*/
+/*	int		i;*/
+/**/
+/*	i = 0;*/
+/*	while (env[i++])*/
+/*	{*/
+/*		envp = ft_new_env_node(env[i]);*/
+/*		if (!envp) */
+/*		{*/
+/*			perror("Failed to allocate memory for envp");*/
+/*			//free*/
+/*			//data->envp = NULL;*/
+/*			exit(EXIT_FAILURE);*/
+/*		}*/
+/*		if (!head)*/
+/*			head = envp;*/
+/*		else*/
+/*			last->next = envp;*/
+/*		last = envp;*/
+/*	}*/
+/*	data->envp = head;*/
+/*}*/
 
-
-t_envp	*ft_new_env_node(t_data *data, char *envp)
-{
-	t_envp	*new;
-	char	*tmp;
-
-	new = malloc(sizeof(t_envp));
-	if (!new)
-		return (NULL);
-	tmp = ft_strchr(envp, '=');
-	if (tmp)
-	{
-		new->key = ft_substr(envp, 0, tmp - envp);
-		new->value = ft_strdup(tmp + 1);
-		new->print = true;
-	}
-	else
-	{
-		new->key = ft_strdup(envp);
-		new->value = NULL;
-		new->print = false;
-	}
-	new->next = NULL;
-	return (new);
-}
+/**/
+/*t_envp	*ft_new_env_node( char *envp)*/
+/*{*/
+/**/
+/*	t_envp	*new;*/
+/*	char	*tmp;*/
+/**/
+/*	new = malloc(sizeof(t_envp));*/
+/*	if (!new)*/
+/*		return (NULL);*/
+/*	tmp = ft_strchr(envp, '=');*/
+/*	if (tmp)*/
+/*	{*/
+/*		new->key = ft_substr(envp, 0, tmp - envp);*/
+/*		new->value = ft_strdup(tmp + 1);*/
+/*		new->print = true;*/
+/*	}*/
+/*	else*/
+/*	{*/
+/*		new->key = ft_strdup(envp);*/
+/*		new->value = NULL;*/
+/*		new->print = false;*/
+/*	}*/
+/*	new->next = NULL;*/
+/*	return (new);*/
+/*}*/

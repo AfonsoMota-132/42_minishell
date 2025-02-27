@@ -115,10 +115,11 @@ typedef struct s_data
 #  include "../srcs/ft_executer/ft_executer.h"
 # endif
 void		ft_print_tokens(t_token *tokens, t_data *data, int tab);
+
 //		FT_ENVP_LIST		//
 
-t_envp	*ft_new_env_node(t_data *data, char *envp);
-
+t_envp	*ft_new_env_node(char *envp);
+void	ft_envlist_init(t_data *data, char **env);
 
 //		FT_SIGNALS		//
 
@@ -188,11 +189,12 @@ void		ft_expander2(t_token *tokens, \
 //		FT_Builtins		//
 
 void	ft_echo(t_data *data, t_bin_token *token);
+void	ft_print_envp(t_data *data);
 void	ft_builtin_choice(t_data *data, t_bin_token *token);
-int	ft_cd(t_data *data, t_bin_token *token);
-/*int	ft_update_pwd(t_data *data);*/
-/*int	ft_go_to_path(t_data *data, int option);*/
-
+int		ft_cd(t_data *data, t_bin_token *token);
+int		ft_update_pwd(t_data *data, char *last_path);
+int		ft_go_to_path(t_data *data, int option, char *last_path);
+t_envp	*ft_find_key(t_data *data, char *key);
 //		FT_Rmv_quotes	//
 
 int			ft_quote_rm_len(char const *s, char quote);

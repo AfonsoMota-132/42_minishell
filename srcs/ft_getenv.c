@@ -16,7 +16,7 @@ char	*ft_getenv(char *env, t_data *data)
 {
 	t_envp	*tmp;
 
-	tmp = data->ft_envp;
+	tmp = data->envp;
 	if (!env || !env[0])
 		return (NULL);
 	while (tmp)
