@@ -48,7 +48,7 @@ void	ft_handle_pipe(t_bin_token *tokens, t_data *data, int fd[2])
 	{
 		child_pid = fork();
 		if (child_pid < 0)
-			ft_putstr_fd("Bash: Failed creating fork.\n", 2);
+			ft_putstr_fd("Minishell: Failed creating fork.\n", 2);
 		if (child_pid == 0)
 			ft_pipe_child(tokens->right, fd, data);
 		else
@@ -64,7 +64,7 @@ void	ft_create_pipe(t_bin_token *tokens, t_data *data)
 	int		fd[2];
 
 	if (pipe(fd) == -1)
-		ft_putstr_fd("Bash: Failed creating pipe.\n", 1);
+		ft_putstr_fd("Minishell: Failed creating pipe.\n", 1);
 	else
 		ft_handle_pipe(tokens, data, fd);
 	waitpid(-1, &status, 0);

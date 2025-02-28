@@ -22,7 +22,6 @@ void	ft_handle_redirects_in(t_data *data, t_bin_token *tokens, char *path)
 			ft_error_msg_redir(data, 1, tokens->redir_in->content, path);
 		if (access(tokens->redir_in->content, R_OK) == -1)
 			ft_error_msg_redir(data, 0, tokens->redir_in->content, path);
-		printf("%s\n", tokens->redir_in->content);
 		fd = open(tokens->redir_in->content, O_RDONLY, 0);
 		dup2(fd, STDIN_FILENO);
 	}

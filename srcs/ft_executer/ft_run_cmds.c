@@ -6,32 +6,34 @@
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 05:56:27 by afogonca          #+#    #+#             */
-/*   Updated: 2025/02/24 05:58:17 by afogonca         ###   ########.fr       */
+/*   Updated: 2025/02/28 11:40:26 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_executer.h"
 
+
+void	ft_exit(t_data *data, t_bin_token *tokens, int	i);
+int	ft_cd(t_data *data, t_bin_token *token, int exit);
+
+int	ft_run_single_builtins(t_bin_token *tokens, t_data *data)
+{
+	if (!tokens->args[0])
+		return (0);
+	if (ft_strncmp("exit", tokens->args[0], 5) == 0)
+		ft_exit(data, tokens, 1);
+	/*if (ft_strncmp("cd", tokens->args[0], 3) == 0)*/
+	/*	ft_cd(data, tokens, 0);*/
+	return (0);
+}
 void	ft_run_cmds(t_data *data)
 {
-	int	status;
-	int	child_pid;
-	int	fd[2];
-
 	if (!data->bin_tokens->right && !data->bin_tokens->left)
 	{
-		if (pipe(fd) == -1)
-			ft_putstr_fd("Bash: Failed creating pipe.\n", 1);
-		else
-		{
-			child_pid = fork();
-			if (child_pid == 0)
-				ft_execve(data->bin_tokens, data);
-			waitpid(-1, &status, 0);
-			data->exit_status = WEXITSTATUS(status);
-			close(fd[0]);
-			close(fd[1]);
-		}
+		if (ft_run_single_builtins(data->bin_tokens, data))
+			return ;
+		ft_create_pipe(data->bin_tokens, data);
+		return ;
 	}
 	else
 		ft_create_pipe(data->bin_tokens, data);
@@ -63,20 +65,29 @@ char	*ft_execve_get_path(char *cmd, t_data *data)
 	return (NULL);
 }
 
-void	ft_handle_builtins(t_bin_token *tokens, t_data *data, int i)
+int	ft_pwd(t_data *data, t_bin_token *tokens, int exit);
+int		ft_handle_builtins(t_bin_token *tokens, t_data *data, int i, int exit)
 {
+	int	status;
+
+	status = 0;
+	if (!tokens->args[i])
+		return (status);
 	if (ft_strncmp("echo", tokens->args[i], 5) == 0)
-		ft_echo(data, tokens, 1);
+		status = ft_echo(data, tokens, exit);
+	if (ft_strncmp("pwd", tokens->args[i], 4) == 0)
+		status = ft_pwd(data, tokens, exit);
 	/*if (ft_strncmp("cd", tokens->args[i], 3) == 0))*/
 	/*	ft_cd(data, tokens);*/
 	/*if (ft_strncmp("exit", tokens->args[i], 5) == 0)*/
-	/*	ft_exit(data, tokens);*/
+	/*	ft_exit(data, tokens, exit);*/
 	/*if (ft_strncmp("export", tokens->args[i], 7) == 0)*/
 	/*	ft_export(data, tokens);*/
 	/*if (ft_strncmp("unset", tokens->args[i], 6) == 0)*/
 	/*	ft_unset(data, tokens);*/
 	/*if (ft_strncmp("cd", tokens->args[i], 3) == 0)*/
 	/*	ft_free(1, NULL, data, 0);*/
+	return (status);
 }
 
 void	ft_execute_node(t_bin_token *tokens, t_data *data)
@@ -87,7 +98,7 @@ void	ft_execute_node(t_bin_token *tokens, t_data *data)
 	if (pid == 0)
 	{
 		ft_handle_redirects(data, tokens, NULL);
-		ft_handle_builtins(tokens, data, 0);
+		ft_handle_builtins(tokens, data, 0, 1);
 		ft_execve(tokens, data);
 	}
 }
@@ -132,7 +143,7 @@ void	ft_execve(t_bin_token *tokens, t_data *data)
 		i++;
 	if (!tokens->args[i])
 		ft_free(0, NULL, data, 0);
-	ft_handle_builtins(tokens,data, i);
+	ft_handle_builtins(tokens,data, i, 1);
 	path = ft_execve_get_path(tokens->args[i], data);
 	if (!path && tokens->args[i])
 		path = ft_strdup(tokens->args[i]);

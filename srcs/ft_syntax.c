@@ -57,13 +57,18 @@ int	ft_redirect_syntax(char *command)
 	i = -1;
 	while (command[++i])
 	{
-		if ((command[i] == '>' && command[i + 1] == '<')
-			|| (command[i] == '<' && command[i + 1] == '>'))
-			return (ft_putstr_fd("minishell: Syntax error too many redirects\n", 2), 1);
+		if (command[i] == '>' && command[i + 1] == '<')
+			return (ft_putstr_fd("minishell: syntax error near unexpected token `<'\n", 2), 1);
+		else if(command[i] == '<' && command[i + 1] == '>')
+			return (ft_putstr_fd("minishell: syntax error near unexpected token `>'\n", 2), 1);
 		if ((command[i] == '>' || command[i] == '<')
 			&& (command[i + 1] == '>' || command[i + 1] == '<')
-			&& (command[i + 2] == '>' || command[i + 2] == '<'))
-			return (ft_putstr_fd("minishell: Syntax error too many redirects\n", 2), 1);
+			&& command[i + 2] == '>')
+			return (ft_putstr_fd("minishell: syntax error near unexpected token `>'\n", 2), 1);
+		if ((command[i] == '>' || command[i] == '<')
+			&& (command[i + 1] == '>' || command[i + 1] == '<')
+			&& command[i + 2] == '<')
+			return (ft_putstr_fd("minishell: syntax error near unexpected token `newline'\n", 2), 1);
 	}
 	return (0);
 }

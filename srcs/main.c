@@ -64,14 +64,12 @@ char	**ft_command_init(t_data *data)
 		|| ft_syntax(command))
 	{
 		if (command && ft_strlen(command))
-			data->exit_status = 1;
+			data->exit_status = 2;
 		if (command)
 			free (command);
 		return (NULL);
 	}
 	add_history(command_in);
-	if (ft_strncmp(command, "exit", 4) == 0)
-		ft_free(data->exit_status, command, data, 1);
 	command_list = ft_split_cmds(command);
 	free(command);
 	free(command_in);
@@ -149,7 +147,7 @@ int	main(int ac, char **av, char **envp)
 		ft_rmv_quotes(data->tokens);
 		if (ft_syntax_tokens(data->tokens) || ft_redirects(data->tokens, &data))
 		{
-			data->exit_status = 1;
+			data->exit_status = 2;
 			continue ;
 		}
 		if (!data->tokens_start)
