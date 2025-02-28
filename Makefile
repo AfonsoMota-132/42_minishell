@@ -51,7 +51,8 @@ SRCS =	srcs/main.c srcs/ft_split_ms.c \
 		srcs/ft_getenv.c $(BUILTINS) $(REDIRS) $(SIGNALS) \
 		$(BIN_TOKENS) $(EXECUTER)
 
-VAL_RULES = --leak-check=full --show-leak-kinds=all --suppressions=readline.supp --trace-children=yes
+VAL_RULES = --leak-check=full --show-leak-kinds=all --suppressions=readline.supp
+#--trace-children=yes
 all: deps $(NAME)
 
 libft:
@@ -78,6 +79,15 @@ fclean: clean
 	$(RM) $(NAME)
 	$(RM) -Rf libs/libft
 
+tester:
+	@if [ -d minishell_tester ]; then \
+		echo "Already cloned"; \
+	else \
+		git clone https://github.com/LucasKuhn/minishell_tester.git; \
+	fi
+
+rm_tester:
+	rm -fr minishell_tester;
 re: fclean all
 
 .PHONY: all clean fclean re deps valgrind

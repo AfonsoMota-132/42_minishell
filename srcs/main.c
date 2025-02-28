@@ -154,10 +154,10 @@ int	main(int ac, char **av, char **envp)
 			continue ;
 		if (data->bin_tokens)
 			ft_free_tree(data->bin_tokens, 1);
-		/*ft_print_tokens(data->tokens, NULL, 0);*/
+		//ft_print_tokens(data->tokens, NULL, 0);
 		data->bin_tokens = ft_bin_tokens(data);
 		ft_run_cmds(data);
-		/*treeprint(data->bin_tokens, 0);*/
+		/*treeprint(data->bin_tokense, 0);*/
 		dup2(1, STDOUT_FILENO);
 		dup2(0, STDIN_FILENO);
 	}

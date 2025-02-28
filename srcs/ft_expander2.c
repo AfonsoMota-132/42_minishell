@@ -89,6 +89,9 @@ void	ft_expander(t_token *tokens, t_data *data)
 		while (tokens->content && tokens->content[i] 
 			&& ft_strchr(&tokens->content[i], '$'))
 		{
+			if (tokens->type == FILENAME
+				|| tokens->type == HERE_DOC)
+				break ;
 			ft_expander2(tokens, &i, data);
 		}
 		tokens = tokens->next;
