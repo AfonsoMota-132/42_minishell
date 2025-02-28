@@ -52,7 +52,7 @@ void	ft_exit(t_data *data, t_bin_token *tokens, int	i)
 			status = ft_atoi(tokens->args[1]);
 		}
 		else
-			status = 0;
+			status = data->exit_status;
 	}
 	else
 		status = ft_verify_exit(tokens, 0);
