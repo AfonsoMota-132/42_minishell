@@ -16,7 +16,7 @@ extern int	g_signal_received;
 
 int	ft_verify_heredoc(t_token *tokens)
 {
-	while (tokens && tokens->type != PIPE)
+	while (tokens)
 	{
 		if (tokens->type == D_REDIRECT_IN)
 			return (1);
@@ -52,10 +52,12 @@ void	ft_heredoc_child_process(t_data *data, t_token *tokens, t_token *tmp)
 		tmp = ft_verify_heredoc_is_last(tokens);
 		while (tokens && tokens->type != PIPE)
 		{
-			if (tokens->next && tokens->next->type == D_REDIRECT_IN)
+			if (tokens && tokens->type == D_REDIRECT_IN)
 			{
-				if (tmp && tokens->next == tmp)
+				if (tmp && tokens == tmp)
+				{
 					ft_actual_heredoc(tokens, data);
+				}
 				else
 				{
 					ft_pseudo_heredoc(tokens);

@@ -82,24 +82,54 @@ t_token		*ft_take_last_pipe(t_token *tokens)
 	return (tmp);
 }
 
-t_token	*ft_bin_redir(t_token *tokens, t_token_type redir_1\
-						, t_token_type redir_2)
+t_token	*ft_bin_redir2(t_token **tokens, t_token_type redir_1\
+					   , t_token_type redir_2)
 {
 	t_token	*tmp_token;
 	t_token	*tmp;
 
-	while (tokens)
+	if ((*tokens) && ((*tokens)->type == redir_1
+		|| (*tokens)->type == redir_2))
 	{
-		tmp_token = tokens->next;
-		if (tokens && tokens->next &&
-			(tokens->next->type == redir_1
-			|| tokens->next->type == redir_2))
-			break ;
-		tokens = tokens->next;
+		tmp_token = (*tokens);
+		tmp = ((*tokens)->next);
+		if ((*tokens)->next->next)
+		{
+			(*tokens) = (*tokens)->next->next;
+			tmp->next = NULL;
+		}
+		else
+			(*tokens) = NULL;
+		free(tmp_token->content);
+		free(tmp_token);
+		return (tmp);
 	}
-	if (!tokens)
+	return (NULL);
+}
+t_token	*ft_bin_redir(t_token **tokens, t_token_type redir_1\
+						, t_token_type redir_2)
+{
+	t_token	*tmp_token;
+	t_token	*tmp;
+	t_token	*head;
+
+
+	tmp = ft_bin_redir2(tokens, redir_1, redir_2);
+	if (tmp)
+		return (tmp);
+	head = (*tokens);
+	while (head)
+	{
+		tmp_token = head->next;
+		if (head && head->next &&
+			(head->next->type == redir_1
+			|| head->next->type == redir_2))
+			break ;
+		head = head->next;
+	}
+	if (!head)
 		return (NULL);
-	tokens->next = tokens->next->next->next;
+	head->next = head->next->next->next;
 	tmp_token->next->next = NULL;
 	tmp = tmp_token->next;
 	free(tmp_token->content);
@@ -143,23 +173,28 @@ void		ft_update_bin_token(t_bin_token	*bin_token, t_token *tokens)
 	int	i;
 
 	bin_token->first_redir = ft_first_redir(tokens);
-	bin_token->redir_in = ft_bin_redir(tokens, REDIRECT_IN, D_REDIRECT_IN);
-	bin_token->redir_out = ft_bin_redir(tokens, REDIRECT_OUT, D_REDIRECT_OUT);
-	arg_len = ft_bin_count_args(tokens);
-	bin_token->nbr_args = arg_len;
-	bin_token->args = ft_calloc(sizeof(char *), arg_len + 1);
-	i = 0;
-	while (i < arg_len && tokens)
+	bin_token->redir_in = ft_bin_redir(&tokens, REDIRECT_IN, D_REDIRECT_IN);
+	bin_token->redir_out = ft_bin_redir(&tokens, REDIRECT_OUT, D_REDIRECT_OUT);
+	if (tokens)
 	{
-		tmp = tokens->next;
-		if (tokens->content)
-			bin_token->args[i++] = ft_strdup(tokens->content);
-		free(tokens->content);
-		free(tokens);
-		if (!tmp)
-			break ;
-		tokens = tmp;
+		arg_len = ft_bin_count_args(tokens);
+		bin_token->nbr_args = arg_len;
+		bin_token->args = ft_calloc(sizeof(char *), arg_len + 1);
+		i = 0;
+		while (i < arg_len && tokens)
+		{
+			tmp = tokens->next;
+			if (tokens->content)
+				bin_token->args[i++] = ft_strdup(tokens->content);
+			free(tokens->content);
+			free(tokens);
+			if (!tmp)
+				break ;
+			tokens = tmp;
+		}
 	}
+	else
+		bin_token->args = ft_calloc(sizeof(char *), 2);
 }
 
 t_bin_token		*ft_bin_multi_pipe(t_data *data, int pipe_count)

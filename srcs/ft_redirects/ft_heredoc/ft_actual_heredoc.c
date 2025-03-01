@@ -62,11 +62,13 @@ void	ft_define_heredoc_paths(t_token *tokens, t_data *data)
 		tmp = ft_verify_heredoc_is_last(tokens);
 		while (tokens && tokens->type != PIPE)
 		{
-			if (tokens->next && tokens->next->type == D_REDIRECT_IN)
+			if (tokens && tokens->type == D_REDIRECT_IN)
 			{
-				if (tmp && tokens->next == tmp)
-					tokens->next->next->heredoc = \
-						ft_heredoc_name(tokens->next->next, data);
+				if (tmp && tokens == tmp)
+				{
+					tokens->next->heredoc = \
+						ft_heredoc_name(tokens->next, data);
+				}
 			}
 			if (tokens)
 				tokens = tokens->next;
@@ -93,8 +95,8 @@ void	ft_actual_heredoc_loop(t_token *tokens, t_data *data
 			ft_free(130, NULL, data, 1);
 		}
 		if (str && !ft_strncmp(str->content,
-				tokens->next->next->content,
-				ft_strlen(tokens->next->next->content) + 1))
+				tokens->next->content,
+				ft_strlen(tokens->next->content) + 1))
 			break ;
 		ft_expander(str, data);
 		ft_putstr_fd(str->content, fd);
@@ -103,6 +105,8 @@ void	ft_actual_heredoc_loop(t_token *tokens, t_data *data
 			free(str->content);
 		str->content = NULL;
 	}
+	if (str->content)
+		free(str->content);
 }
 
 void	ft_actual_heredoc(t_token *tokens, t_data *data)
@@ -110,7 +114,7 @@ void	ft_actual_heredoc(t_token *tokens, t_data *data)
 	t_token	*str;
 	int		fd;
 
-	fd = open(tokens->next->next->heredoc,
+	fd = open(tokens->next->heredoc,
 			O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	str = malloc(sizeof(t_token));
 	str->content = NULL;
