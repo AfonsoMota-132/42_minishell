@@ -73,11 +73,13 @@ $(NAME): $(OBJS)
 
 clean:
 	$(RM) $(OBJS)
-	$(MAKE) -C libs/libft/ clean
+	@if [ -d libs/libft ]; then \
+		$(MAKE) -C libs/libft/ clean; fi;
 
 fclean: clean
 	$(RM) $(NAME)
-	$(RM) -Rf libs/libft
+	@if [ -d libs/libft ]; then \
+		$(RM) -rf libs/libft; fi;
 
 tester:
 	@if [ -d minishell_tester ]; then \
@@ -88,6 +90,7 @@ tester:
 
 rm_tester:
 	rm -fr minishell_tester;
+
 re: fclean all
 
 .PHONY: all clean fclean re deps valgrind

@@ -52,13 +52,16 @@ t_token	*ft_put_cmd_first(t_token *tokens)
 	t_token	*head;
 
 	head = ft_pcmdf_first(tokens);
+	if (!head)
+		return (tokens);
 	while (tokens && tokens->type != PIPE)
 		tokens = tokens->next;
 	while (tokens)
 	{
 		if (tokens && tokens->type == PIPE)
 		{
-			tokens->next = ft_pcmdf_first(tokens->next);
+			if (ft_pcmdf_first(tokens->next))
+				tokens->next = ft_pcmdf_first(tokens->next);
 			tokens = tokens->next;
 		}
 		else

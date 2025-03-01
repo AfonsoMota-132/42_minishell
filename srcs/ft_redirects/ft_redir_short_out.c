@@ -76,19 +76,22 @@ void	ft_redir_short_out(t_token *tokens)
 	{
 		i = -1;
 		head = tokens;
+		if (tokens->type == PIPE)
+			tokens = tokens->next;
 		if (!ft_verify_redir_short(tokens))
 			tokens = ft_skip_to_pipe(tokens);
-		while (tokens && tokens->type != PIPE)
-		{
-			if ((tokens->type == D_REDIRECT_OUT
-					|| tokens->type == REDIRECT_OUT))
+		else
+			while (tokens && tokens->type != PIPE)
 			{
-				i = ft_verify_access_out(tokens);
-				break ;
+				if ((tokens->type == D_REDIRECT_OUT
+					|| tokens->type == REDIRECT_OUT))
+				{
+					i = ft_verify_access_out(tokens);
+					break ;
+				}
+				else
+					tokens = tokens->next;
 			}
-			else
-				tokens = tokens->next;
-		}
 		tokens = ft_take_ro_out(head, tokens, i);
 		if (tokens && tokens->next)
 			tokens = tokens->next;
