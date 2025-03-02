@@ -66,7 +66,7 @@ char	*ft_heredoc_path(t_data *data)
 t_envp	*ft_new_env_node(t_data *data, char *envp)
 {
 	t_envp	*new;
-	int		tmp;
+	size_t	tmp;
 
 	new = malloc(sizeof(t_envp));
 	if (!new)

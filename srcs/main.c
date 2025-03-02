@@ -56,7 +56,7 @@ char	**ft_command_init(t_data *data)
 	char	*command;
 	char	**command_list;
 
-	command_in = readline(data->prompt);
+	command_in = readline("Minishell: ");
 	if (!command_in)
 		ft_free(0, NULL, data, 1);
 	command = ft_strtrim(command_in, " \t\n");
@@ -173,7 +173,6 @@ int	main(int ac, char **av, char **envp)
 		if (data->bin_tokens)
 			ft_free_tree(data->bin_tokens, 1);
 		/*ft_add_quotes_to_files(data->tokens_start);*/
-		/*ft_print_tokens(data->tokens, NULL, 0);*/
 		data->bin_tokens = ft_bin_tokens(data);
 		ft_run_cmds(data);
 		/*treeprint(data->bin_tokens, 0);*/

@@ -12,49 +12,52 @@
 
 #include "../../incs/minishell.h"
 
-int		ft_verify_exit(t_bin_token *tokens, int print)
+int		ft_verify_numeric_exit(t_bin_token *tokens, int print)
 {
 	int	i;
 
-	if (tokens->args[1] && tokens->args[2])
-	{
-		if (print)
-			ft_putstr_fd("minishell : too many arguments\n", 2);
-		return (1);
-	}
 	if (tokens->args[1])
 	{
-		i = 0;
-		while (tokens->args[1][i])
+		i = -1;
+		while (tokens->args[1][++i])
 		{
 			if (!ft_isdigit(tokens->args[1][i])
 				&& tokens->args[1][i] != '+'
 				&& tokens->args[1][i] != '-')
 			{
 				if (print)
-					ft_putstr_fd("minishell : numeric argument required\n", 2);
+				{
+					ft_putstr_fd("minishell : exit: ", 2);
+					ft_putstr_fd(tokens->args[1], 2);
+					ft_putstr_fd(": numeric argument required\n", 2);
+				}
 				return (2);
 			}
-			i++;
 		}
 	}
 	return (0);
 }
 
-void	ft_exit(t_data *data, t_bin_token *tokens, int	i)
+int	ft_exit(t_data *data, t_bin_token *tokens, int exit)
 {
 	int	status;
 
-	if (!ft_verify_exit(tokens, 1))
+	if (!ft_verify_numeric_exit(tokens, 1))
 	{
-		if (tokens->args[1])
+		if (tokens->args[1] && tokens->args[2])
 		{
-			status = ft_atoi(tokens->args[1]);
+			ft_putstr_fd("bash: exit: too many arguments\n", 2);
+			if (exit)
+				ft_free(1, NULL, data, 0);
+			return (1);
 		}
+		if (tokens->args[1])
+			status = ft_atoi(tokens->args[1]);
 		else
 			status = data->exit_status;
 	}
 	else
-		status = ft_verify_exit(tokens, 0);
-	ft_free(status, NULL, data, i);
+		status = ft_verify_numeric_exit(tokens, 0);
+	ft_free(status, NULL, data, 0);
+	return (0);
 }

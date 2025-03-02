@@ -13,15 +13,18 @@
 #include "ft_executer.h"
 
 
-void	ft_exit(t_data *data, t_bin_token *tokens, int	i);
+int	ft_exit(t_data *data, t_bin_token *tokens, int	i);
 int	ft_cd(t_data *data, t_bin_token *token, int exit);
 
 int	ft_run_single_builtins(t_bin_token *tokens, t_data *data)
 {
 	if (!tokens->args[0])
 		return (0);
-	if (ft_strncmp("exit", tokens->args[0], 5) == 0)
-		ft_exit(data, tokens, 1);
+	if (ft_strcmp("exit", tokens->args[0]) == 0)
+	{
+		data->exit_status = ft_exit(data, tokens, 0);
+		return (1);
+	}
 	/*if (ft_strncmp("cd", tokens->args[0], 3) == 0)*/
 	/*	ft_cd(data, tokens, 0);*/
 	return (0);
@@ -73,10 +76,12 @@ int		ft_handle_builtins(t_bin_token *tokens, t_data *data, int i, int exit)
 	status = 0;
 	if (!tokens->args[i])
 		return (status);
-	if (ft_strncmp("echo", tokens->args[i], 5) == 0)
+	if (ft_strcmp("echo", tokens->args[0]) == 0)
 		status = ft_echo(data, tokens, exit);
-	if (ft_strncmp("pwd", tokens->args[i], 4) == 0)
+	if (ft_strcmp("pwd", tokens->args[0]) == 0)
 		status = ft_pwd(data, tokens, exit);
+	if (ft_strcmp("exit", tokens->args[0]) == 0)
+		status = ft_exit(data, tokens, exit);
 	/*if (ft_strncmp("cd", tokens->args[i], 3) == 0))*/
 	/*	ft_cd(data, tokens);*/
 	/*if (ft_strncmp("exit", tokens->args[i], 5) == 0)*/

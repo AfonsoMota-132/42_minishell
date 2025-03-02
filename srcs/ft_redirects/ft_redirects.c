@@ -44,6 +44,8 @@ t_token	*ft_pcmdf_first(t_token *tokens)
 			prev = tokens;
 		tokens = tokens->next;
 	}
+	if (!tokens)
+		return (head);
 	return (tokens);
 }
 
@@ -60,8 +62,7 @@ t_token	*ft_put_cmd_first(t_token *tokens)
 	{
 		if (tokens && tokens->type == PIPE)
 		{
-			if (ft_pcmdf_first(tokens->next))
-				tokens->next = ft_pcmdf_first(tokens->next);
+			tokens->next = ft_pcmdf_first(tokens->next);
 			tokens = tokens->next;
 		}
 		else
