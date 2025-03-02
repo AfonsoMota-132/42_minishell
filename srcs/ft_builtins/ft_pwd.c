@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../incs/minishell.h"
+#include "ft_builtins.h"
 
 int	ft_verify_pwd(t_bin_token *tokens, int print)
 {
@@ -40,7 +40,6 @@ int	ft_pwd(t_data *data, t_bin_token *tokens, int exit)
 	char	*path;
 
 	path = ft_calloc(sizeof(char), 4096);
-
 	if (ft_verify_pwd(tokens, 1))
 	{
 		free(path);
@@ -55,6 +54,6 @@ int	ft_pwd(t_data *data, t_bin_token *tokens, int exit)
 		free(path);
 		if (exit)
 			ft_free(1, NULL, data, 0);
-		return (ft_putstr_fd("Minishell: pwd error\n", 2),1);
+		return (ft_putstr_fd("Minishell: pwd error\n", 2), 1);
 	}
 }

@@ -6,11 +6,11 @@
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 08:41:48 by afogonca          #+#    #+#             */
-/*   Updated: 2025/02/03 08:51:04 by afogonca         ###   ########.fr       */
+/*   Updated: 2025/03/02 12:34:57 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../incs/minishell.h"
+#include "ft_redirects.h"
 
 t_token	*ft_rmv_rod_before(t_token *tokens, t_token *head)
 {
@@ -41,7 +41,7 @@ t_token	*ft_rmv_rod_before(t_token *tokens, t_token *head)
 	return (NULL);
 }
 
-t_token *ft_take_rod_out(t_token *tokens, t_token *tmp)
+t_token	*ft_take_rod_out(t_token *tokens, t_token *tmp)
 {
 	t_token	*tmp2;
 
@@ -66,8 +66,8 @@ t_token *ft_take_rod_out(t_token *tokens, t_token *tmp)
 
 void	ft_redir_short_out_double(t_token *tokens)
 {
-	t_token *head;
-	t_token *tmp;
+	t_token	*head;
+	t_token	*tmp;
 
 	while (tokens)
 	{

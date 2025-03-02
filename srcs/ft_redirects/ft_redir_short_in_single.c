@@ -6,11 +6,11 @@
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 08:52:19 by afogonca          #+#    #+#             */
-/*   Updated: 2025/02/06 09:14:33 by afogonca         ###   ########.fr       */
+/*   Updated: 2025/03/02 12:34:40 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../incs/minishell.h"
+#include "ft_redirects.h"
 
 t_token	*ft_rmv_ris_before(t_token *tokens, t_token *head)
 {
@@ -46,10 +46,10 @@ t_token	*ft_take_ris_out(t_token *tokens, t_token *tmp)
 
 	if (!tmp)
 		tokens = ft_skip_to_pipe(tokens);
-	while(tokens && tokens->type != PIPE)
+	while (tokens && tokens->type != PIPE)
 	{
 		if (tokens->next && tokens->next->type == REDIRECT_IN
-		&& tokens->next->next && tokens->next != tmp)
+			&& tokens->next->next && tokens->next != tmp)
 		{
 			tmp2 = tokens->next;
 			tokens->next = tokens->next->next->next;
@@ -65,9 +65,9 @@ t_token	*ft_take_ris_out(t_token *tokens, t_token *tmp)
 
 void	ft_redir_short_in_single(t_token *tokens)
 {
-	t_token *head;
-	t_token *tmp;
-	
+	t_token	*head;
+	t_token	*tmp;
+
 	while (tokens)
 	{
 		tmp = NULL;

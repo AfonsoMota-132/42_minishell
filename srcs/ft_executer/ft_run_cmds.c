@@ -12,10 +12,6 @@
 
 #include "ft_executer.h"
 
-
-int	ft_exit(t_data *data, t_bin_token *tokens, int	i);
-int	ft_cd(t_data *data, t_bin_token *token, int exit);
-
 int	ft_run_single_builtins(t_bin_token *tokens, t_data *data)
 {
 	if (!tokens->args[0])
@@ -25,10 +21,9 @@ int	ft_run_single_builtins(t_bin_token *tokens, t_data *data)
 		data->exit_status = ft_exit(data, tokens, 0);
 		return (1);
 	}
-	/*if (ft_strncmp("cd", tokens->args[0], 3) == 0)*/
-	/*	ft_cd(data, tokens, 0);*/
 	return (0);
 }
+
 void	ft_run_cmds(t_data *data)
 {
 	if (!data->bin_tokens->right && !data->bin_tokens->left)
@@ -68,8 +63,7 @@ char	*ft_execve_get_path(char *cmd, t_data *data)
 	return (NULL);
 }
 
-int	ft_pwd(t_data *data, t_bin_token *tokens, int exit);
-int		ft_handle_builtins(t_bin_token *tokens, t_data *data, int i, int exit)
+int	ft_handle_builtins(t_bin_token *tokens, t_data *data, int i, int exit)
 {
 	int	status;
 
@@ -82,16 +76,6 @@ int		ft_handle_builtins(t_bin_token *tokens, t_data *data, int i, int exit)
 		status = ft_pwd(data, tokens, exit);
 	if (ft_strcmp("exit", tokens->args[0]) == 0)
 		status = ft_exit(data, tokens, exit);
-	/*if (ft_strncmp("cd", tokens->args[i], 3) == 0))*/
-	/*	ft_cd(data, tokens);*/
-	/*if (ft_strncmp("exit", tokens->args[i], 5) == 0)*/
-	/*	ft_exit(data, tokens, exit);*/
-	/*if (ft_strncmp("export", tokens->args[i], 7) == 0)*/
-	/*	ft_export(data, tokens);*/
-	/*if (ft_strncmp("unset", tokens->args[i], 6) == 0)*/
-	/*	ft_unset(data, tokens);*/
-	/*if (ft_strncmp("cd", tokens->args[i], 3) == 0)*/
-	/*	ft_free(1, NULL, data, 0);*/
 	return (status);
 }
 
@@ -127,8 +111,8 @@ char	**ft_envp_list2array(t_envp *env)
 	{
 		array[i] = ft_strdup(tmp->key);
 		if (tmp->value)
-			array[i] = ft_strjoin_gnl(ft_strjoin_gnl(array[i]
-						, "="), tmp->value);
+			array[i] = ft_strjoin_gnl(ft_strjoin_gnl(array[i],
+						"="), tmp->value);
 		tmp = tmp->next;
 		i++;
 	}
@@ -148,7 +132,7 @@ void	ft_execve(t_bin_token *tokens, t_data *data)
 		i++;
 	if (!tokens->args[i])
 		ft_free(0, NULL, data, 0);
-	ft_handle_builtins(tokens,data, i, 1);
+	ft_handle_builtins(tokens, data, i, 1);
 	path = ft_execve_get_path(tokens->args[i], data);
 	if (!path && tokens->args[i])
 		path = ft_strdup(tokens->args[i]);

@@ -26,7 +26,7 @@ void	ft_handle_redirects_in(t_data *data, t_bin_token *tokens, char *path)
 		dup2(fd, STDIN_FILENO);
 	}
 	else if (tokens->redir_in && tokens->redir_in->type == HERE_DOC)
-		{
+	{
 		if (access(tokens->redir_in->heredoc, F_OK) == -1)
 			ft_error_msg_redir(data, 1, tokens->redir_in->heredoc, path);
 		if (access(tokens->redir_in->heredoc, R_OK) == -1)
@@ -47,8 +47,8 @@ void	ft_handle_redirects_out(t_data *data, t_bin_token *tokens, char *path)
 		fd = open(tokens->redir_out->content, O_WRONLY | O_APPEND, 0);
 		dup2(fd, STDOUT_FILENO);
 	}
-
 }
+
 void	ft_handle_redirects(t_data *data, t_bin_token *tokens, char *path)
 {
 	if (tokens->first_redir == 1)
@@ -61,5 +61,4 @@ void	ft_handle_redirects(t_data *data, t_bin_token *tokens, char *path)
 		ft_handle_redirects_out(data, tokens, path);
 		ft_handle_redirects_in(data, tokens, path);
 	}
-
 }

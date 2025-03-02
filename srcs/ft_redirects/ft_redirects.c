@@ -6,11 +6,11 @@
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 10:40:09 by afogonca          #+#    #+#             */
-/*   Updated: 2025/02/06 10:39:03 by afogonca         ###   ########.fr       */
+/*   Updated: 2025/03/02 12:35:11 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../incs/minishell.h"
+#include "ft_redirects.h"
 
 void	ft_free_token(t_token *tokens)
 {

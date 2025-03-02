@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../incs/minishell.h"
+#include "ft_heredoc.h"
 
 extern int	g_signal_received;
 

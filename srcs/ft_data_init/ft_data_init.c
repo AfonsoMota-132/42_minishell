@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/minishell.h"
-#include <fcntl.h>
+#include "ft_data_init.h"
 
 char	*ft_get_hostname(void)
 {
@@ -27,27 +26,11 @@ char	*ft_get_hostname(void)
 		return (NULL);
 	close(fd);
 	i = 0;
-	while (tmp[i] != '\0' && tmp[i] != '.')	
+	while (tmp[i] != '\0' && tmp[i] != '.')
 		i++;
 	hostname = ft_substr(tmp, 0, i);
 	free(tmp);
 	return (hostname);
-}
-
-char	**ft_cpyenv(char **envp)
-{
-	int		i;
-	char	**env;
-
-	i = 0;
-	while (envp[i])
-		i++;
-	env = malloc(sizeof(char *) * (i + 1));
-	i = -1;
-	while (envp[++i])
-		env[i] = ft_strdup(envp[i]);
-	env[i] = NULL;
-	return (env);
 }
 
 char	*ft_heredoc_path(t_data *data)
@@ -101,13 +84,6 @@ void	ft_envlist_init(t_data *data, char **env)
 	while (env[++i])
 	{
 		envp->next = ft_new_env_node(data, env[i]);
-		if (!envp) 
-		{
-			perror("Failed to allocate memory for envp");
-			//free
-			//data->envp = NULL;
-			exit(EXIT_FAILURE);
-		}
 		envp = envp->next;
 	}
 	data->ft_envp = head;
@@ -136,7 +112,7 @@ t_data	*ft_data_init(char **envp)
 		ft_prompt_init(data);
 	}
 	else
-		data->prompt= ft_strdup("minishell(prompt not found😡):");
+		data->prompt = ft_strdup("minishell(prompt not found😡):");
 	data->bin_tokens = NULL;
 	data->heredoc_path = ft_heredoc_path(data);
 	return (data);

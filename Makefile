@@ -23,7 +23,9 @@ EXECUTER = srcs/ft_executer/ft_pipes.c \
 		   srcs/ft_executer/ft_error_exec.c \
 		   srcs/ft_executer/ft_redirects_exec.c
 
-BIN_TOKENS = srcs/ft_bin_tokens/ft_bin_tokens.c
+BIN_TOKENS = srcs/ft_bin_tokens/ft_bin_tokens.c \
+			srcs/ft_bin_tokens/ft_update_bin_tokens.c \
+			srcs/ft_bin_tokens/ft_bin_tokens_pipes.c
 
 SIGNALS = srcs/ft_signals/ft_signals.c
 
@@ -42,14 +44,27 @@ REDIRS = 	srcs/ft_redirects/ft_redirects.c \
 			srcs/ft_redirects/ft_redir_short_in_single.c \
 			$(HEREDOC)
 
-SRCS =	srcs/main.c srcs/ft_split_ms.c \
-		srcs/ft_free.c srcs/ft_tokens.c srcs/ft_syntax.c \
-		srcs/ft_data_init.c srcs/ft_expander.c \
-		srcs/ft_rmv_quotes.c \
-		srcs/ft_expander2.c	srcs/ft_syntax_tokens.c \
-		srcs/ft_get_prompt.c \
-		srcs/ft_getenv.c $(BUILTINS) $(REDIRS) $(SIGNALS) \
-		$(BIN_TOKENS) $(EXECUTER)
+SYNTAX = srcs/ft_syntax/ft_syntax.c \
+		srcs/ft_syntax/ft_syntax_tokens.c
+
+EXPANDER = srcs/ft_expander/ft_expander.c \
+		srcs/ft_expander/ft_expander2.c \
+		srcs/ft_expander/ft_expander_replace.c
+
+RMV_QUOTES = srcs/ft_rmv_quotes/ft_rmv_quotes.c
+
+DATA_INIT = srcs/ft_data_init/ft_data_init.c \
+			srcs/ft_data_init/ft_getenv.c \
+			srcs/ft_data_init/ft_get_prompt.c
+
+FREE = srcs/ft_free/ft_free.c
+
+TOKENS = srcs/ft_tokens/ft_split_ms.c \
+		srcs/ft_tokens/ft_tokens.c
+
+SRCS =	srcs/main.c $(DATA_INIT) $(FREE) $(TOKENS) \
+		$(BUILTINS) $(REDIRS) $(SIGNALS) $(RMV_QUOTES) \
+		$(BIN_TOKENS) $(EXECUTER) $(SYNTAX) $(EXPANDER)
 
 VAL_RULES = --leak-check=full --show-leak-kinds=all --suppressions=readline.supp
 #--trace-children=yes

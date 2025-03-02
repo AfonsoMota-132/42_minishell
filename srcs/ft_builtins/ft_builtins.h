@@ -1,29 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_getenv.c                                        :+:      :+:    :+:   */
+/*   ft_builtins.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/27 09:33:35 by afogonca          #+#    #+#             */
-/*   Updated: 2025/01/27 09:36:38 by afogonca         ###   ########.fr       */
+/*   Created: 2025/03/02 12:16:27 by afogonca          #+#    #+#             */
+/*   Updated: 2025/03/02 12:19:01 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/minishell.h"
+#ifndef FT_BUILTINS_H
+# define FT_BUILTINS_H
 
-char	*ft_getenv(char *env, t_data *data)
-{
-	t_envp	*tmp;
+# ifndef MINISHELL_H
+#  include "../../incs/minishell.h"
+# endif
 
-	tmp = data->ft_envp;
-	if (!env || !env[0])
-		return (NULL);
-	while (tmp)
-	{
-		if (ft_strncmp(tmp->key, env, ft_strlen(env) + 1) == 0)
-			return (tmp->value);
-		tmp = tmp->next;
-	}
-	return (NULL);
-}
+int	ft_echo(t_data *data, t_bin_token *token, int exit);
+int	ft_pwd(t_data *data, t_bin_token *tokens, int exit);
+int	ft_exit(t_data *data, t_bin_token *tokens, int exit);
+
+#endif

@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../incs/minishell.h"
+#include "ft_builtins.h"
 
-int		ft_verify_numeric_exit(t_bin_token *tokens, int print)
+int	ft_verify_numeric_exit(t_bin_token *tokens, int print)
 {
 	int	i;
 
