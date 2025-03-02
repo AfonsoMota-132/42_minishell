@@ -83,7 +83,9 @@ void	ft_redir_short_out_single(t_token *tokens)
 		{
 			if (tokens->type == REDIRECT_OUT)
 			{
-				if (open(tokens->next->content,
+				/*if (tokens->next->content[0] == '$')*/
+				/*{*/
+				if(open(tokens->next->content,
 						O_WRONLY | O_CREAT | O_TRUNC, 0644) == -1
 					&& (access(tokens->next->content, W_OK) == -1))
 				{

@@ -81,8 +81,13 @@ void	ft_expander3(t_token *tokens, size_t *i)
 	if (tokens->content[(*i) + 1] && tokens->content[(*i) + 1] != ' '
 		&& tokens->content[(*i) + 1] != '"')
 	{
-		tokens->content = ft_expander_replace_null(tokens->content, *i);
-		(*i) = 0;
+		if (tokens->type == FILENAME && tokens->content[0] == '$')
+			(*i)++;
+		else
+		{
+			tokens->content = ft_expander_replace_null(tokens->content, *i);
+			(*i) = 0;
+		}
 	}
 	else if (tokens->content[(*i) + 1])
 		(*i)++;

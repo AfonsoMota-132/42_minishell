@@ -77,8 +77,9 @@ void	ft_redir_short_out_double(t_token *tokens)
 		{
 			if (tokens->type == D_REDIRECT_OUT)
 			{
-				if (open(tokens->next->content, O_WRONLY | O_CREAT, 0644) == -1
-					&& access(tokens->next->content, W_OK) == -1)
+				if (tokens->next->content[0] == '$'
+					|| (open(tokens->next->content, O_WRONLY | O_CREAT, 0644) == -1
+					&& access(tokens->next->content, W_OK) == -1))
 				{
 					tmp = ft_rmv_rod_before(tokens, head);
 					break ;

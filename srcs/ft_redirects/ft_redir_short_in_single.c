@@ -6,11 +6,11 @@
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 08:52:19 by afogonca          #+#    #+#             */
-/*   Updated: 2025/03/02 12:34:40 by afogonca         ###   ########.fr       */
+/*   Updated: 2025/03/02 12:28:09 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_redirects.h"
+#include "../../incs/minishell.h"
 
 t_token	*ft_rmv_ris_before(t_token *tokens, t_token *head)
 {
@@ -65,9 +65,9 @@ t_token	*ft_take_ris_out(t_token *tokens, t_token *tmp)
 
 void	ft_redir_short_in_single(t_token *tokens)
 {
-	t_token	*head;
-	t_token	*tmp;
-
+	t_token *head;
+	t_token *tmp;
+	
 	while (tokens)
 	{
 		tmp = NULL;
@@ -77,7 +77,8 @@ void	ft_redir_short_in_single(t_token *tokens)
 			if (tokens->type == REDIRECT_IN)
 			{
 				if (access(tokens->next->content, F_OK) == -1
-					|| access(tokens->next->content, R_OK) == -1)
+					|| access(tokens->next->content, R_OK) == -1
+					|| tokens->next->content[0] == '$')
 				{
 					tmp = ft_rmv_ris_before(tokens, head);
 					break ;
