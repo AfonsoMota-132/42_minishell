@@ -90,7 +90,7 @@ char	**ft_command_init(t_data *data)
 	char	*command;
 	char	**command_list;
 
-	command_in = readline("Minishell: ");
+	command_in = readline(data->prompt);
 	if (!command_in)
 		ft_free(0, NULL, data, 1);
 	command = ft_strtrim(command_in, " \t\n");
@@ -134,8 +134,8 @@ void	ft_loop2(t_data *data)
 	if (data->bin_tokens)
 		ft_free_tree(data->bin_tokens, 1);
 	data->bin_tokens = ft_bin_tokens(data);
-	/*ft_run_cmds(data);*/
-	treeprint(data->bin_tokens, 0);
+	ft_run_cmds(data);
+	/*treeprint(data->bin_tokens, 0);*/
 	dup2(1, STDOUT_FILENO);
 	dup2(0, STDIN_FILENO);
 }
@@ -155,6 +155,7 @@ void	ft_loop(t_data *data)
 		if (!commands)
 			continue ;
 		ft_token_start(commands, data);
+		ft_rmv_quotes(data->tokens);
 		if (ft_syntax_tokens(data->tokens) || ft_redirects(data->tokens, &data))
 		{
 			data->exit_status = 2;

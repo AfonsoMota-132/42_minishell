@@ -78,5 +78,10 @@ void	ft_error_msg_redir(t_data *data, int type, char *redir, char *path)
 		ft_putstr_fd(redir, 2);
 		ft_putstr_fd(" : No such file or directory\n", 2);
 	}
+	else if (type == 2)
+	{
+		ft_putstr_fd(redir, 2);
+		ft_putstr_fd(": ambiguous redirect\n", 2);
+	}
 	ft_free(1, NULL, data, 0);
 }

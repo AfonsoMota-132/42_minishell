@@ -18,6 +18,8 @@ void	ft_handle_redirects_in(t_data *data, t_bin_token *tokens, char *path)
 
 	if (tokens->redir_in && tokens->redir_in->type == FILENAME)
 	{
+		if (tokens->redir_out->content[0] == '$' && !tokens->redir_out->quotes)
+			ft_error_msg_redir(data, 2, tokens->redir_out->content, path);
 		if (access(tokens->redir_in->content, F_OK) == -1)
 			ft_error_msg_redir(data, 1, tokens->redir_in->content, path);
 		if (access(tokens->redir_in->content, R_OK) == -1)
@@ -42,6 +44,8 @@ void	ft_handle_redirects_out(t_data *data, t_bin_token *tokens, char *path)
 
 	if (tokens->redir_out)
 	{
+		if (tokens->redir_out->content[0] == '$' && !tokens->redir_out->quotes)
+			ft_error_msg_redir(data, 2, tokens->redir_out->content, path);
 		if (access(tokens->redir_out->content, F_OK | W_OK) == -1)
 			ft_error_msg_redir(data, 0, tokens->redir_out->content, path);
 		fd = open(tokens->redir_out->content, O_WRONLY | O_APPEND, 0);

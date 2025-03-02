@@ -56,7 +56,7 @@ void	ft_expand_quest(t_token *tokens, t_data *data
 	char	*tmp;
 	char	*new;
 	char	*str;
-	int		i;
+	size_t	i;
 
 	str = tokens->content;
 	if (env[0] == '?')
@@ -72,7 +72,7 @@ void	ft_expand_quest(t_token *tokens, t_data *data
 		free(tmp);
 		free(tokens->content);
 		tokens->content = new;
-		ft_expander2(tokens, start, data);
+		ft_expander_reset(tokens->content, &i);
 	}
 }
 

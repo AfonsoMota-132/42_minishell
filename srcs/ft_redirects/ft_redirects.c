@@ -118,6 +118,7 @@ int	ft_only_one_redir_shor(t_token *tokens)
 	}
 	return (0);
 }
+
 int	ft_redirects(t_token *tokens, t_data **data)
 {
 	tokens = ft_put_cmd_first(tokens);

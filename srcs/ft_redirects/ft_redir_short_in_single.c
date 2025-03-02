@@ -63,11 +63,24 @@ t_token	*ft_take_ris_out(t_token *tokens, t_token *tmp)
 	return (tokens);
 }
 
+int	ft_redir_short_in_single2(t_token *tokens, t_token **tmp, t_token *head)
+{
+	if (access(tokens->next->content, F_OK) == -1
+		|| access(tokens->next->content, R_OK) == -1
+		|| (tokens->next->content[0] == '$' && tokens->next->quotes == 0))
+	{
+		(*tmp) = ft_rmv_ris_before(tokens, head);
+		return (1);
+	}
+	(*tmp) = tokens;
+	return (0);
+}
+
 void	ft_redir_short_in_single(t_token *tokens)
 {
-	t_token *head;
-	t_token *tmp;
-	
+	t_token	*head;
+	t_token	*tmp;
+
 	while (tokens)
 	{
 		tmp = NULL;
@@ -75,16 +88,8 @@ void	ft_redir_short_in_single(t_token *tokens)
 		while (tokens && tokens->type != PIPE)
 		{
 			if (tokens->type == REDIRECT_IN)
-			{
-				if (access(tokens->next->content, F_OK) == -1
-					|| access(tokens->next->content, R_OK) == -1
-					|| tokens->next->content[0] == '$')
-				{
-					tmp = ft_rmv_ris_before(tokens, head);
+				if (ft_redir_short_in_single2(tokens, &tmp, head))
 					break ;
-				}
-				tmp = tokens;
-			}
 			tokens = tokens->next;
 		}
 		tokens = head;
