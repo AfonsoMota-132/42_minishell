@@ -61,6 +61,7 @@ typedef struct s_token
 	t_token_type	type;
 	char			*content;
 	char			*heredoc;
+	int				quotes;
 	size_t			len;
 	struct s_token	*next;
 	struct s_token	*prev;
@@ -72,7 +73,8 @@ typedef struct s_bin_token
 	int					nbr_args;
 	t_token				*redir_in;
 	t_token				*redir_out;
-	t_bin_token_type	type;	
+	t_bin_token_type	type;
+	int					first_redir;
 	struct s_bin_token	*right;
 	struct s_bin_token	*left;
 }	t_bin_token;
@@ -111,145 +113,18 @@ typedef struct s_data
 	t_envp	*envp;
 }	t_data;
 
-# ifndef FT_EXECUTER_H
-#  include "../srcs/ft_executer/ft_executer.h"
-# endif
+# include "../srcs/ft_executer/ft_executer.h"
+# include "../srcs/ft_bin_tokens/ft_bin_tokens.h"
+# include "../srcs/ft_builtins/ft_builtins.h"
+# include "../srcs/ft_redirects/ft_redirects.h"
+# include "../srcs/ft_signals/ft_signals.h"
+# include "../srcs/ft_syntax/ft_syntax.h"
+# include "../srcs/ft_expander/ft_expander.h"
+# include "../srcs/ft_rmv_quotes/ft_rmv_quotes.h"
+# include "../srcs/ft_data_init/ft_data_init.h"
+# include "../srcs/ft_free/ft_free.h"
+# include "../srcs/ft_tokens/ft_tokens.h"
+
 void		ft_print_tokens(t_token *tokens, t_data *data, int tab);
-//		FT_ENVP_LIST		//
-
-t_envp	*ft_new_env_node(t_data *data, char *envp);
-
-
-//		FT_SIGNALS		//
-
-void		ft_signals_handler(int sig);
-void		ft_signals(void);
-void		ft_heredoc_signal_handler(int sig);
-
-//		ft_readline		//
-
-char		*ft_readline(char *str);
-char		*ft_rmv_nl(char *str);
-char		*ft_addstr(char *s1, char s2);
-
-//		Ft_split_ms		//
-
-int			ft_quote_len(char const *s);
-int			ft_seglen(char const *s);
-int			ft_count_parts(char const *s);
-char		**ft_split_cmds(char *command);
-
-//		Ft_free			//
-
-void		ft_free_env(t_envp *envp);
-void		ft_free_cmds(char **commands);
-void		ft_free_tokens(t_token *tokens, int del_heredoc);
-int			ft_free(int i, char *command, t_data *data, int del_heredoc);
-void		ft_free_matrix(char **matrix);
-void		ft_free_tree(t_bin_token *tokens, int del_heredoc);
-
-//		Ft_tokens		//
-
-t_token		*ft_token_maker(char **commands);
-void		ft_tokens_cat(t_data **data);
-
-//		FT_Syntax		//
-
-int			ft_quote_syntax(char *command);
-int			ft_pipe_syntax(char *command);
-int			ft_redirect_syntax(char *command);
-int			ft_syntax(char *command);
-
-//		FT_data_init	//
-
-char		*ft_get_path(t_data *data);
-void		ft_prompt_init(t_data *data);
-char		*ft_get_hostname(void);
-char		**ft_cpyenv(char **envp);
-t_data		*ft_data_init(char **envp);
-char		*ft_get_path_with_til(char *path, char **dirs, int i);
-char		*ft_get_path_without_til(char *path, char **dirs, int i);
-char		*ft_get_path(t_data *data);
-
-//		FT_expander		//
-
-void		ft_expander(t_token *tokens, t_data *data);
-int			ft_len_env(char *str);
-char		*ft_expander_replace(char *str, char *env, int start);
-int			ft_check_expander(t_token *tokens, size_t *i);
-void		ft_expand_quest(t_token *tokens, t_data *data,
-				char *env, size_t *start);
-void		ft_expander_reset(char *str, size_t *i);
-void		ft_skip_single_quote(char *str, size_t *i);
-char		*ft_getenv(char *env, t_data *data);
-void		ft_expander2(t_token *tokens, \
-			size_t *start, t_data *data);
-
-//		FT_Builtins		//
-
-void	ft_echo(t_data *data, t_bin_token *token);
-void	ft_builtin_choice(t_data *data, t_bin_token *token);
-int	ft_cd(t_data *data, t_bin_token *token);
-/*int	ft_update_pwd(t_data *data);*/
-/*int	ft_go_to_path(t_data *data, int option);*/
-
-//		FT_Rmv_quotes	//
-
-int			ft_quote_rm_len(char const *s, char quote);
-char		*ft_rmv_single_quotes(char *str, int *start);
-char		*ft_rmv_double_quotes(char *str, int *start);
-void		ft_rmv_quotes(t_token *tokens);
-
-//		FT_Syntax_Tokens	//
-
-int			ft_syntax_tokens(t_token *tokens);
-
-//		FT_redirects		//
-
-int			ft_redirects(t_token *tokens, t_data **data);
-t_token		*ft_skip_to_pipe(t_token *tokens);
-
-//		FT_redir_short__out__single		//
-
-t_token		*ft_rmv_ros_before(t_token *tokens, t_token *head);
-t_token		*ft_take_ros_out(t_token *tokens, t_token *tmp);
-void		ft_redir_short_out_single(t_token *tokens);
-
-//		FT_redir_short_out_double		//
-
-t_token		*ft_rmv_rod_before(t_token *tokens, t_token *head);
-t_token		*ft_take_rod_out(t_token *tokens, t_token *tmp);
-void		ft_redir_short_out_double(t_token *tokens);
-
-//		FT_redir_short_out		//
-
-t_token		*ft_take_ro_out(t_token *head, t_token *tokens, int i);
-void		ft_redir_short_out(t_token *tokens);
-
-//		FT_redir_short_in		//
-
-t_token		*ft_rmv_ris_before(t_token *tokens, t_token *head);
-t_token		*ft_take_ris_out(t_token *tokens, t_token *tmp);
-void		ft_redir_short_in_single(t_token *tokens);
-
-//		FT_Heredoc		//
-
-int			ft_heredoc(t_token *tokens, t_data *data);
-
-void		ft_actual_heredoc_loop(t_token *tokens, t_data *data, t_token *str, int fd);
-char		*ft_heredoc_name(t_token *tokens, t_data *data);
-int			ft_strvalue(char *str);
-void		ft_free_token(t_token *tokens);
-void		ft_define_heredoc_paths(t_token *tokens, t_data *data);
-t_token		*ft_verify_heredoc_is_last(t_token *tokens);
-void		ft_actual_heredoc(t_token *tokens, t_data *data);
-void		ft_pseudo_heredoc(t_token *tokens);
-void		ft_del_pseudo_heredocs(t_token *tokens);
-
-//	t_bin_tokens	//
-
-t_bin_token	*ft_bin_tokens(t_data *data);
-
-//		ft_executer	test		//
 
 #endif

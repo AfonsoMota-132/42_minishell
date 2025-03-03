@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/minishell.h"
+#include "ft_tokens.h"
 
 t_token	*ft_token_maker(char **commands)
 {
@@ -28,13 +28,15 @@ t_token	*ft_token_maker(char **commands)
 		token->content = ft_strdup(commands[i]);
 		token->type = CMD;
 		token->heredoc = NULL;
+		token->amb_redir = 0;
+		token->quotes = 0;
 		if (!commands[i + 1])
 			break ;
 		token->next = ft_calloc(sizeof(t_token), 1);
 		token = token->next;
 	}
 	token->next = NULL;
-	ft_free_cmds(commands);
+	ft_free_matrix(commands);
 	return (start);
 }
 
@@ -66,6 +68,15 @@ int	ft_tokens_cat2(t_data **data, int check)
 	return (check);
 }
 
+void	ft_tokens_cat3(t_data **data)
+{
+	if ((ft_strchr((*data)->tokens->content, '\'')
+			|| ft_strchr((*data)->tokens->content, '"'))
+		&& (*data)->tokens->type != CMD && (*data)->tokens->type != HERE_DOC
+		&& (*data)->tokens->type != FILENAME)
+		(*data)->tokens->type = ARG;
+}
+
 void	ft_tokens_cat(t_data **data)
 {
 	int	check;
@@ -86,11 +97,18 @@ void	ft_tokens_cat(t_data **data)
 		}
 		else
 			check = ft_tokens_cat2(data, check);
-		if ((ft_strchr((*data)->tokens->content, '\'')
-				|| ft_strchr((*data)->tokens->content, '"'))
-			&& (*data)->tokens->type != CMD)
-			(*data)->tokens->type = ARG;
+		ft_tokens_cat3(data);
 		(*data)->tokens = (*data)->tokens->next;
 	}
 	(*data)->tokens = (*data)->tokens_start;
+}
+
+void	ft_token_start(char **commands, t_data *data)
+{
+	if (data->tokens_start)
+		ft_free_tokens(data->tokens_start, 1);
+	data->tokens_start = ft_token_maker(commands);
+	data->tokens = data->tokens_start;
+	ft_tokens_cat(&data);
+	ft_expander(data->tokens, data);
 }

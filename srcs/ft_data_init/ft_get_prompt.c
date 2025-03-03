@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/minishell.h"
+#include "ft_data_init.h"
 
-char	*ft_get_path_with_til(char *path, char **dirs,  int	i)
+char	*ft_get_path_with_til(char *path, char **dirs, int i)
 {
 	path = ft_strdup("~");
 	while (dirs[++i])
@@ -29,7 +29,6 @@ char	*ft_get_path_with_til(char *path, char **dirs,  int	i)
 char	*ft_get_path_without_til(char *path, char **dirs, int i)
 {
 	i = -1;
-
 	path = ft_strdup("/");
 	while (dirs[++i])
 	{

@@ -6,11 +6,11 @@
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 09:09:59 by afogonca          #+#    #+#             */
-/*   Updated: 2025/02/05 09:10:40 by afogonca         ###   ########.fr       */
+/*   Updated: 2025/03/02 12:34:49 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../incs/minishell.h"
+#include "ft_redirects.h"
 
 t_token	*ft_take_ro_out(t_token *head, t_token *tokens, int i)
 {
@@ -30,9 +30,9 @@ t_token	*ft_take_ro_out(t_token *head, t_token *tokens, int i)
 			ft_free_token(tmp);
 			break ;
 		}
-		else if (tokens->next && (tokens->next->type == D_REDIRECT_OUT
+		else if (tokens && (tokens->next->type == D_REDIRECT_OUT
 				|| tokens->next->type == REDIRECT_OUT)
-			&& tokens->next->next && !(--i))
+			&& tokens->next->next && !(++i))
 			tokens = tokens->next;
 		else
 			tokens = tokens->next;
@@ -40,7 +40,7 @@ t_token	*ft_take_ro_out(t_token *head, t_token *tokens, int i)
 	return (head);
 }
 
-int		ft_verify_redir_short(t_token *tokens)
+int	ft_verify_redir_short(t_token *tokens)
 {
 	char	redirect_single;
 	char	redirect_double;
@@ -50,9 +50,9 @@ int		ft_verify_redir_short(t_token *tokens)
 	while (tokens && tokens->type != PIPE)
 	{
 		if (tokens->type == D_REDIRECT_OUT && !redirect_single)
-				redirect_single++;
+			redirect_single++;
 		else if (tokens->type == REDIRECT_OUT && !redirect_double)
-				redirect_double++;
+			redirect_double++;
 		if (redirect_double && redirect_single)
 			break ;
 		tokens = tokens->next;
@@ -60,11 +60,27 @@ int		ft_verify_redir_short(t_token *tokens)
 	return ((redirect_double && redirect_single));
 }
 
-int		ft_verify_access_out(t_token *tokens)
+int	ft_verify_access_out(t_token *tokens)
 {
-	if (access(tokens->next->content, W_OK) == -1)
+	if (access(tokens->next->content, W_OK) == -1
+		|| tokens->next->content[0] == '$')
 		return (0);
 	return (1);
+}
+
+void	ft_redir_short_out_2(t_token *tokens, int *i)
+{
+	while (tokens && tokens->type != PIPE)
+	{
+		if ((tokens->type == D_REDIRECT_OUT
+				|| tokens->type == REDIRECT_OUT))
+		{
+			(*i) = ft_verify_access_out(tokens);
+			break ;
+		}
+		else
+			tokens = tokens->next;
+	}
 }
 
 void	ft_redir_short_out(t_token *tokens)
@@ -76,19 +92,12 @@ void	ft_redir_short_out(t_token *tokens)
 	{
 		i = -1;
 		head = tokens;
+		if (tokens->type == PIPE)
+			tokens = tokens->next;
 		if (!ft_verify_redir_short(tokens))
 			tokens = ft_skip_to_pipe(tokens);
-		while (tokens && tokens->type != PIPE)
-		{
-			if ((tokens->type == D_REDIRECT_OUT
-					|| tokens->type == REDIRECT_OUT))
-			{
-				i = ft_verify_access_out(tokens);
-				break ;
-			}
-			else
-				tokens = tokens->next;
-		}
+		else
+			ft_redir_short_out_2(tokens, &i);
 		tokens = ft_take_ro_out(head, tokens, i);
 		if (tokens && tokens->next)
 			tokens = tokens->next;

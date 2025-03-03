@@ -35,8 +35,8 @@ void	ft_builtin_choice(t_data *data, t_bin_token *token)
 		/*	ft_export(data, token);*/
 		/*else if (ft_strcmp(token->args[0], "unset") == 0)*/
 		/*	ft_unset(data, token);*/
-		/*else if (ft_strcmp(token->args[0], "env") == 0)*/
-		/*	ft_env(data, token);*/
+		else if (ft_strcmp(token->args[0], "env") == 0)
+			ft_print_envp(data);
 		/*else if (ft_strcmp(token->args[0], "exit") == 0)*/
 		/*	ft_exit(data, token);*/
 	}

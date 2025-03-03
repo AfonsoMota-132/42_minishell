@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../incs/minishell.h"
-#include <unistd.h>
+#include "ft_builtins.h"
 
 static int	ft_flag_check( t_bin_token *token)
 {
@@ -27,20 +26,20 @@ static int	ft_flag_check( t_bin_token *token)
 			i++;
 			while (token->args[n][i] == 'n')
 				i++;
-			if (token->args[n][i] != '\0' && n != 1)
-				return(n);
+			if (token->args[n][i] != '\0')
+				return (n);
 		}
 		else
 			break ;
 		n++;
 	}
-		return(n);
-}	
-void	ft_echo(t_data *data, t_bin_token *token)
+	return (n);
+}
+
+int	ft_echo(t_data *data, t_bin_token *token, int exit)
 {
 	int	n;
 	int	flag;
-(void)data;
 
 	n = 1;
 	flag = 1;
@@ -58,6 +57,8 @@ void	ft_echo(t_data *data, t_bin_token *token)
 	}
 	if (flag == 1)
 		ft_putstr_fd("\n", STDOUT_FILENO);
-	ft_free(0, NULL, data, 0);
+	if (exit == 1)
+		ft_free(0, NULL, data, 0);
+	return (0);
 }
 

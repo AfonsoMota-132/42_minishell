@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/minishell.h"
+#include "ft_rmv_quotes.h"
 
 int	ft_quote_rm_len(char const *s, char quote)
 {
@@ -75,11 +75,11 @@ char	*ft_rmv_double_quotes(char *str, int *start)
 
 void	ft_empty_quotes(t_token *tokens, int i)
 {
-	if (((tokens->content[i] == '"' 
-			&& tokens->content[i + 1] == '"')
-		|| (tokens->content[i] == '\''
-			&& tokens->content[i + 1] == '\''))
-			&& ft_strlen(tokens->content) == 2)
+	if (((tokens->content[i] == '"'
+				&& tokens->content[i + 1] == '"')
+			|| (tokens->content[i] == '\''
+				&& tokens->content[i + 1] == '\''))
+		&& ft_strlen(tokens->content) == 2)
 	{
 		free(tokens->content);
 		tokens->content = ft_strdup("");
@@ -98,13 +98,18 @@ void	ft_rmv_quotes(t_token *tokens)
 			ft_empty_quotes(tokens, i);
 			if (ft_strlen(tokens->content) == 0)
 				break ;
-			if (tokens->content[i] != '\''
-				&& tokens->content[i] != '"')
+			if (tokens->content[i] != '\'' && tokens->content[i] != '"')
 				i++;
 			if (tokens->content[i] == '"')
+			{
+				tokens->quotes = 1;
 				tokens->content = ft_rmv_double_quotes(tokens->content, &i);
+			}
 			if (tokens->content[i] == '\'')
+			{
+				tokens->quotes = 2;
 				tokens->content = ft_rmv_single_quotes(tokens->content, &i);
+			}
 		}
 		tokens = tokens->next;
 	}
