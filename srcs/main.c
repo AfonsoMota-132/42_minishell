@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "../incs/minishell.h"
-#include <readline/readline.h>
-#include <unistd.h>
 
 int	g_signal_received = 0;
 
@@ -51,34 +49,6 @@ void	ft_print_tokens(t_token *tokens, t_data *data, int	tab)
 	}
 	(void) data;
 }
-
-char	**ft_command_init(t_data *data)
-{
-	char	*command_in;
-	char	*command;
-	char	**command_list;
-
-	command_in = readline(data->prompt);
-	if (!command_in)
-		ft_free(0, NULL,data, 1);
-	command = ft_strtrim(command_in, " \t\n");
-	if (!command || !ft_strlen(command)
-		|| ft_syntax(command))
-	{
-		data->exit_status = 1;
-		if (command)
-			free (command);
-		return (NULL);
-	}
-	add_history(command_in);
-	if (ft_strncmp(command, "exit", 4) == 0)
-		ft_free(0, command, data, 1);
-	command_list = ft_split_cmds(command);
-	free(command);
-	free(command_in);
-	return (command_list);
-}
-
 void treeprint(t_bin_token *cur, int depth)
 {
     if(cur== 0)
@@ -114,23 +84,66 @@ void treeprint(t_bin_token *cur, int depth)
     treeprint(cur->left, depth + 1);
     treeprint(cur->right, depth + 1);
 }
-
-int	main(int ac, char **av, char **envp)
+char	**ft_command_init(t_data *data)
 {
-	t_data	*data;
+	char	*command_in;
+	char	*command;
+	char	**command_list;
+
+	command_in = readline(data->prompt);
+	if (!command_in)
+		ft_free(0, NULL, data, 1);
+	command = ft_strtrim(command_in, " \t\n");
+	if (!command || !ft_strlen(command)
+		|| ft_syntax(command))
+	{
+		if (command && ft_strlen(command))
+			data->exit_status = 2;
+		if (command)
+			free (command);
+		return (NULL);
+	}
+	add_history(command_in);
+	command_list = ft_split_cmds(command);
+	free(command);
+	free(command_in);
+	return (command_list);
+}
+
+void	ft_add_quotes_to_files(t_token *tokens)
+{
+	char	*tmp;
+
+	while (tokens)
+	{
+		if (tokens->type == FILENAME)
+		{
+			tmp = ft_strjoin("'", tokens->content);
+			tmp = ft_strjoin_gnl(tmp, "'");
+			free(tokens->content);
+			tokens->content = ft_strdup(tmp);
+			free(tmp);
+		}
+		tokens = tokens->next;
+	}
+}
+
+void	ft_loop2(t_data *data)
+{
+	/*ft_print_tokens(data->tokens_start, data, 0);*/
+	if (data->bin_tokens)
+		ft_free_tree(data->bin_tokens, 1);
+	data->bin_tokens = ft_bin_tokens(data);
+	ft_run_cmds(data);
+	/*treeprint(data->bin_tokens, 0);*/
+	dup2(1, STDOUT_FILENO);
+	dup2(0, STDIN_FILENO);
+}
+
+void	ft_loop(t_data *data)
+{
 	char	**commands;
-	int		fd_in;
-	int		fd_out;
 
-
-	(void) ac;
-	(void) av;	
-	fd_in = dup(STDIN_FILENO);
-	fd_out = dup(STDOUT_FILENO);
-	dup2(fd_in, STDIN_FILENO);
-	dup2(fd_out, STDOUT_FILENO);
-	data = ft_data_init(envp);
-	ft_signals();
 	while (1)
 	{
 		commands = ft_command_init(data);
@@ -141,29 +154,26 @@ int	main(int ac, char **av, char **envp)
 		}
 		if (!commands)
 			continue ;
-		if (data->tokens_start)
-			ft_free_tokens(data->tokens_start, 1);
-		data->tokens_start = ft_token_maker(commands);
-		data->tokens = data->tokens_start;
-		ft_tokens_cat(&data);
-		ft_expander(data->tokens, data);
+		ft_token_start(commands, data);
 		ft_rmv_quotes(data->tokens);
 		if (ft_syntax_tokens(data->tokens) || ft_redirects(data->tokens, &data))
 		{
-			data->exit_status = 1;
+			data->exit_status = 2;
 			continue ;
 		}
 		if (!data->tokens_start)
 			continue ;
-		if (data->bin_tokens)
-			ft_free_tree(data->bin_tokens, 1);
-		ft_print_tokens(data->tokens_start, data, 0);
-		data->bin_tokens = ft_bin_tokens(data);
-		ft_run_cmds(data);
-		dup2(1, STDOUT_FILENO);
-		dup2(0, STDIN_FILENO);
-		/*ft_cd(data, data->bin_tokens);*/
-		/*treeprint(data->bin_tokens, 0);*/
+		ft_loop2(data);
 	}
+}
 
+int	main(int ac, char **av, char **envp)
+{
+	t_data	*data;
+
+	(void) ac;
+	(void) av;
+	data = ft_data_init(envp);
+	ft_signals();
+	ft_loop(data);
 }

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../incs/minishell.h"
+#include "ft_heredoc.h"
 
 void	ft_del_pseudo_heredocs(t_token *tokens)
 {
@@ -18,7 +18,6 @@ void	ft_del_pseudo_heredocs(t_token *tokens)
 
 	while (tokens)
 	{
-		printf("tokens->content %s\n", tokens->content);
 		if (tokens->next
 			&& tokens->next->type == D_REDIRECT_IN
 			&& tokens->next->next && !tokens->next->next->heredoc)

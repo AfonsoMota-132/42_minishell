@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/minishell.h"
+#include "ft_free.h"
 
 void	ft_free_matrix(char **matrix)
 {
@@ -38,17 +38,7 @@ void	ft_free_env(t_envp *env)
 	}
 }
 
-void	ft_free_cmds(char **commands)
-{
-	int	i;
-
-	i = -1;
-	while (commands[++i])
-		free(commands[i]);
-	free(commands);
-}
-
-void	ft_free_tokens(t_token *tokens, int	del_heredoc)
+void	ft_free_tokens(t_token *tokens, int del_heredoc)
 {
 	t_token	*tmp;
 
@@ -76,12 +66,12 @@ void	ft_free_tokens(t_token *tokens, int	del_heredoc)
 	}
 }
 
-void ft_free_tree(t_bin_token *tokens, int del_heredoc)
+void	ft_free_tree(t_bin_token *tokens, int del_heredoc)
 {
 	if (tokens != NULL)
 	{
-		if (tokens->redir_in &&
-			tokens->redir_in->type == HERE_DOC
+		if (tokens->redir_in
+			&& tokens->redir_in->type == HERE_DOC
 			&& tokens->redir_in->heredoc)
 			unlink(tokens->redir_in->heredoc);
 		if (tokens->redir_in)

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/minishell.h"
+#include "ft_expander.h"
 
 void	ft_expander_reset(char *str, size_t *i)
 {
@@ -86,9 +86,13 @@ void	ft_expander(t_token *tokens, t_data *data)
 	while (tokens)
 	{
 		i = 0;
-		while (tokens->content && tokens->content[i] 
+		while (tokens->content && tokens->content[i]
 			&& ft_strchr(&tokens->content[i], '$'))
+		{
+			if (tokens->type == HERE_DOC)
+				break ;
 			ft_expander2(tokens, &i, data);
+		}
 		tokens = tokens->next;
 	}
 }

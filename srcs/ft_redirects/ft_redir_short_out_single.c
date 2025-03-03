@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_redir_short_out.c                               :+:      :+:    :+:   */
+/*   ft_redir_short_out_single.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 11:41:21 by afogonca          #+#    #+#             */
-/*   Updated: 2025/02/01 13:16:10 by afogonca         ###   ########.fr       */
+/*   Updated: 2025/03/02 12:35:05 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../incs/minishell.h"
+#include "ft_redirects.h"
 
 t_token	*ft_rmv_ros_before(t_token *tokens, t_token *head)
 {
-	t_token *tmp;
+	t_token	*tmp;
 	t_token	*tmp2;
 
 	tmp = head;
@@ -49,14 +49,14 @@ t_token	*ft_skip_to_pipe(t_token *tokens)
 
 t_token	*ft_take_ros_out(t_token *tokens, t_token *tmp)
 {
-	t_token *tmp2;
+	t_token	*tmp2;
 
 	if (!tmp)
 		tokens = ft_skip_to_pipe(tokens);
 	while (tokens && tokens->type != PIPE)
 	{
 		if (tokens->next && (tokens->next->type == REDIRECT_OUT)
-		&& tokens->next->next && tokens->next != tmp)
+			&& tokens->next->next && tokens->next != tmp)
 		{
 			tmp2 = tokens->next;
 			tokens->next = tokens->next->next->next;
@@ -70,10 +70,24 @@ t_token	*ft_take_ros_out(t_token *tokens, t_token *tmp)
 	return (tokens);
 }
 
+int	ft_redir_short_out_single2(t_token *tokens, t_token **tmp, t_token *head)
+{
+	if ((tokens->next->content[0] == '$' && tokens->next->quotes == 0)
+		|| (open(tokens->next->content,
+				O_WRONLY | O_CREAT | O_TRUNC, 0644) == -1
+			&& (access(tokens->next->content, W_OK) == -1)))
+	{
+		(*tmp) = ft_rmv_ros_before(tokens, head);
+		return (1);
+	}
+	(*tmp) = tokens;
+	return (0);
+}
+
 void	ft_redir_short_out_single(t_token *tokens)
 {
 	t_token	*head;
-	t_token *tmp;
+	t_token	*tmp;
 
 	while (tokens)
 	{
@@ -82,15 +96,8 @@ void	ft_redir_short_out_single(t_token *tokens)
 		while (tokens && tokens->type != PIPE)
 		{
 			if (tokens->type == REDIRECT_OUT)
-			{
-				if (open(tokens->next->content, O_WRONLY | O_CREAT | O_TRUNC, 0644) == -1
-					&& (access(tokens->next->content, W_OK) == -1))
-				{
-					tmp = ft_rmv_ros_before(tokens, head);
+				if (ft_redir_short_out_single2(tokens, &tmp, head))
 					break ;
-				}
-				tmp = tokens;
-			}
 			tokens = tokens->next;
 		}
 		tokens = head;
