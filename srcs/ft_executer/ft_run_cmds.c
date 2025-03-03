@@ -20,6 +20,8 @@ void	ft_run_cmds(t_data *data)
 
 	if (!data->bin_tokens->right && !data->bin_tokens->left)
 	{
+		if (ft_handle_builtins(data->bin_tokens, data, 0))
+			return ;
 		if (pipe(fd) == -1)
 			ft_putstr_fd("Bash: Failed creating pipe.\n", 1);
 		else
@@ -63,16 +65,27 @@ char	*ft_execve_get_path(char *cmd, t_data *data)
 	return (NULL);
 }
 
-void	ft_handle_builtins(t_bin_token *tokens, t_data *data, int i)
+int	ft_handle_builtins(t_bin_token *tokens, t_data *data, int i)
 {
-	printf("tokens->args[i]: %s\n", tokens->args[i]);
-	if (ft_strncmp("cd", tokens->args[i], 3) == 0)
-		ft_cd(data, tokens);
-	else if (ft_strncmp("echo", tokens->args[i], 5) == 0)
+	printf("tokens->args[i]: %s\n", tokens->args[0]);
+	if (ft_strcmp("cd", tokens->args[i]) == 0)
+	{
+		ft_cd(data, tokens, 0);
+		return (1);
+	}
+	else if (ft_strcmp("echo", tokens->args[i]) == 0)
 		ft_echo(data, tokens);	
-	else if (ft_strncmp("env", tokens->args[i], 4) == 0)
+	else if (ft_strcmp("env", tokens->args[i]) == 0)
 			ft_print_envp(data);
-	
+	else if (ft_strcmp("export", tokens->args[i]) == 0)
+		ft_export(data, tokens);
+	/*else if (ft_strcmp("unset", tokens->args[i]) == 0)*/
+	/*	ft_unset(data, tokens);*/
+	/*else if (ft_strcmp("pwd", tokens->args[i]) == 0)*/
+	/*	ft_pwd(data);*/
+	/*else if (ft_strcmp("exit", tokens->args[i]) == 0)*/
+	/*	ft_exit(data, tokens);*/
+	return (0);
 }
 
 void	ft_execute_node(t_bin_token *tree, t_data *data)

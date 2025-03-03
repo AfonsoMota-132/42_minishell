@@ -30,7 +30,7 @@ void	ft_create_pipe(t_bin_token *tokens, t_data *data);
 //			ft_run_cmds			//
 void	ft_run_cmds(t_data *data);
 char	*ft_execve_get_path(char *cmd, t_data *data);
-void	ft_handle_builtins(t_bin_token *tokens, t_data *data, int i);
+int		ft_handle_builtins(t_bin_token *tokens, t_data *data, int i);
 void	ft_execute_node(t_bin_token *tree, t_data *data);
 void	ft_execve(t_bin_token *tokens, t_data *data);
 

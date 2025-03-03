@@ -116,6 +116,11 @@ typedef struct s_data
 # endif
 void		ft_print_tokens(t_token *tokens, t_data *data, int tab);
 
+
+
+#include "../srcs/ft_builtins/ft_builtins.h"
+
+
 //		FT_ENVP_LIST		//
 
 t_envp	*ft_new_env_node(char *envp);
@@ -191,7 +196,7 @@ void		ft_expander2(t_token *tokens, \
 void	ft_echo(t_data *data, t_bin_token *token);
 void	ft_print_envp(t_data *data);
 void	ft_builtin_choice(t_data *data, t_bin_token *token);
-int		ft_cd(t_data *data, t_bin_token *token);
+int		ft_cd(t_data *data, t_bin_token *token, int exit);
 int		ft_update_pwd(t_data *data, char *last_path);
 int		ft_go_to_path(t_data *data, int option, char *last_path);
 t_envp	*ft_find_key(t_data *data, char *key);

@@ -28,7 +28,7 @@ void	ft_builtin_choice(t_data *data, t_bin_token *token)
 		if (ft_strncmp(token->args[0], "echo", 5) == 0)
 			ft_echo(data, token);
 		else if (ft_strncmp(token->args[0], "cd", 3) == 0)
-			ft_cd(data, token);
+			ft_cd(data, token, 0);
 		/*else if (ft_strcmp(token->args[0], "pwd") == 0)*/
 		/*	ft_pwd(data, token);*/
 		/*else if (ft_strcmp(token->args[0], "export") == 0)*/

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: palexand <palexand@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/28 08:55:33 by afogonca          #+#    #+#             */
-/*   Updated: 2025/02/24 18:58:45 by palexand         ###   ########.fr       */
+/*   Created: 2025/03/03 23:10:37 by palexand          #+#    #+#             */
+/*   Updated: 2025/03/03 23:10:39 by palexand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

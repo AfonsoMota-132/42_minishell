@@ -31,6 +31,8 @@ BUILTINS = srcs/ft_builtins/ft_echo.c \
 					 srcs/ft_builtins/ft_cd.c \
 					 srcs/ft_builtins/ft_parsing.c\
 					 srcs/ft_builtins/ft_env.c \
+					 srcs/ft_builtins/ft_export.c \
+					 srcs/ft_builtins/ft_export_utils.c \
 
 HEREDOC = srcs/ft_redirects/ft_heredoc/ft_heredoc.c \
 		  srcs/ft_redirects/ft_heredoc/ft_actual_heredoc.c \

@@ -54,7 +54,7 @@ void	ft_add_env(t_data	*data, char *key, char *value)
 {
 	t_envp	*new;
 	t_envp	*tmp;
-	
+
 	tmp = data->envp;
 	new = malloc(sizeof(t_envp));
 	new->key = ft_strdup(key);
@@ -65,7 +65,6 @@ void	ft_add_env(t_data	*data, char *key, char *value)
 	}
 	if (value)
 		new->value = ft_strdup(value);
-	new->value = ft_strdup(value);
 	new->print = true;
 
 	while (!tmp)
@@ -147,7 +146,7 @@ int	ft_go_to_path(t_data *data, int option, char *last_path)
 	return (return_value);
 }
 
-int	ft_cd(t_data *data, t_bin_token *token)
+int	ft_cd(t_data *data, t_bin_token *token, int exit)
 {
 	int		return_value;
 	char	*last_path;
@@ -156,7 +155,7 @@ int	ft_cd(t_data *data, t_bin_token *token)
 	last_path = getcwd(cwd, sizeof(cwd));
 	if (!token->args[1])
 		return(ft_go_to_path(data, 0, last_path));
-	else if (ft_strcmp(token->args[1], "..") == 0)
+	else if (ft_strcmp(token->args[1], "-") == 0)
 		return_value = ft_go_to_path(data, 1, last_path);
 	else
 	{
@@ -171,5 +170,7 @@ int	ft_cd(t_data *data, t_bin_token *token)
 			ft_putstr_fd(": No such file or directory\n", 2);
 		}
 	}
-	return(ft_free(return_value, NULL, data, 0), 0);
+	if (exit == 1)
+		ft_free(return_value, NULL, data, 0);
+	return (return_value);
 }
