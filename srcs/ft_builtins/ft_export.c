@@ -44,7 +44,7 @@ void	ft_print_export(t_data *data)
 {
 	t_envp	*envp;
 
-	envp = data->ft_envp;
+	envp = data->envp;
 	while (envp)
 	{
 		if (envp->key)
@@ -84,11 +84,11 @@ void	ft_sort_envp(t_data *data)
 	int	i;
 	t_envp	*tmp;
 
-	length = ft_size_struct(data->ft_envp);
+	length = ft_size_struct(data->envp);
 	
 	while(length > 0)
 	{
-		tmp = data->ft_envp;
+		tmp = data->envp;
 		i = 0;
 		while (i < length - 1)
 		{

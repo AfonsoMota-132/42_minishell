@@ -18,7 +18,7 @@ int	ft_replace_env(t_data	*data, char *key, char *value)
 	t_envp	*tmp;
 
 	i = 0;
-	tmp = data->ft_envp;
+	tmp = data->envp;
 	while (tmp && ft_strcmp(tmp->key, key) != 0)
 		tmp = tmp->next;
 	if (!tmp)
@@ -57,7 +57,7 @@ void	ft_add_env(t_data	*data, char *key, char *value)
 	t_envp	*new;
 	t_envp	*tmp;
 
-	tmp = data->ft_envp;
+	tmp = data->envp;
 	new = malloc(sizeof(t_envp));
 	new->key = ft_strdup(key);
 	if (!new)
@@ -74,7 +74,7 @@ void	ft_add_env(t_data	*data, char *key, char *value)
 	while (!tmp)
 	{
 		new->next = NULL;
-		data->ft_envp = new;
+		data->envp = new;
 		return ;
 	}
 	while (tmp->next)
@@ -110,7 +110,7 @@ t_envp	*ft_find_key(t_data *data, char *key)
 {
 	t_envp	*envp;
 
-	envp = data->ft_envp;
+	envp = data->envp;
 	while (envp)
 	{
 		if (ft_strcmp(envp->key, key) == 0)

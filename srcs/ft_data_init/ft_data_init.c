@@ -83,7 +83,7 @@ void	ft_envlist_init(t_data *data, char **env)
 	last = NULL;
 	while (env[i])
 	{
-		envp->next = ft_new_env_node(data, env[i]);
+		envp->next = ft_new_env_node(env[i]);
 		envp = envp->next;
 	}
 	data->envp = head;

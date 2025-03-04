@@ -17,7 +17,7 @@ void	ft_print_envp(t_data *data)
 {
 	t_envp	*envp;
 
-	envp = data->ft_envp;
+	envp = data->envp;
 	while (envp)
 	{
 		if (envp->key && envp->value)
