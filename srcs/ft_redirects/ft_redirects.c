@@ -17,9 +17,11 @@ void	ft_free_token(t_token *tokens)
 	t_token	*tmp;	
 
 	tmp = tokens->next;
-	free(tokens->content);
+	if (tokens->content)
+		free(tokens->content);
 	free(tokens);
-	free(tmp->content);
+	if (tmp->content)
+		free(tmp->content);
 	free(tmp);
 }
 

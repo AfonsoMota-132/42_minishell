@@ -26,6 +26,11 @@ int	ft_error_msg_redir_ne(int type, char *redir, char *path)
 		ft_putstr_fd(redir, 2);
 		ft_putstr_fd(" : No such file or directory\n", 2);
 	}
+	else if (type == 2)
+	{
+		ft_putstr_fd(redir, 2);
+		ft_putstr_fd(": ambiguous redirect\n", 2);
+	}
 	return (1);
 }
 
@@ -33,6 +38,8 @@ int	ft_handle_redirects_in_ne(t_bin_token *tokens, char *path)
 {
 	if (tokens->redir_in && tokens->redir_in->type == FILENAME)
 	{
+		if (tokens->redir_in->content[0] == '$' && !tokens->redir_in->quotes)
+			return (ft_error_msg_redir_ne(2, tokens->redir_in->content, path), 1);
 		if (access(tokens->redir_in->content, F_OK) == -1)
 			return (ft_error_msg_redir_ne(1, tokens->redir_in->content, path), 1);
 		if (access(tokens->redir_in->content, R_OK) == -1)
@@ -52,6 +59,8 @@ int	ft_handle_redirects_out_ne(t_bin_token *tokens, char *path)
 {
 	if (tokens->redir_out)
 	{
+		if (tokens->redir_out->content[0] == '$' && !tokens->redir_out->quotes)
+			return (ft_error_msg_redir_ne(2, tokens->redir_out->content, path), 1);
 		if (access(tokens->redir_out->content, F_OK | W_OK) == -1)
 			return (ft_error_msg_redir_ne(0, tokens->redir_out->content, path));
 	}
