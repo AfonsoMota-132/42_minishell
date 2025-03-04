@@ -64,6 +64,19 @@ t_token	*ft_take_rod_out(t_token *tokens, t_token *tmp)
 	return (tokens);
 }
 
+int	ft_redir_short_out_double2(t_token *tokens, t_token **tmp, t_token *head)
+{
+	if ((tokens->next->content[0] == '$' && tokens->next->quotes == 0)
+		|| (open(tokens->next->content, O_WRONLY | O_CREAT, 0644) == -1
+			&& access(tokens->next->content, W_OK) == -1))
+	{
+		(*tmp) = ft_rmv_rod_before(tokens, head);
+		return (1);
+	}
+	(*tmp) = tokens;
+	return (0);
+}
+
 void	ft_redir_short_out_double(t_token *tokens)
 {
 	t_token	*head;
@@ -76,15 +89,8 @@ void	ft_redir_short_out_double(t_token *tokens)
 		while (tokens && tokens->type != PIPE)
 		{
 			if (tokens->type == D_REDIRECT_OUT)
-			{
-				if (open(tokens->next->content, O_WRONLY | O_CREAT, 0644) == -1
-					&& access(tokens->next->content, W_OK) == -1)
-				{
-					tmp = ft_rmv_rod_before(tokens, head);
+				if (ft_redir_short_out_double2(tokens, &tmp, head))
 					break ;
-				}
-				tmp = tokens;
-			}
 			tokens = tokens->next;
 		}
 		tokens = head;

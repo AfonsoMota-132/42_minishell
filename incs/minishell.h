@@ -61,6 +61,7 @@ typedef struct s_token
 	t_token_type	type;
 	char			*content;
 	char			*heredoc;
+	int				quotes;
 	size_t			len;
 	struct s_token	*next;
 	struct s_token	*prev;

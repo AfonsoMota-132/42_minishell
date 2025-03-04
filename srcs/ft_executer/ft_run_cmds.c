@@ -38,11 +38,11 @@ int	ft_run_single_builtins(t_bin_token *tokens, t_data *data)
 	}
 	if (ft_strcmp("export", tokens->args[0]) == 0)
 	{
-		ft_create_pipe(tokens, data);
-		if (data->exit_status != 256)
+		status = ft_handle_redirects_ne(tokens, NULL);
+		if (status == 0)
 			status = ft_export(data, tokens, 0);
 		else
-			status = data->exit_status;
+			data->exit_status = 1;
 	}
 	if (status == -1)
 		return (0);
