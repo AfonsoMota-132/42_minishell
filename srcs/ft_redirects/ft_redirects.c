@@ -6,11 +6,11 @@
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 10:40:09 by afogonca          #+#    #+#             */
-/*   Updated: 2025/02/06 10:39:03 by afogonca         ###   ########.fr       */
+/*   Updated: 2025/03/02 12:35:11 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../incs/minishell.h"
+#include "ft_redirects.h"
 
 void	ft_free_token(t_token *tokens)
 {
@@ -44,6 +44,8 @@ t_token	*ft_pcmdf_first(t_token *tokens)
 			prev = tokens;
 		tokens = tokens->next;
 	}
+	if (!tokens)
+		return (head);
 	return (tokens);
 }
 
@@ -52,6 +54,8 @@ t_token	*ft_put_cmd_first(t_token *tokens)
 	t_token	*head;
 
 	head = ft_pcmdf_first(tokens);
+	if (!head)
+		return (tokens);
 	while (tokens && tokens->type != PIPE)
 		tokens = tokens->next;
 	while (tokens)

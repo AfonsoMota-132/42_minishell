@@ -12,29 +12,10 @@
 
 #include "ft_executer.h"
 
-void	ft_handle_redirects2(t_data *data, t_bin_token *tokens, char *path)
+void	ft_handle_redirects_in(t_data *data, t_bin_token *tokens, char *path)
 {
 	int	fd;
 
-	if (access(tokens->redir_in->heredoc, F_OK) == -1)
-		ft_error_msg_redir(data, 1, tokens->redir_in->heredoc, path);
-	if (access(tokens->redir_in->heredoc, R_OK) == -1)
-		ft_error_msg_redir(data, 0, tokens->redir_in->heredoc, path);
-	fd = open(tokens->redir_in->heredoc, O_RDONLY, 0);
-	dup2(fd, STDIN_FILENO);
-}
-
-void	ft_handle_redirects(t_data *data, t_bin_token *tokens, char *path)
-{
-	int		fd;
-
-	if (tokens->redir_out)
-	{
-		if (access(tokens->redir_out->content, F_OK | W_OK) == -1)
-			ft_error_msg_redir(data, 0, tokens->redir_out->content, path);
-		fd = open(tokens->redir_out->content, O_WRONLY | O_APPEND, 0);
-		dup2(fd, STDOUT_FILENO);
-	}
 	if (tokens->redir_in && tokens->redir_in->type == FILENAME)
 	{
 		if (access(tokens->redir_in->content, F_OK) == -1)
@@ -45,5 +26,39 @@ void	ft_handle_redirects(t_data *data, t_bin_token *tokens, char *path)
 		dup2(fd, STDIN_FILENO);
 	}
 	else if (tokens->redir_in && tokens->redir_in->type == HERE_DOC)
-		ft_handle_redirects2(data, tokens, path);
+	{
+		if (access(tokens->redir_in->heredoc, F_OK) == -1)
+			ft_error_msg_redir(data, 1, tokens->redir_in->heredoc, path);
+		if (access(tokens->redir_in->heredoc, R_OK) == -1)
+			ft_error_msg_redir(data, 0, tokens->redir_in->heredoc, path);
+		fd = open(tokens->redir_in->heredoc, O_RDONLY, 0);
+		dup2(fd, STDIN_FILENO);
+	}
+}
+
+void	ft_handle_redirects_out(t_data *data, t_bin_token *tokens, char *path)
+{
+	int		fd;
+
+	if (tokens->redir_out)
+	{
+		if (access(tokens->redir_out->content, F_OK | W_OK) == -1)
+			ft_error_msg_redir(data, 0, tokens->redir_out->content, path);
+		fd = open(tokens->redir_out->content, O_WRONLY | O_APPEND, 0);
+		dup2(fd, STDOUT_FILENO);
+	}
+}
+
+void	ft_handle_redirects(t_data *data, t_bin_token *tokens, char *path)
+{
+	if (tokens->first_redir == 1)
+	{
+		ft_handle_redirects_in(data, tokens, path);
+		ft_handle_redirects_out(data, tokens, path);
+	}
+	else if (tokens->first_redir == 0)
+	{
+		ft_handle_redirects_out(data, tokens, path);
+		ft_handle_redirects_in(data, tokens, path);
+	}
 }

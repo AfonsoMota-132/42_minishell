@@ -10,36 +10,44 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../incs/minishell.h"
 #include "ft_builtins.h"
 
-void	ft_export(t_data *data, t_bin_token *token)
+int	ft_export(t_data *data, t_bin_token *token, int	exit)
 {
-	
+	int		status;	
 	if (!token->args[1])
 	{
+		if (!exit)
+			return (-1);
 		ft_sort_envp(data);
 		ft_print_export(data);
-		return ;
+		if (exit)
+			ft_free(0, NULL, data, 0);
+		return (0);
 	}
 	if (token->args[1][0] == '-' && token->args[1][1])
 	{
 		ft_putstr_fd("minishell: export: `", STDERR_FILENO);
 		ft_putstr_fd(token->args[1], STDERR_FILENO);
 		ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
-		return ;
+		if (exit)
+			ft_free(1, NULL, data, 0);
+		return (1);
 	}
-	ft_export_loop(data, token);
+	status = ft_export_loop(data, token);
+	if (exit)
+		ft_free(status, NULL, data, 0);
+	return (status);
 }
 
 void	ft_print_export(t_data *data)
 {
 	t_envp	*envp;
 
-	envp = data->envp;
+	envp = data->ft_envp;
 	while (envp)
 	{
-		if (envp->print)
+		if (envp->key)
 		{
 			ft_putstr_fd("declare -x ", STDOUT_FILENO);
 			ft_putstr_fd(envp->key, STDOUT_FILENO);
@@ -76,11 +84,11 @@ void	ft_sort_envp(t_data *data)
 	int	i;
 	t_envp	*tmp;
 
-	length = ft_size_struct(data->envp);
+	length = ft_size_struct(data->ft_envp);
 	
 	while(length > 0)
 	{
-		tmp = data->envp;
+		tmp = data->ft_envp;
 		i = 0;
 		while (i < length - 1)
 		{

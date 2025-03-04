@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/minishell.h"
+#include "ft_tokens.h"
 
 int	ft_quote_len(char const *s)
 {

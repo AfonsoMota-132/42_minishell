@@ -17,10 +17,10 @@ void	ft_print_envp(t_data *data)
 {
 	t_envp	*envp;
 
-	envp = data->envp;
+	envp = data->ft_envp;
 	while (envp)
 	{
-		if (envp->print)
+		if (envp->key && envp->value)
 		{
 			ft_putstr_fd(envp->key, STDOUT_FILENO);
 			ft_putchar_fd('=', STDOUT_FILENO);

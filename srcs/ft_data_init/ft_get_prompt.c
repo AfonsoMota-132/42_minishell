@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/minishell.h"
+#include "ft_data_init.h"
 
-char	*ft_get_path_with_til(char *path, char **dirs,  int	i)
+char	*ft_get_path_with_til(char *path, char **dirs, int i)
 {
 	path = ft_strdup("~");
 	while (dirs[++i])
@@ -29,7 +29,6 @@ char	*ft_get_path_with_til(char *path, char **dirs,  int	i)
 char	*ft_get_path_without_til(char *path, char **dirs, int i)
 {
 	i = -1;
-
 	path = ft_strdup("/");
 	while (dirs[++i])
 	{
@@ -71,6 +70,11 @@ void	ft_prompt_init(t_data *data)
 {
 	if (data->prompt)
 		free(data->prompt);
+	if (data->path)
+	{
+		free(data->path);
+		data->path = ft_get_path(data);
+	}
 	data->prompt = ft_strjoin(data->user, "@");
 	data->prompt = ft_strjoin_gnl(data->prompt, data->hostname);
 	data->prompt = ft_strjoin_gnl(data->prompt, ":");

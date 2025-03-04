@@ -10,26 +10,30 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../incs/minishell.h"
+#include "ft_builtins.h"
 
-int	ft_replace_env(t_data	*data, char *value)
+int	ft_replace_env(t_data	*data, char *key, char *value)
 {
 	int		i;
+	t_envp	*tmp;
 
 	i = 0;
-	while (value[i] != '=')
-		i++;
-	if (value[i] == '=' && value[i + 1] != '\0')
+	tmp = data->ft_envp;
+	while (tmp && ft_strcmp(tmp->key, key) != 0)
+		tmp = tmp->next;
+	if (!tmp)
+		return (0);
+	if (value)
 	{
-		free(data->envp->value);
-		data->envp->value = ft_strdup(value + i + 1);
-		data->envp->print = true;
+		free(tmp->value);
+		tmp->value = ft_strdup(value);
+		tmp->print = true;
 	}
 	else
 	{
-		free(data->envp->value);
-		data->envp->value = NULL;
-		data->envp->print = true;
+		free(tmp->value);
+		tmp->value = NULL;
+		tmp->print = true;
 	}
 	return (1);
 }
@@ -38,16 +42,14 @@ void	ft_change_env(t_data	*data, char *key, char *dir)
 {
 	char	*new_value;
 
-	if (dir)
-		new_value = ft_strjoin(key, dir);
-	else
-		new_value = ft_strdup(key);
+	new_value = ft_strdup(dir);
 	if (!new_value)
 	{
 		ft_putstr_fd("Failed to allocate memory for new_value\n", 2);
 		return ;
 	}
-	ft_replace_env(data, new_value);
+	ft_replace_env(data, key, new_value);
+	free(new_value);
 }
 
 void	ft_add_env(t_data	*data, char *key, char *value)
@@ -55,7 +57,7 @@ void	ft_add_env(t_data	*data, char *key, char *value)
 	t_envp	*new;
 	t_envp	*tmp;
 
-	tmp = data->envp;
+	tmp = data->ft_envp;
 	new = malloc(sizeof(t_envp));
 	new->key = ft_strdup(key);
 	if (!new)
@@ -65,12 +67,14 @@ void	ft_add_env(t_data	*data, char *key, char *value)
 	}
 	if (value)
 		new->value = ft_strdup(value);
+	else
+		new->value = NULL;
 	new->print = true;
 
 	while (!tmp)
 	{
 		new->next = NULL;
-		data->envp = new;
+		data->ft_envp = new;
 		return ;
 	}
 	while (tmp->next)
@@ -89,16 +93,15 @@ int	ft_update_pwd(t_data *data, char *last_path)
 	if (current_pwd == NULL)
 		return (ft_putstr_fd("getcwd error\n", 2), -1);
 	found = ft_find_key(data, "OLDPWD");
-	if (found) {
-		ft_change_env(data, "OLDPWD=", found->value);
-	}
+	if (found)
+		ft_change_env(data, "OLDPWD", found->value);
 	else
-		ft_add_env(data, "OLDPWD=", last_path);
+		ft_add_env(data, "OLDPWD", last_path);
 	found = ft_find_key(data, "PWD");
 	if (found)
-		ft_change_env(data, "PWD=", current_pwd);
+		ft_change_env(data, "PWD", current_pwd);
 	else
-		ft_add_env(data, "PWD=", current_pwd);
+		ft_add_env(data, "PWD", current_pwd);
 	return (1);
 }
 
@@ -107,7 +110,7 @@ t_envp	*ft_find_key(t_data *data, char *key)
 {
 	t_envp	*envp;
 
-	envp = data->envp;
+	envp = data->ft_envp;
 	while (envp)
 	{
 		if (ft_strcmp(envp->key, key) == 0)
@@ -125,13 +128,15 @@ int	ft_go_to_path(t_data *data, int option, char *last_path)
 
 	if (option == 0)
 	{
-		ft_update_pwd(data, last_path);
 		path = ft_getenv("HOME", data);
+		return_value = chdir(path);
+		ft_update_pwd(data, last_path);
 		if (!path)
 		{
 			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
 			return (1);
 		}
+		return (return_value);
 	}
 	if (option == 1)
 	{
@@ -153,14 +158,26 @@ int	ft_cd(t_data *data, t_bin_token *token, int exit)
 	char	cwd[PATH_MAX];
 
 	last_path = getcwd(cwd, sizeof(cwd));
-	if (!token->args[1])
-		return(ft_go_to_path(data, 0, last_path));
+	if (token->args[1] && token->args[2])
+	{
+		ft_putstr_fd("cd : too many arguments\n", 2);
+		if (exit == 1)
+			ft_free(1, NULL, data, 0);
+		return (1);
+	}
+	if (!token->args[1])	
+	{
+		return_value = ft_go_to_path(data, 0, last_path);
+		if (exit == 1)
+			ft_free(return_value, NULL, data, 0);
+		return (return_value);
+	}
 	else if (ft_strcmp(token->args[1], "-") == 0)
 		return_value = ft_go_to_path(data, 1, last_path);
 	else
 	{
-		ft_update_pwd(data, last_path);
 		return_value = chdir(token->args[1]);
+		ft_update_pwd(data, last_path);
 		if (return_value < 0)
 			return_value *= -1;	
 		if (return_value != 0)

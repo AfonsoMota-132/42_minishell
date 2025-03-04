@@ -10,7 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/minishell.h"
+#include "ft_expander.h"
+
+void	ft_check_expander2(t_token *tokens, size_t *i)
+{
+	if (tokens->content[*i] == '\'')
+	{
+		(*i)++;
+		while (tokens->content[(*i)] != '\''
+			&& tokens->content[(*i)] != '\0')
+			(*i)++;
+	}
+}
 
 int	ft_check_expander(t_token *tokens, size_t *i)
 {
@@ -24,49 +35,19 @@ int	ft_check_expander(t_token *tokens, size_t *i)
 		if (tokens->content[*i] == '"')
 		{
 			(*i)++;
-			while (tokens->content[(*i)] != '\0' &&
-				tokens->content[(*i)] != '"')
+			while (tokens->content[(*i)] != '\0'
+				&& tokens->content[(*i)] != '"')
 			{
 				if (tokens->content[(*i)] == '$')
 					return (1);
 				(*i)++;
 			}
 		}
-		if (tokens->content[*i] == '\'')
-		{
-			(*i)++;
-			while (tokens->content[(*i)] != '\''
-				&& tokens->content[(*i)] != '\0')
-				(*i)++;
-		}
+		ft_check_expander2(tokens, i);
 		if (tokens->content[(*i)])
 			(*i)++;
 	}
 	return (0);
-}
-
-char	*ft_expander_replace(char *str, char *env, int start)
-{
-	int		i;
-	int		j;
-	char	*new;
-
-	j = 0;
-	i = start;
-	while (str[i] && str[i] != '$')
-		i++;
-	if (str[i] == '$')
-		i++;
-	while (str[i + j] && str[i + j] != ' '
-		&& str[i + j] != '\t' && str[i + j] != '\n'
-		&& str[i + j] != '$' && str[i + j] != '"'
-		&& str[i + j] != '\'')
-		j++;
-	new = ft_substr(str, 0, i - 1);
-	new = ft_strjoin_gnl(new, env);
-	new = ft_strjoin_gnl(new, &str[i + j]);
-	free(str);
-	return (new);
 }
 
 void	ft_expand_quest(t_token *tokens, t_data *data
@@ -76,23 +57,18 @@ void	ft_expand_quest(t_token *tokens, t_data *data
 	char	*new;
 	char	*str;
 	int		i;
-	int		j;
 
 	str = tokens->content;
 	if (env[0] == '?')
 	{
 		i = (*start);
-		j = 0;
 		while (tokens->content[i] && tokens->content[i] != '$')
 			i++;
 		if (str[i] == '$')
 			i++;
-		while (str[i + j] && str[i + j] != ' ' && str[i + j] != '\t'
-			&& str[i + j] != '\n' && str[i + j] != '$'
-			&& str[i + j] != '"' && str[i + j] != '\'' && ++j);
 		tmp = ft_itoa(data->exit_status);
 		new = ft_substr(tokens->content, 0, i - 1);
-		new = ft_strjoin_gnl(ft_strjoin_gnl(new, tmp), &tokens->content[i + j]);
+		new = ft_strjoin_gnl(ft_strjoin_gnl(new, tmp), &tokens->content[i + 1]);
 		free(tmp);
 		free(tokens->content);
 		tokens->content = new;
@@ -100,27 +76,16 @@ void	ft_expand_quest(t_token *tokens, t_data *data
 	}
 }
 
-char	*ft_expander_replace_null(char *str, int start)
+void	ft_expander3(t_token *tokens, size_t *i)
 {
-	int		i;
-	char	*new;
-
-	i = start;
-	while (str[i] && str[i] != '$')
-		i++;
-	if (str[i] == '$')
-		i++;
-	if (str[i + 1] && !ft_isdigit(str[i + 1]))
-		while (str[i] && str[i] != ' '
-			&& str[i] != '\t' && str[i] != '\n'
-			&& str[i] != '$' && str[i] != '"'
-			&& str[i] != '\'')
-			i++;
-	new = NULL;
-	if (str[i])
-		new = ft_strjoin_gnl(new, &str[i]);
-	free(str);
-	return (new);
+	if (tokens->content[(*i) + 1] && tokens->content[(*i) + 1] != ' '
+		&& tokens->content[(*i) + 1] != '"')
+	{
+		tokens->content = ft_expander_replace_null(tokens->content, *i);
+		(*i) = 0;
+	}
+	else if (tokens->content[(*i) + 1])
+		(*i)++;
 }
 
 void	ft_expander2(t_token *tokens, \
@@ -141,13 +106,10 @@ void	ft_expander2(t_token *tokens, \
 			tokens->content = ft_expander_replace(tokens->content, \
 									ft_getenv(env, data), i++);
 			ft_expander_reset(tokens->content, &i);
+			ft_expander2(tokens, start, data);
 		}
 		else if (ft_strchr(tokens->content, '$') != NULL)
-		{
-			if (tokens->content[i + 1] && tokens->content[i + 1] != ' ')
-				tokens->content = ft_expander_replace_null(tokens->content, i);
-			i = 0;
-		}
+			ft_expander3(tokens, &i);
 		free(env);
 	}
 	(*start) = i;

@@ -29,29 +29,44 @@ int ft_check_key(char *key)
 	return (1);
 }
 
-void ft_export_loop(t_data *data, t_bin_token *token)
+int	ft_export_loop(t_data *data, t_bin_token *token)
 {
 	int i;
+	int		status;
+	size_t tmp;
+	char	*key;
+	char	*value;
 	
 	i = 0;
+	status = 0;
 	while (token->args[++i])
 	{
-		if (ft_check_key(token->args[i]))
+		tmp = ft_strchr_len(token->args[i], '=');
+		key = ft_substr(token->args[i], 0, tmp);
+		if (tmp != ft_strlen(token->args[i]))
+			value = ft_substr(token->args[i], ft_strchr_len(token->args[i], '=') + 1, ft_strlen(token->args[i]));
+		else
+			value = NULL;
+		if (ft_check_key(key))
 		{
-			if (ft_find_key(data, token->args[i]))
+			if (ft_find_key(data, key))
 			{
-				printf("found key\n data->envp->key: %s\n", data->envp->key);
-				printf("token->args[i + 1]: %s\n", token->args[i + 1]);
-				ft_replace_env(data, token->args[i + 1]);
+				ft_replace_env(data, key, value);
 			}
 			else
-				ft_add_env(data, token->args[i], NULL);
+				ft_add_env(data, key, value);
 		}
 		else
 		{
 			ft_putstr_fd("minishell: export: `", STDERR_FILENO);
 			ft_putstr_fd(token->args[i], STDERR_FILENO);
 			ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
+			status = 1;
 		}
+		if (key)
+			free(key);
+		if (value)
+			free(value); 
 	}
+	return (status);
 }

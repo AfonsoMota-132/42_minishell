@@ -6,34 +6,58 @@
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 05:56:27 by afogonca          #+#    #+#             */
-/*   Updated: 2025/02/24 05:58:17 by afogonca         ###   ########.fr       */
+/*   Updated: 2025/02/28 11:40:26 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_executer.h"
+	
+int	ft_handle_redirects_ne(t_bin_token *tokens, char *path);
+int	ft_run_single_builtins(t_bin_token *tokens, t_data *data)
+{
+	int	status;
+
+	status = -1;
+	if (!tokens->args[0])
+		return (0);
+	if (ft_strcmp("exit", tokens->args[0]) == 0)
+	{
+		status = ft_handle_redirects_ne(tokens, NULL);
+		if (status == 0)
+			status = ft_exit(data, tokens, 0);
+		else
+			data->exit_status = 1;
+	}
+	if (ft_strcmp("cd", tokens->args[0]) == 0)
+	{
+		status = ft_handle_redirects_ne(tokens, NULL);
+		if (status == 0)
+			status = ft_cd(data, tokens, 0);
+		else
+			data->exit_status = 1;
+	}
+	if (ft_strcmp("export", tokens->args[0]) == 0)
+	{
+		ft_create_pipe(tokens, data);
+		if (data->exit_status != 256)
+			status = ft_export(data, tokens, 0);
+		else
+			status = data->exit_status;
+	}
+	if (status == -1)
+		return (0);
+	data->exit_status = status;
+	return (1);
+}
 
 void	ft_run_cmds(t_data *data)
 {
-	int	status;
-	int	child_pid;
-	int	fd[2];
-
 	if (!data->bin_tokens->right && !data->bin_tokens->left)
 	{
-		if (ft_handle_builtins(data->bin_tokens, data, 0))
+		if (ft_run_single_builtins(data->bin_tokens, data))
 			return ;
-		if (pipe(fd) == -1)
-			ft_putstr_fd("Bash: Failed creating pipe.\n", 1);
-		else
-		{
-			child_pid = fork();
-			if (child_pid == 0)
-				ft_execve(data->bin_tokens, data);
-			waitpid(-1, &status, 0);
-			data->exit_status = WEXITSTATUS(status);
-			close(fd[0]);
-			close(fd[1]);
-		}
+		ft_create_pipe(data->bin_tokens, data);
+		return ;
 	}
 	else
 		ft_create_pipe(data->bin_tokens, data);
@@ -65,38 +89,39 @@ char	*ft_execve_get_path(char *cmd, t_data *data)
 	return (NULL);
 }
 
-int	ft_handle_builtins(t_bin_token *tokens, t_data *data, int i)
+int	ft_handle_builtins(t_bin_token *tokens, t_data *data, int i, int exit)
 {
-	printf("tokens->args[i]: %s\n", tokens->args[0]);
-	if (ft_strcmp("cd", tokens->args[i]) == 0)
+	int	status;
+
+	status = 0;
+	if (!tokens->args[i])
+		return (status);
+	if (ft_strcmp("echo", tokens->args[0]) == 0)
+		status = ft_echo(data, tokens, exit);
+	if (ft_strcmp("pwd", tokens->args[0]) == 0)
+		status = ft_pwd(data, tokens, exit);
+	if (ft_strcmp("exit", tokens->args[0]) == 0)
+		status = ft_exit(data, tokens, exit);
+	if (ft_strcmp("export", tokens->args[0]) == 0)
+		status = ft_export(data, tokens, 1);
+	if (ft_strcmp("env", tokens->args[0]) == 0)
 	{
-		ft_cd(data, tokens, 0);
-		return (1);
+		ft_print_envp(data);
+		ft_free(0, NULL, data, 0);
 	}
-	else if (ft_strcmp("echo", tokens->args[i]) == 0)
-		ft_echo(data, tokens);	
-	else if (ft_strcmp("env", tokens->args[i]) == 0)
-			ft_print_envp(data);
-	else if (ft_strcmp("export", tokens->args[i]) == 0)
-		ft_export(data, tokens);
-	/*else if (ft_strcmp("unset", tokens->args[i]) == 0)*/
-	/*	ft_unset(data, tokens);*/
-	/*else if (ft_strcmp("pwd", tokens->args[i]) == 0)*/
-	/*	ft_pwd(data);*/
-	/*else if (ft_strcmp("exit", tokens->args[i]) == 0)*/
-	/*	ft_exit(data, tokens);*/
-	return (0);
+	return (status);
 }
 
-void	ft_execute_node(t_bin_token *tree, t_data *data)
+void	ft_execute_node(t_bin_token *tokens, t_data *data)
 {
 	pid_t	pid;
 
 	pid = fork();
 	if (pid == 0)
 	{
-		// handle builtins
-		ft_execve(tree, data);
+		ft_handle_redirects(data, tokens, NULL);
+		ft_handle_builtins(tokens, data, 0, 1);
+		ft_execve(tokens, data);
 	}
 }
 
@@ -112,16 +137,17 @@ char	**ft_envp_list2array(t_envp *env)
 		return (NULL);
 	while (tmp && ++i)
 		tmp = tmp->next;
-	array = malloc(sizeof(char *) * i);
-	i = -1;
+	array = ft_calloc(sizeof(char *), i + 1);
+	i = 0;
 	tmp = env;
 	while (tmp)
 	{
-		array[++i] = ft_strdup(tmp->key);
+		array[i] = ft_strdup(tmp->key);
 		if (tmp->value)
-			array[i] = ft_strjoin_gnl(ft_strjoin_gnl(array[i]
-						, "="), tmp->value);
+			array[i] = ft_strjoin_gnl(ft_strjoin_gnl(array[i],
+						"="), tmp->value);
 		tmp = tmp->next;
+		i++;
 	}
 	array[i] = NULL;
 	return (array);
@@ -134,22 +160,22 @@ void	ft_execve(t_bin_token *tokens, t_data *data)
 	int		i;
 
 	i = 0;
+	ft_handle_redirects(data, tokens, NULL);
 	while (!tokens->args[i] && i < tokens->nbr_args)
 		i++;
 	if (!tokens->args[i])
-		ft_free(1, NULL, data, 0);
-	ft_handle_builtins(tokens,data, i);
+		ft_free(0, NULL, data, 0);
+	ft_handle_builtins(tokens, data, i, 1);
 	path = ft_execve_get_path(tokens->args[i], data);
 	if (!path && tokens->args[i])
 		path = ft_strdup(tokens->args[i]);
-	ft_handle_redirects(data, tokens, path);
 	if (path)
 	{
 		envp = ft_envp_list2array(data->envp);
 		printf("path: %s\n", path);
 		i = execve(path, tokens->args, envp);
 		if (i == -1)
-			ft_command_not_found(data, path);
+			ft_command_not_found(data, path, envp);
 	}
 	if (path)
 		free(path);
