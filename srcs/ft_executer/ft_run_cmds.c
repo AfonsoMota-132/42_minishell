@@ -14,14 +14,27 @@
 
 int	ft_run_single_builtins(t_bin_token *tokens, t_data *data)
 {
+	int	status;
+
+	status = -1;
 	if (!tokens->args[0])
 		return (0);
 	if (ft_strcmp("exit", tokens->args[0]) == 0)
 	{
-		data->exit_status = ft_exit(data, tokens, 0);
-		return (1);
+		status = ft_exit(data, tokens, 0);
 	}
-	return (0);
+	if (ft_strcmp("cd", tokens->args[0]) == 0)
+	{
+		status = ft_cd(data, tokens, 0);
+	}
+	if (ft_strcmp("export", tokens->args[0]) == 0)
+	{
+		status = ft_export(data, tokens, 0);
+	}
+	if (status == -1)
+		return (0);
+	data->exit_status = status;
+	return (1);
 }
 
 void	ft_run_cmds(t_data *data)
@@ -76,6 +89,13 @@ int	ft_handle_builtins(t_bin_token *tokens, t_data *data, int i, int exit)
 		status = ft_pwd(data, tokens, exit);
 	if (ft_strcmp("exit", tokens->args[0]) == 0)
 		status = ft_exit(data, tokens, exit);
+	if (ft_strcmp("export", tokens->args[0]) == 0)
+		status = ft_export(data, tokens, 1);
+	if (ft_strcmp("env", tokens->args[0]) == 0)
+	{
+		ft_print_envp(data);
+		ft_free(0, NULL, data, 0);
+	}
 	return (status);
 }
 

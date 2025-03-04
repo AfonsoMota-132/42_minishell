@@ -88,7 +88,6 @@ void	ft_envlist_init(t_data *data, char **env)
 	}
 	data->ft_envp = head;
 }
-
 t_data	*ft_data_init(char **envp)
 {
 	t_data	*data;
@@ -103,16 +102,15 @@ t_data	*ft_data_init(char **envp)
 	data->ft_envp = NULL;
 	data->user = NULL;
 	data->exit_status = 0;
+	ft_envlist_init(data, envp);
 	data->user = getenv("USER");
+	if (!data->user)
+		data->user = ft_strdup("unkown");
 	data->hostname = ft_get_hostname();
+	if (!data->hostname)
+		data->hostname = ft_strdup("unkown");
 	data->path = ft_get_path(data);
-	if (data->user && data->path && data->hostname)
-	{
-		ft_envlist_init(data, envp);
-		ft_prompt_init(data);
-	}
-	else
-		data->prompt = ft_strdup("minishell(prompt not found😡):");
+	ft_prompt_init(data);
 	data->bin_tokens = NULL;
 	data->heredoc_path = ft_heredoc_path(data);
 	return (data);

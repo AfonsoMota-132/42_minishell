@@ -56,7 +56,7 @@ void	ft_expand_quest(t_token *tokens, t_data *data
 	char	*tmp;
 	char	*new;
 	char	*str;
-	size_t	i;
+	int		i;
 
 	str = tokens->content;
 	if (env[0] == '?')
@@ -72,7 +72,7 @@ void	ft_expand_quest(t_token *tokens, t_data *data
 		free(tmp);
 		free(tokens->content);
 		tokens->content = new;
-		ft_expander_reset(tokens->content, &i);
+		ft_expander2(tokens, start, data);
 	}
 }
 
@@ -81,13 +81,8 @@ void	ft_expander3(t_token *tokens, size_t *i)
 	if (tokens->content[(*i) + 1] && tokens->content[(*i) + 1] != ' '
 		&& tokens->content[(*i) + 1] != '"')
 	{
-		if (tokens->type == FILENAME && tokens->content[0] == '$')
-			(*i)++;
-		else
-		{
-			tokens->content = ft_expander_replace_null(tokens->content, *i);
-			(*i) = 0;
-		}
+		tokens->content = ft_expander_replace_null(tokens->content, *i);
+		(*i) = 0;
 	}
 	else if (tokens->content[(*i) + 1])
 		(*i)++;
@@ -111,6 +106,7 @@ void	ft_expander2(t_token *tokens, \
 			tokens->content = ft_expander_replace(tokens->content, \
 									ft_getenv(env, data), i++);
 			ft_expander_reset(tokens->content, &i);
+			ft_expander2(tokens, start, data);
 		}
 		else if (ft_strchr(tokens->content, '$') != NULL)
 			ft_expander3(tokens, &i);

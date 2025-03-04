@@ -6,11 +6,11 @@
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 08:52:19 by afogonca          #+#    #+#             */
-/*   Updated: 2025/03/02 12:28:09 by afogonca         ###   ########.fr       */
+/*   Updated: 2025/03/02 12:34:40 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../incs/minishell.h"
+#include "ft_redirects.h"
 
 t_token	*ft_rmv_ris_before(t_token *tokens, t_token *head)
 {
@@ -63,19 +63,6 @@ t_token	*ft_take_ris_out(t_token *tokens, t_token *tmp)
 	return (tokens);
 }
 
-int	ft_redir_short_in_single2(t_token *tokens, t_token **tmp, t_token *head)
-{
-	if (access(tokens->next->content, F_OK) == -1
-		|| access(tokens->next->content, R_OK) == -1
-		|| (tokens->next->content[0] == '$' && tokens->next->quotes == 0))
-	{
-		(*tmp) = ft_rmv_ris_before(tokens, head);
-		return (1);
-	}
-	(*tmp) = tokens;
-	return (0);
-}
-
 void	ft_redir_short_in_single(t_token *tokens)
 {
 	t_token	*head;
@@ -88,8 +75,15 @@ void	ft_redir_short_in_single(t_token *tokens)
 		while (tokens && tokens->type != PIPE)
 		{
 			if (tokens->type == REDIRECT_IN)
-				if (ft_redir_short_in_single2(tokens, &tmp, head))
+			{
+				if (access(tokens->next->content, F_OK) == -1
+					|| access(tokens->next->content, R_OK) == -1)
+				{
+					tmp = ft_rmv_ris_before(tokens, head);
 					break ;
+				}
+				tmp = tokens;
+			}
 			tokens = tokens->next;
 		}
 		tokens = head;

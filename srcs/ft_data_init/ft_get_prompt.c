@@ -70,6 +70,11 @@ void	ft_prompt_init(t_data *data)
 {
 	if (data->prompt)
 		free(data->prompt);
+	if (data->path)
+	{
+		free(data->path);
+		data->path = ft_get_path(data);
+	}
 	data->prompt = ft_strjoin(data->user, "@");
 	data->prompt = ft_strjoin_gnl(data->prompt, data->hostname);
 	data->prompt = ft_strjoin_gnl(data->prompt, ":");

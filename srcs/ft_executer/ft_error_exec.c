@@ -20,7 +20,7 @@ void	ft_command_not_found2(t_data *data, char *path)
 		ft_putstr_fd(path, 2);
 		ft_putstr_fd(" : No such file or directory\n", 2);
 	}
-	if (access(path, X_OK) == -1 && (path[0] == '/' || path [0] == '~'
+	else if (access(path, X_OK) == -1 && (path[0] == '/' || path [0] == '~'
 			|| (path[0] == '.' && path[1] == '/')))
 	{
 		ft_putstr_fd(path, 2);
@@ -28,7 +28,7 @@ void	ft_command_not_found2(t_data *data, char *path)
 		free(path);
 		ft_free(126, NULL, data, 1);
 	}
-	if (ft_strlen(path) == 0)
+	else if (ft_strlen(path) == 0)
 	{
 		ft_putstr_fd("\'\' : command not found\n", 2);
 	}
@@ -77,11 +77,6 @@ void	ft_error_msg_redir(t_data *data, int type, char *redir, char *path)
 	{
 		ft_putstr_fd(redir, 2);
 		ft_putstr_fd(" : No such file or directory\n", 2);
-	}
-	else if (type == 2)
-	{
-		ft_putstr_fd(redir, 2);
-		ft_putstr_fd(": ambiguous redirect\n", 2);
 	}
 	ft_free(1, NULL, data, 0);
 }

@@ -30,9 +30,9 @@ t_token	*ft_take_ro_out(t_token *head, t_token *tokens, int i)
 			ft_free_token(tmp);
 			break ;
 		}
-		else if (tokens && (tokens->next->type == D_REDIRECT_OUT
+		else if (tokens->next && (tokens->next->type == D_REDIRECT_OUT
 				|| tokens->next->type == REDIRECT_OUT)
-			&& tokens->next->next && !(++i))
+			&& tokens->next->next && !(--i))
 			tokens = tokens->next;
 		else
 			tokens = tokens->next;
@@ -62,8 +62,7 @@ int	ft_verify_redir_short(t_token *tokens)
 
 int	ft_verify_access_out(t_token *tokens)
 {
-	if (access(tokens->next->content, W_OK) == -1
-		|| tokens->next->content[0] == '$')
+	if (access(tokens->next->content, W_OK) == -1)
 		return (0);
 	return (1);
 }

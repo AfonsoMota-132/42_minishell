@@ -98,18 +98,13 @@ void	ft_rmv_quotes(t_token *tokens)
 			ft_empty_quotes(tokens, i);
 			if (ft_strlen(tokens->content) == 0)
 				break ;
-			if (tokens->content[i] != '\'' && tokens->content[i] != '"')
+			if (tokens->content[i] != '\''
+				&& tokens->content[i] != '"')
 				i++;
 			if (tokens->content[i] == '"')
-			{
-				tokens->quotes = 1;
 				tokens->content = ft_rmv_double_quotes(tokens->content, &i);
-			}
 			if (tokens->content[i] == '\'')
-			{
-				tokens->quotes = 2;
 				tokens->content = ft_rmv_single_quotes(tokens->content, &i);
-			}
 		}
 		tokens = tokens->next;
 	}

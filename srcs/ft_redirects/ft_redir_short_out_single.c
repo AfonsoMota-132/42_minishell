@@ -70,20 +70,6 @@ t_token	*ft_take_ros_out(t_token *tokens, t_token *tmp)
 	return (tokens);
 }
 
-int	ft_redir_short_out_single2(t_token *tokens, t_token **tmp, t_token *head)
-{
-	if ((tokens->next->content[0] == '$' && tokens->next->quotes == 0)
-		|| (open(tokens->next->content,
-				O_WRONLY | O_CREAT | O_TRUNC, 0644) == -1
-			&& (access(tokens->next->content, W_OK) == -1)))
-	{
-		(*tmp) = ft_rmv_ros_before(tokens, head);
-		return (1);
-	}
-	(*tmp) = tokens;
-	return (0);
-}
-
 void	ft_redir_short_out_single(t_token *tokens)
 {
 	t_token	*head;
@@ -96,8 +82,16 @@ void	ft_redir_short_out_single(t_token *tokens)
 		while (tokens && tokens->type != PIPE)
 		{
 			if (tokens->type == REDIRECT_OUT)
-				if (ft_redir_short_out_single2(tokens, &tmp, head))
+			{
+				if (open(tokens->next->content,
+						O_WRONLY | O_CREAT | O_TRUNC, 0644) == -1
+					&& (access(tokens->next->content, W_OK) == -1))
+				{
+					tmp = ft_rmv_ros_before(tokens, head);
 					break ;
+				}
+				tmp = tokens;
+			}
 			tokens = tokens->next;
 		}
 		tokens = head;
