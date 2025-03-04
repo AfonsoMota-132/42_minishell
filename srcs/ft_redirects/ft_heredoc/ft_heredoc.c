@@ -52,17 +52,13 @@ void	ft_heredoc_child_process(t_data *data, t_token *tokens, t_token *tmp)
 		tmp = ft_verify_heredoc_is_last(tokens);
 		while (tokens && tokens->type != PIPE)
 		{
-			if (tokens && tokens->type == D_REDIRECT_IN)
+			if ((tmp && tmp == tokens)
+				|| (tokens && tokens->type == D_REDIRECT_IN))
 			{
-				if (tmp && tokens == tmp)
-				{
+				if (tokens->next && tokens->next->heredoc)
 					ft_actual_heredoc(tokens, data);
-				}
 				else
-				{
-					ft_pseudo_heredoc(tokens);
-					continue ;
-				}
+					ft_pseudo_heredoc(tokens, data);
 			}
 			if (tokens)
 				tokens = tokens->next;

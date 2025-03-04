@@ -11,7 +11,8 @@
 /* ************************************************************************** */
 
 #include "ft_executer.h"
-
+	
+int	ft_handle_redirects_ne(t_bin_token *tokens, char *path);
 int	ft_run_single_builtins(t_bin_token *tokens, t_data *data)
 {
 	int	status;
@@ -21,15 +22,27 @@ int	ft_run_single_builtins(t_bin_token *tokens, t_data *data)
 		return (0);
 	if (ft_strcmp("exit", tokens->args[0]) == 0)
 	{
-		status = ft_exit(data, tokens, 0);
+		status = ft_handle_redirects_ne(tokens, NULL);
+		if (status == 0)
+			status = ft_exit(data, tokens, 0);
+		else
+			data->exit_status = 1;
 	}
 	if (ft_strcmp("cd", tokens->args[0]) == 0)
 	{
-		status = ft_cd(data, tokens, 0);
+		status = ft_handle_redirects_ne(tokens, NULL);
+		if (status == 0)
+			status = ft_cd(data, tokens, 0);
+		else
+			data->exit_status = 1;
 	}
 	if (ft_strcmp("export", tokens->args[0]) == 0)
 	{
-		status = ft_export(data, tokens, 0);
+		ft_create_pipe(tokens, data);
+		if (data->exit_status != 256)
+			status = ft_export(data, tokens, 0);
+		else
+			status = data->exit_status;
 	}
 	if (status == -1)
 		return (0);

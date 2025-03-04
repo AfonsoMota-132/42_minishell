@@ -94,9 +94,8 @@ void	ft_actual_heredoc_loop(t_token *tokens, t_data *data
 			close (fd);
 			ft_free(130, NULL, data, 1);
 		}
-		if (str && !ft_strncmp(str->content,
-				tokens->next->content,
-				ft_strlen(tokens->next->content) + 1))
+		if (str && !ft_strcmp(str->content,
+				tokens->next->content))
 			break ;
 		ft_expander(str, data);
 		ft_putstr_fd(str->content, fd);

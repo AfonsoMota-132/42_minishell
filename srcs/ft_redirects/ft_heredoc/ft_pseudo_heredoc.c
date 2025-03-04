@@ -12,6 +12,8 @@
 
 #include "ft_heredoc.h"
 
+extern	int	g_signal_received;
+
 void	ft_del_pseudo_heredocs(t_token *tokens)
 {
 	t_token	*tmp2;
@@ -30,23 +32,38 @@ void	ft_del_pseudo_heredocs(t_token *tokens)
 	}
 }
 
-void	ft_pseudo_heredoc(t_token *tokens)
+void	ft_pseudo_heredoc_loop(t_token *tokens, t_data *data, t_token *str)
 {
-	char	*str;
-	t_token	*tmp;
-
 	while (1)
 	{
-		str = readline("heredoc>");
-		if ((!str) || (str && !ft_strncmp(str, tokens->next->next->content,
-					ft_strlen(tokens->next->next->content) + 1)))
+		str->content = readline("heredoc>");
+		if (!str->content && g_signal_received != 130)
 			break ;
-		free(str);
-		str = NULL;
+		if (!str->content && g_signal_received == 130)
+		{
+			if (str)
+				free(str);
+			ft_free(130, NULL, data, 1);
+		}
+		if (str && !ft_strcmp(str->content,
+				tokens->next->content))
+			break ;
+		if (str->content)
+			free(str->content);
+		str->content = NULL;
 	}
-	if (str)
-		free(str);
-	tmp = tokens->next;
-	tokens->next = tokens->next->next->next;
-	ft_free_token(tmp);
+	if (str->content)
+		free(str->content);
+}
+
+void	ft_pseudo_heredoc(t_token *tokens, t_data *data)
+{
+	t_token	*str;
+
+	str = malloc(sizeof(t_token));
+	str->content = NULL;
+	str->type = CMD;
+	str->next = NULL;
+	ft_pseudo_heredoc_loop(tokens, data, str);
+	free(str);
 }
