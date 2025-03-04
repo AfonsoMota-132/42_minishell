@@ -83,7 +83,20 @@ void	ft_envlist_init(t_data *data, char **env)
 	last = NULL;
 	while (env[i])
 	{
-		envp->next = ft_new_env_node(env[i]);
+		envp = ft_new_env_node(env[i++]);
+		if (!envp) 
+		{
+			perror("Failed to allocate memory for envp");
+			//free
+			//data->envp = NULL;
+			exit(EXIT_FAILURE);
+		}
+		if (!head)
+			head = envp;
+		else
+			last->next = envp;
+		last = envp;
+		envp->next = ft_new_env_node(data, env[i]);
 		envp = envp->next;
 	}
 	data->envp = head;

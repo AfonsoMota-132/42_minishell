@@ -165,7 +165,6 @@ void	ft_loop(t_data *data)
 			continue ;
 		ft_loop2(data);
 	}
-
 }
 
 int	main(int ac, char **av, char **envp)
