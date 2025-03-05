@@ -6,7 +6,7 @@
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 12:59:45 by afogonca          #+#    #+#             */
-/*   Updated: 2025/02/24 19:48:01 by palexand         ###   ########.fr       */
+/*   Updated: 2025/02/23 13:02:54 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdlib.h>
-# include <stdbool.h>
 # include <unistd.h>
 # include <termios.h>
 # include <fcntl.h>
@@ -104,13 +103,12 @@ typedef struct s_data
 	char		*command;
 	char		*heredoc_path;
 	char		**args;
-	char		**ft_envp; // we use this one in execve;
+	t_envp	*envp;
 	char		*path;
 	char		*user;
 	char		*hostname;
 	char		*prompt;
 	int			exit_status;
-	t_envp	*envp;
 }	t_data;
 
 # include "../srcs/ft_executer/ft_executer.h"

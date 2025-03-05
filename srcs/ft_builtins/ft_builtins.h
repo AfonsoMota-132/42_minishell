@@ -21,6 +21,7 @@ int	ft_echo(t_data *data, t_bin_token *token, int exit);
 int	ft_pwd(t_data *data, t_bin_token *tokens, int exit);
 int	ft_exit(t_data *data, t_bin_token *tokens, int exit);
 
+int	ft_unset(t_data *data, t_bin_token *token, bool exit_nbr);
 
 int		ft_cd(t_data *data, t_bin_token *token, int exit);
 t_envp	*ft_find_key(t_data *data, char *key);
@@ -35,4 +36,5 @@ int		ft_replace_env(t_data	*data, char *key, char *value);
 void	ft_change_env(t_data	*data, char *key, char *dir);
 void	ft_add_env(t_data	*data, char *key, char *value);
 void	ft_print_envp(t_data *data);
+bool	ft_unsetenv(t_data *data, char *token);
 #endif

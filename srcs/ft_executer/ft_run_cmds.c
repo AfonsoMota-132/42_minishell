@@ -44,6 +44,15 @@ int	ft_run_single_builtins(t_bin_token *tokens, t_data *data)
 		else
 			data->exit_status = 1;
 	}
+	if (ft_strcmp("unset", tokens->args[0]) == 0)
+	{
+		status = ft_handle_redirects_ne(tokens, NULL);
+		if (status == 0)
+			status = ft_unset(data, tokens, 0);
+		else
+			data->exit_status = 1;
+	}
+
 	if (status == -1)
 		return (0);
 	data->exit_status = status;
