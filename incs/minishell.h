@@ -126,6 +126,7 @@ typedef struct s_data
 # include "../srcs/ft_data_init/ft_data_init.h"
 # include "../srcs/ft_free/ft_free.h"
 # include "../srcs/ft_tokens/ft_tokens.h"
+# include "../srcs/ft_wildcards/ft_wildcards.h"
 
 void		ft_print_tokens(t_token *tokens, t_data *data, int tab);
 

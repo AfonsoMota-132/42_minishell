@@ -27,5 +27,6 @@ void	ft_replace_node(t_token **head, t_token *target, t_token *new_nodes);
 
 void	ft_tokenadd_back(t_token **token, t_token *new_token);
 t_token	*ft_token_new(char *str);
+int	ft_wildcards(t_data *data);
 
 #endif

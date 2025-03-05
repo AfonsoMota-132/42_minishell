@@ -92,6 +92,7 @@ void treeprint(t_bin_token *cur, int depth)
     treeprint(cur->left, depth + 1);
     treeprint(cur->right, depth + 1);
 }
+
 char	**ft_command_init(t_data *data)
 {
 	char	*command_in;
@@ -136,10 +137,8 @@ void	ft_add_quotes_to_files(t_token *tokens)
 	}
 }
 
-void	ft_wildcards(t_data *data);
 void	ft_loop2(t_data *data)
 {
-	ft_wildcards(data);
 	if (data->bin_tokens)
 		ft_free_tree(data->bin_tokens, 1);
 	data->bin_tokens = ft_bin_tokens(data);
@@ -249,7 +248,9 @@ void	ft_loop(t_data *data)
 				data->tokens_end = NULL;
 			if (run == 1)
 			{
-				if (ft_syntax_tokens(data->tokens) || ft_redirects(data->tokens, &data))
+				if (ft_syntax_tokens(data->tokens)
+					|| ft_wildcards(data)
+					|| ft_redirects(data->tokens, &data))
 				{
 					data->exit_status = 2;
 				if (!data->tokens_start)
