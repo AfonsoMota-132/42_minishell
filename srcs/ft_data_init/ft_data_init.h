@@ -32,7 +32,7 @@ void	ft_prompt_init(t_data *data);
 
 char	*ft_get_hostname(void);
 char	*ft_heredoc_path(t_data *data);
-t_envp	*ft_new_env_node(char *envp);
+t_envp	*ft_new_env_node(t_data *data, char *envp);
 void	ft_envlist_init(t_data *data, char **env);
 t_data	*ft_data_init(char **envp);
 
