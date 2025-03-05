@@ -65,7 +65,11 @@ DATA_INIT = srcs/ft_data_init/ft_data_init.c \
 
 FREE = srcs/ft_free/ft_free.c
 
-WILDCARDS = srcs/ft_wildcards/ft_wildcards.c
+WILDCARDS = srcs/ft_wildcards/ft_wildcards.c \
+			srcs/ft_wildcards/ft_wildcards_end.c \
+			srcs/ft_wildcards/ft_wildcards_mid.c \
+			srcs/ft_wildcards/ft_wildcards_begin.c \
+			srcs/ft_wildcards/ft_wildcards_utils.c
 
 TOKENS = srcs/ft_tokens/ft_split_ms.c \
 		srcs/ft_tokens/ft_tokens.c

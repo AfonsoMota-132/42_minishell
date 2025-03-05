@@ -67,7 +67,6 @@ typedef struct s_token
 	int				quotes;
 	size_t			len;
 	struct s_token	*next;
-	struct s_token	*prev;
 }	t_token;
 
 typedef struct s_bin_token

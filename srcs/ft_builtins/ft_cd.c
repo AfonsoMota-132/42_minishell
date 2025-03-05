@@ -14,10 +14,8 @@
 
 int	ft_replace_env(t_data	*data, char *key, char *value)
 {
-	int		i;
 	t_envp	*tmp;
 
-	i = 0;
 	tmp = data->ft_envp;
 	while (tmp && ft_strcmp(tmp->key, key) != 0)
 		tmp = tmp->next;
