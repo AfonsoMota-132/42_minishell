@@ -65,10 +65,13 @@ DATA_INIT = srcs/ft_data_init/ft_data_init.c \
 
 FREE = srcs/ft_free/ft_free.c
 
+WILDCARDS = srcs/ft_wildcards/ft_wildcards.c
+
 TOKENS = srcs/ft_tokens/ft_split_ms.c \
 		srcs/ft_tokens/ft_tokens.c
 
-SRCS =	srcs/main.c $(DATA_INIT) $(FREE) $(TOKENS) \
+SRCS =	srcs/main.c \
+		$(WILDCARDS) $(DATA_INIT) $(FREE) $(TOKENS) \
 		$(BUILTINS) $(REDIRS) $(SIGNALS) $(RMV_QUOTES) \
 		$(BIN_TOKENS) $(EXECUTER) $(SYNTAX) $(EXPANDER)
 

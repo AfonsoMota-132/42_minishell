@@ -12,6 +12,7 @@
 
 #include "../incs/minishell.h"
 #include "ft_data_init/ft_data_init.h"
+#include "ft_free/ft_free.h"
 
 int	g_signal_received = 0;
 
@@ -40,6 +41,12 @@ void	ft_print_tokens(t_token *tokens, t_data *data, int	tab)
 			printf("Filename");
 		else if (tokens->type == HERE_DOC)
 			printf("Here Doc");
+		else if (tokens->type == SEMI)
+			printf("Semicolon");
+		else if (tokens->type == AND)
+			printf("And");
+		else if (tokens->type == OR)
+			printf("Or");
 		if (tokens->heredoc)
 			printf("\thmmm\t%s\n",tokens->heredoc);
 		else
@@ -96,8 +103,7 @@ char	**ft_command_init(t_data *data)
 	if (!command_in)
 		ft_free(0, NULL, data, 1);
 	command = ft_strtrim(command_in, " \t\n");
-	if (!command || !ft_strlen(command)
-		|| ft_syntax(command))
+	if (!command || !ft_strlen(command))
 	{
 		if (command && ft_strlen(command))
 			data->exit_status = 2;
@@ -130,8 +136,10 @@ void	ft_add_quotes_to_files(t_token *tokens)
 	}
 }
 
+void	ft_wildcards(t_data *data);
 void	ft_loop2(t_data *data)
 {
+	ft_wildcards(data);
 	if (data->bin_tokens)
 		ft_free_tree(data->bin_tokens, 1);
 	data->bin_tokens = ft_bin_tokens(data);
@@ -139,11 +147,80 @@ void	ft_loop2(t_data *data)
 	/*treeprint(data->bin_tokens, 0);*/
 	dup2(1, STDOUT_FILENO);
 	dup2(0, STDIN_FILENO);
+	(void)data;
 }
 
+t_token	*ft_return_after_con(t_token *tokens)
+{
+	t_token	*prev;
+	t_token	*now;
+	t_token	*tmp;
+
+	now = tokens;
+	prev = NULL;
+	while (now)
+	{
+		if (now->type == SEMI || now->type == AND
+			|| now->type == OR)
+		{
+			prev->next = NULL;
+			tmp = now->next;
+			free(now->content);
+			free(now);
+			return (tmp);
+		}
+		prev = now;
+		now = now->next;
+	}
+	return (now);
+}
+
+t_token_type ft_return_con_type(t_token *tokens)
+{
+	t_token	*now;
+
+	now = tokens;
+	while (now)
+	{
+		if (now->type == SEMI)
+			return (SEMI);
+		if (now->type == AND)
+			return (AND);
+		if (now->type == OR)
+			return (OR);
+		now = now->next;
+	}
+	return (NON);
+}
+
+int		ft_syntax_con(t_token *tokens)
+{
+	while (tokens)
+	{
+		if (tokens->type == SEMI && ((tokens->next
+		&&	(tokens->next->type == SEMI || tokens->next->type == AND
+			|| tokens->next->type == OR)) || tokens->next == NULL))
+			return (ft_putstr_fd("minishell: syntax error ", 2),
+				ft_putstr_fd("near unexpected token `;'\n", 2), 1);
+		if (tokens->type == AND && ((tokens->next
+		&&	(tokens->next->type == SEMI || tokens->next->type == AND
+			|| tokens->next->type == OR)) || tokens->next == NULL))
+			return (ft_putstr_fd("minishell: syntax error ", 2),
+				ft_putstr_fd("near unexpected token `&&'\n", 2), 1);
+		if (tokens->type == SEMI && ((tokens->next
+		&&	(tokens->next->type == OR || tokens->next->type == AND
+			|| tokens->next->type == OR)) || tokens->next == NULL))
+			return (ft_putstr_fd("minishell: syntax error ", 2),
+				ft_putstr_fd("near unexpected token `||'\n", 2), 1);
+		tokens = tokens->next;
+	}
+	return (0);
+}
 void	ft_loop(t_data *data)
 {
-	char	**commands;
+	char		**commands;
+	t_token_type	type_tmp;
+	int				run;
 
 	while (1)
 	{
@@ -156,14 +233,52 @@ void	ft_loop(t_data *data)
 		if (!commands)
 			continue ;
 		ft_token_start(commands, data);
-		if (ft_syntax_tokens(data->tokens) || ft_redirects(data->tokens, &data))
+		run = 1;
+		data->tokens_start = data->tokens;
+		if (ft_syntax_con(data->tokens))
 		{
-			data->exit_status = 2;
 			continue ;
 		}
-		if (!data->tokens_start)
-			continue ;
-		ft_loop2(data);
+		data->tokens = data->tokens_start;
+		while (1)
+		{
+			type_tmp = ft_return_con_type(data->tokens);
+			if (type_tmp != NON)
+				data->tokens_end = ft_return_after_con(data->tokens);
+			if (type_tmp == NON)
+				data->tokens_end = NULL;
+			if (run == 1)
+			{
+				if (ft_syntax_tokens(data->tokens) || ft_redirects(data->tokens, &data))
+				{
+					data->exit_status = 2;
+				if (!data->tokens_start)
+					continue ;
+				}
+				else
+					ft_loop2(data);
+			}
+			if (type_tmp == NON)
+				break ;
+			if (data->exit_status)
+			{
+				if (type_tmp == AND)
+					run = 0;
+				if (type_tmp == OR)
+					run = 1;
+			}
+			else if (!data->exit_status)
+			{
+				if (type_tmp == AND)
+					run = 1;
+				if (type_tmp == OR)
+					run = 0;
+			}
+			if (type_tmp == SEMI)
+				run = 1;
+			data->tokens_start = data->tokens_end;
+			data->tokens = data->tokens_start;
+		}
 	}
 }
 

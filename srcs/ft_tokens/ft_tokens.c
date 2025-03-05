@@ -69,6 +69,17 @@ int	ft_tokens_cat2(t_data **data, int check)
 
 void	ft_tokens_cat3(t_data **data)
 {
+	if ((*data)->tokens->content[0] == ';'
+		&& ft_strlen((*data)->tokens->content) == 1)
+		(*data)->tokens->type = SEMI;
+	if ((*data)->tokens->content[0] == '&'
+		&& (*data)->tokens->content[1] == '&'
+		&& ft_strlen((*data)->tokens->content) == 2)
+		(*data)->tokens->type = AND;
+	if ((*data)->tokens->content[0] == '|'
+		&& (*data)->tokens->content[1] == '|'
+		&& ft_strlen((*data)->tokens->content) == 2)
+		(*data)->tokens->type = OR;
 	if ((ft_strchr((*data)->tokens->content, '\'')
 			|| ft_strchr((*data)->tokens->content, '"'))
 		&& (*data)->tokens->type != CMD && (*data)->tokens->type != HERE_DOC

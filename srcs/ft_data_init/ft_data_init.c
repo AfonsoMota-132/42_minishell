@@ -95,6 +95,7 @@ t_data	*ft_data_init(char **envp)
 	data = malloc(sizeof(t_data));
 	data->tokens = NULL;
 	data->tokens_start = NULL;
+	data->tokens_end = NULL;
 	data->bin_tokens = NULL;
 	data->command = NULL;
 	data->args = NULL;

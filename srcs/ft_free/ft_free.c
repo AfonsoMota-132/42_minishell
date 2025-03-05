@@ -96,6 +96,8 @@ int	ft_free(int i, char *command, t_data *data, int del_heredoc)
 			ft_free_tree(data->bin_tokens, del_heredoc);
 		if (data->tokens_start)
 			ft_free_tokens(data->tokens_start, del_heredoc);
+		if (data->tokens_end)
+			ft_free_tokens(data->tokens_end, 0);
 		if (data->path)
 			free(data->path);
 		if (data->prompt)

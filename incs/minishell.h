@@ -46,7 +46,11 @@ typedef enum e_token_type
 	REDIRECT_OUT,
 	D_REDIRECT_OUT,
 	FILENAME,
-	HERE_DOC
+	HERE_DOC,
+	SEMI,
+	AND,
+	OR,
+	NON
 }	t_token_type;
 
 typedef enum e_bin_token_type
@@ -99,6 +103,7 @@ typedef struct s_data
 {
 	t_token		*tokens;
 	t_token		*tokens_start;
+	t_token		*tokens_end;
 	t_bin_token	*bin_tokens;
 	char		*command;
 	char		*heredoc_path;

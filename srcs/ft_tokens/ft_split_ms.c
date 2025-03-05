@@ -35,6 +35,16 @@ int	ft_quote_len(char const *s)
 	return (i);
 }
 
+int	ft_seglen2(char const *s, int i)
+{
+	if ((s[i] == '|' && s[i + 1] == '|')
+		|| (s[i] == '&' && s[i + 1] == '&'))
+		return (2);
+	if (s[i] == '|' || s[i] == ';')
+		return (1);
+	return (0);
+}
+
 int	ft_seglen(char const *s)
 {
 	int		i;
@@ -49,12 +59,14 @@ int	ft_seglen(char const *s)
 			return (2);
 		return (1);
 	}
-	if (s[i] == '|')
-		return (1);
-	while (s[i] && s[i] != ' '
-		&& s[i] != '\t' && s[i] != '|'
-		&& s[i] != '<' && s[i] != '>')
+	if (ft_seglen2(s, i))
+		return (ft_seglen2(s, i));
+	while (s[i] && s[i] != ' ' && s[i] != '\t'
+		&& s[i] != '|' && s[i] != '<'
+		&& s[i] != '>' && s[i] != ';')
 	{
+		if (s[i] == '&' && s[i + 1] == '&')
+			break ;
 		i++;
 		if (s[i] == '\'' || s[i] == '"')
 			i += ft_quote_len(&s[i]);
