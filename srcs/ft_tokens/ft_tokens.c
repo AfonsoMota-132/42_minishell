@@ -28,6 +28,8 @@ t_token	*ft_token_maker(char **commands)
 		token->content = ft_strdup(commands[i]);
 		token->type = CMD;
 		token->heredoc = NULL;
+		if (ft_strchr(commands[i], '"') || ft_strchr(commands[i], '\''))
+			token->quotes = 1;
 		token->quotes = 0;
 		if (!commands[i + 1])
 			break ;

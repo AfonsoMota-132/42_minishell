@@ -16,7 +16,9 @@ void	ft_run_cmds(t_data *data)
 {
 	if (!data->bin_tokens->right && !data->bin_tokens->left)
 	{
-		if (ft_run_single_builtins(data->bin_tokens, data))
+		if (ft_run_single_builtins(data->bin_tokens, data)
+			|| ft_run_single_builtins2(data->bin_tokens, data)
+			|| ft_run_single_builtins3(data->bin_tokens, data))
 			return ;
 		ft_create_pipe(data->bin_tokens, data);
 		return ;

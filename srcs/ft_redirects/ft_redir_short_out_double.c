@@ -66,7 +66,9 @@ t_token	*ft_take_rod_out(t_token *tokens, t_token *tmp)
 
 int	ft_redir_short_out_double2(t_token *tokens, t_token **tmp, t_token *head)
 {
-	if ((tokens->next->content[0] == '$' && tokens->next->quotes == 0)
+	if (((tokens->next->content[0] == '$'
+				|| ft_strchr(tokens->next->content, '*'))
+			&& tokens->next->quotes == 0)
 		|| (open(tokens->next->content, O_WRONLY | O_CREAT, 0644) == -1
 			&& access(tokens->next->content, W_OK) == -1))
 	{

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_token.c                                      :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/06 09:21:23 by afogonca          #+#    #+#             */
-/*   Updated: 2025/03/06 09:21:54 by afogonca         ###   ########.fr       */
+/*   Created: 2024/12/17 20:39:29 by afogonca          #+#    #+#             */
+/*   Updated: 2025/02/24 19:07:44 by palexand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,12 @@ void	ft_print_tokens(t_token *tokens, t_data *data, int	tab)
 			printf("Filename");
 		else if (tokens->type == HERE_DOC)
 			printf("Here Doc");
-		else if (tokens->type == SEMI)
-			printf("Semicolon");
 		else if (tokens->type == AND)
 			printf("And");
 		else if (tokens->type == OR)
 			printf("Or");
+		else if (tokens->type == SEMI)
+			printf("Semicolon");
 		if (tokens->heredoc)
 			printf("\thmmm\t%s\n",tokens->heredoc);
 		else
@@ -53,7 +53,6 @@ void	ft_print_tokens(t_token *tokens, t_data *data, int	tab)
 	}
 	(void) data;
 }
-
 void treeprint(t_bin_token *cur, int depth)
 {
     if(cur== 0)

@@ -68,6 +68,8 @@ int	ft_wildcards(t_data *data)
 	{
 		if (data->tokens->type != HERE_DOC
 			&& data->tokens->type != FILENAME
+			&& data->tokens->content
+			&& data->tokens->quotes == 0
 			&& ft_strchr(data->tokens->content, '*'))
 			ft_substitution(data, &data->tokens);
 		if (data->tokens)

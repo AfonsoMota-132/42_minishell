@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "../incs/minishell.h"
-#include "ft_data_init/ft_data_init.h"
-#include "ft_free/ft_free.h"
 
 int	g_signal_received = 0;
 
@@ -98,7 +96,10 @@ void	ft_loop(t_data *data)
 		ft_token_start(commands, data);
 		data->tokens_start = data->tokens;
 		if (ft_syntax_con(data->tokens))
+		{
+			data->exit_status = 2;
 			continue ;
+		}
 		ft_loop3(data, 1);
 	}
 }

@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = minishell
+NAME = minishell_bonus
 LIBS = libs/libft/libft.a
 CFLAGS = -Wall -Wextra -Werror
 CC = cc
@@ -79,7 +79,7 @@ WILDCARDS = srcs/ft_wildcards/ft_wildcards.c \
 TOKENS = srcs/ft_tokens/ft_split_ms.c \
 		srcs/ft_tokens/ft_tokens.c
 
-SRCS =	srcs/main.c srcs/main_utils.c \
+SRCS =	srcs/main.c srcs/main_utils.c  ./print.c \
 		$(WILDCARDS) $(DATA_INIT) $(FREE) $(TOKENS) \
 		$(BUILTINS) $(REDIRS) $(SIGNALS) $(RMV_QUOTES) \
 		$(BIN_TOKENS) $(EXECUTER) $(SYNTAX) $(EXPANDER)

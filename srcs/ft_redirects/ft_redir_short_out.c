@@ -62,8 +62,10 @@ int	ft_verify_redir_short(t_token *tokens)
 
 int	ft_verify_access_out(t_token *tokens)
 {
-	if (access(tokens->next->content, W_OK) == -1
-		|| tokens->next->content[0] == '$')
+	if (((tokens->next->content[0] == '$'
+				|| ft_strchr(tokens->next->content, '*'))
+			&& tokens->next->quotes == 0)
+		|| access(tokens->next->content, W_OK) == -1)
 		return (0);
 	return (1);
 }

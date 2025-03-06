@@ -30,8 +30,7 @@ t_token	*ft_wildcards_mid(t_token *tokens, char **files)
 	size2 = ft_strchr_len(tokens->content, '*');
 	while (files[i])
 	{
-		if (ft_strlen(files[i]) > size2
-			&& ft_strncmp(files[i],
+		if (ft_strlen(files[i]) > size2 && ft_strncmp(files[i],
 				tokens->content, size2) == 0 && ft_strlen(files[i]) > size1
 			&& ft_strncmp(&files[i][ft_strlen(files[i]) - size1],
 			&tokens->content[pos + 1], size1) == 0)

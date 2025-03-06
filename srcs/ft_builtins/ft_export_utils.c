@@ -74,7 +74,7 @@ int	ft_export_loop(t_data *data, t_bin_token *token)
 	while (token->args[++i])
 	{
 		tmp = ft_strchr_len(token->args[i], '=');
-		if (token->args[i][tmp - 1] == '+')
+		if (tmp > 1 && token->args[i][tmp - 1] == '+')
 		{
 			tmp_status = ft_export_append(data, token, tmp, i);
 			if (!status && tmp_status)

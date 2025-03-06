@@ -44,6 +44,8 @@ int	ft_run_single_builtins3(t_bin_token *tokens, t_data *data)
 	int	status;
 
 	status = -1;
+	if (!tokens->args[0])
+		return (0);
 	if (ft_strcmp("unset", tokens->args[0]) == 0)
 	{
 		status = ft_handle_redirects_ne(tokens, NULL);
@@ -52,7 +54,10 @@ int	ft_run_single_builtins3(t_bin_token *tokens, t_data *data)
 		else
 			data->exit_status = 1;
 	}
-	return (status);
+	if (status == -1)
+		return (0);
+	data->exit_status = status;
+	return (1);
 }
 
 int	ft_run_single_builtins2(t_bin_token *tokens, t_data *data)
@@ -60,6 +65,8 @@ int	ft_run_single_builtins2(t_bin_token *tokens, t_data *data)
 	int	status;
 
 	status = -1;
+	if (!tokens->args[0])
+		return (0);
 	if (ft_strcmp("cd", tokens->args[0]) == 0)
 	{
 		status = ft_handle_redirects_ne(tokens, NULL);
@@ -76,7 +83,10 @@ int	ft_run_single_builtins2(t_bin_token *tokens, t_data *data)
 		else
 			data->exit_status = 1;
 	}
-	return (status);
+	if (status == -1)
+		return (0);
+	data->exit_status = status;
+	return (1);
 }
 
 int	ft_run_single_builtins(t_bin_token *tokens, t_data *data)
@@ -94,8 +104,6 @@ int	ft_run_single_builtins(t_bin_token *tokens, t_data *data)
 		else
 			data->exit_status = 1;
 	}
-	status = ft_run_single_builtins2(tokens, data);
-	status = ft_run_single_builtins3(tokens, data);
 	if (status == -1)
 		return (0);
 	data->exit_status = status;

@@ -34,22 +34,14 @@ int	ft_error_msg_redir_ne(int type, char *redir, char *path)
 	return (1);
 }
 
-int	ft_handle_redirects_in_ne(t_bin_token *tokens, char *path)
+int	ft_handle_redirects_in_ne2(t_bin_token *tokens, char *path)
 {
-	if (tokens->redir_in && tokens->redir_in->type == FILENAME)
+	if (tokens->redir_in && tokens->redir_in->type == HERE_DOC)
 	{
-		if (tokens->redir_in->content[0] == '$' && !tokens->redir_in->quotes)
+		if (ft_strchr(tokens->redir_in->content, '*') != NULL
+			&& tokens->redir_in->quotes == 0)
 			return (ft_error_msg_redir_ne(2,
 					tokens->redir_in->content, path), 1);
-		if (access(tokens->redir_in->content, F_OK) == -1)
-			return (ft_error_msg_redir_ne(1,
-					tokens->redir_in->content, path), 1);
-		if (access(tokens->redir_in->content, R_OK) == -1)
-			return (ft_error_msg_redir_ne(0,
-					tokens->redir_in->content, path), 1);
-	}
-	else if (tokens->redir_in && tokens->redir_in->type == HERE_DOC)
-	{
 		if (access(tokens->redir_in->heredoc, F_OK) == -1)
 			return (ft_error_msg_redir_ne(1,
 					tokens->redir_in->heredoc, path), 1);
@@ -60,10 +52,37 @@ int	ft_handle_redirects_in_ne(t_bin_token *tokens, char *path)
 	return (0);
 }
 
+int	ft_handle_redirects_in_ne(t_bin_token *tokens, char *path)
+{
+	if (tokens->redir_in && tokens->redir_in->type == FILENAME)
+	{
+		if (ft_strchr(tokens->redir_in->content, '*') != NULL
+			&& tokens->redir_in->quotes == 0)
+			return (ft_error_msg_redir_ne(2,
+					tokens->redir_in->content, path), 1);
+		if (tokens->redir_in->content[0] == '$' && !tokens->redir_in->quotes)
+			return (ft_error_msg_redir_ne(2,
+					tokens->redir_in->content, path), 1);
+		if (access(tokens->redir_in->content, F_OK) == -1)
+			return (ft_error_msg_redir_ne(1,
+					tokens->redir_in->content, path), 1);
+		if (access(tokens->redir_in->content, R_OK) == -1)
+			return (ft_error_msg_redir_ne(0,
+					tokens->redir_in->content, path), 1);
+	}
+	else if (ft_handle_redirects_in_ne2(tokens, path))
+		return (1);
+	return (0);
+}
+
 int	ft_handle_redirects_out_ne(t_bin_token *tokens, char *path)
 {
 	if (tokens->redir_out)
 	{
+		if (ft_strchr(tokens->redir_out->content, '*') != NULL
+			&& tokens->redir_in->quotes == 0)
+			return (ft_error_msg_redir_ne(2,
+					tokens->redir_out->content, path), 1);
 		if (tokens->redir_out->content[0] == '$' && !tokens->redir_out->quotes)
 			return (ft_error_msg_redir_ne(2,
 					tokens->redir_out->content, path), 1);
