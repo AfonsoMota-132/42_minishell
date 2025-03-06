@@ -102,8 +102,8 @@ int	ft_free(int i, char *command, t_data *data, int del_heredoc)
 			free(data->path);
 		if (data->prompt)
 			free(data->prompt);
-		if (data->ft_envp)
-			ft_free_env(data->ft_envp);
+		if (data->envp)
+			ft_free_env(data->envp);
 		if (data->hostname)
 			free(data->hostname);
 		if (data->heredoc_path)
@@ -112,6 +112,5 @@ int	ft_free(int i, char *command, t_data *data, int del_heredoc)
 	}
 	if (i == -1)
 		return (0);
-	else
-		exit(i);
+	exit(i);
 }

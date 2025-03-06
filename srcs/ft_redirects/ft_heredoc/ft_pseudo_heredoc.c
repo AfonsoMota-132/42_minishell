@@ -12,7 +12,7 @@
 
 #include "ft_heredoc.h"
 
-extern	int	g_signal_received;
+extern int	g_signal_received;
 
 void	ft_del_pseudo_heredocs(t_token *tokens)
 {

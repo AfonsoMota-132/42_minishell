@@ -13,9 +13,7 @@
 #ifndef FT_EXPANDER_H
 # define FT_EXPANDER_H
 
-# ifndef MINISHELL_H
-#  include "../../incs/minishell.h"
-# endif
+# include "../../incs/minishell.h"
 
 //		ft_expander_replace		//
 char	*ft_expander_replace(char *str, char *env, int start);

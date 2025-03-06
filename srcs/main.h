@@ -1,29 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tests.c                                            :+:      :+:    :+:   */
+/*   main.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/05 13:48:32 by afogonca          #+#    #+#             */
-/*   Updated: 2025/03/05 13:49:15 by afogonca         ###   ########.fr       */
+/*   Created: 2025/03/06 11:20:33 by afogonca          #+#    #+#             */
+/*   Updated: 2025/03/06 11:21:18 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <dirent.h>
+#ifndef MAIN_H
+# define MAIN_H
 
-int main(int argc, char *argv[]) {
-    DIR *dir;
-    struct dirent *entry;
-    
-    dir = opendir(".");
-    if (dir == NULL)
-        return EXIT_FAILURE;
-    while ((entry = readdir(dir)) != NULL) {
-        printf("%s\n", entry->d_name);
-    }
-    closedir(dir);
-    return EXIT_SUCCESS;
-}
+# include "../incs/minishell.h"
+#endif

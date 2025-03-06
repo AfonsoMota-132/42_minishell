@@ -13,9 +13,7 @@
 #ifndef FT_DATA_INIT_H
 # define FT_DATA_INIT_H
 
-# ifndef MINISHELL_H
-#  include "../../incs/minishell.h"
-# endif
+# include "../../incs/minishell.h"
 
 //		ft_getenv		//
 

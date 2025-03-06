@@ -13,9 +13,7 @@
 #ifndef FT_HEREDOC_H
 # define FT_HEREDOC_H
 
-# ifndef FT_REDIRECTS_H
-#  include "../ft_redirects.h"
-# endif
+# include "../../../incs/minishell.h"
 
 //			ft_heredoc		//
 int		ft_verify_heredoc(t_token *tokens);

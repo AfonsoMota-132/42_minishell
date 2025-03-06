@@ -13,8 +13,6 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-
-# include "../libs/libft/libft.h"
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -27,107 +25,27 @@
 # include <sys/wait.h>
 # include <dirent.h>
 # include <stdbool.h>
-
-typedef struct s_envp
-{
-	char				*key;
-	char				*value;
-	bool				print;
-	struct s_envp		*next;
-}	t_envp;
-
-typedef enum e_token_type
-{
-	CMD,
-	ARG,
-	PIPE,
-	REDIRECT_IN,
-	D_REDIRECT_IN,
-	REDIRECT_OUT,
-	D_REDIRECT_OUT,
-	FILENAME,
-	HERE_DOC,
-	SEMI,
-	AND,
-	OR,
-	NON
-}	t_token_type;
-
-typedef enum e_bin_token_type
-{
-	CMD_NODE,
-	PIPE_NODE
-}	t_bin_token_type;
-
-typedef struct s_token
-{
-	t_token_type	type;
-	char			*content;
-	char			*heredoc;
-	int				quotes;
-	size_t			len;
-	struct s_token	*next;
-}	t_token;
-
-typedef struct s_bin_token
-{
-	char				**args;
-	int					nbr_args;
-	t_token				*redir_in;
-	t_token				*redir_out;
-	t_bin_token_type	type;
-	int					first_redir;
-	struct s_bin_token	*right;
-	struct s_bin_token	*left;
-}	t_bin_token;
-
-typedef struct s_redir
-{
-	char			*filename;
-	int				fd;
-	t_token_type	type;
-}	t_redir;
-
-typedef struct s_command
-{
-	char				*command;
-	char				*path;
-	char				**args;
-	t_redir				*redir_in;
-	t_redir				*redir_out;
-	struct s_command	*next;
-}	t_command;
-
-typedef struct s_data
-{
-	t_token		*tokens;
-	t_token		*tokens_start;
-	t_token		*tokens_end;
-	t_bin_token	*bin_tokens;
-	char		*command;
-	char		*heredoc_path;
-	char		**args;
-	t_envp		*ft_envp;
-	char		*path;
-	char		*user;
-	char		*hostname;
-	char		*prompt;
-	int			exit_status;
-}	t_data;
-
-# include "../srcs/ft_executer/ft_executer.h"
+# include <stdio.h>
+# include <sys/stat.h>
+# include <unistd.h>
+# include <errno.h>
+# include "ft_structs.h"
 # include "../srcs/ft_bin_tokens/ft_bin_tokens.h"
 # include "../srcs/ft_builtins/ft_builtins.h"
+# include "../srcs/ft_data_init/ft_data_init.h"
+# include "../srcs/ft_executer/ft_executer.h"
 # include "../srcs/ft_redirects/ft_redirects.h"
 # include "../srcs/ft_signals/ft_signals.h"
 # include "../srcs/ft_syntax/ft_syntax.h"
 # include "../srcs/ft_expander/ft_expander.h"
 # include "../srcs/ft_rmv_quotes/ft_rmv_quotes.h"
-# include "../srcs/ft_data_init/ft_data_init.h"
 # include "../srcs/ft_free/ft_free.h"
 # include "../srcs/ft_tokens/ft_tokens.h"
 # include "../srcs/ft_wildcards/ft_wildcards.h"
 
-void		ft_print_tokens(t_token *tokens, t_data *data, int tab);
-
+t_token			*ft_tokens_end(t_token_type type_tmp, t_data *data);
+int				ft_get_run(t_data *data, t_token_type type_tmp);
+int				ft_syntax_con(t_token *tokens);
+t_token_type	ft_return_con_type(t_token *tokens);
+t_token			*ft_return_after_con(t_token *tokens);
 #endif

@@ -86,8 +86,9 @@ void	ft_envlist_init(t_data *data, char **env)
 		envp->next = ft_new_env_node(data, env[i]);
 		envp = envp->next;
 	}
-	data->ft_envp = head;
+	data->envp = head;
 }
+
 t_data	*ft_data_init(char **envp)
 {
 	t_data	*data;
@@ -100,7 +101,7 @@ t_data	*ft_data_init(char **envp)
 	data->command = NULL;
 	data->args = NULL;
 	data->prompt = NULL;
-	data->ft_envp = NULL;
+	data->envp = NULL;
 	data->user = NULL;
 	data->exit_status = 0;
 	ft_envlist_init(data, envp);

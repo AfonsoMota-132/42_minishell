@@ -101,16 +101,12 @@ void	ft_rmv_quotes(t_token *tokens)
 			if (tokens->content[i] != '\''
 				&& tokens->content[i] != '"')
 				i++;
-			if (tokens->content[i] == '"')
-			{
-				tokens->quotes = 1;
+			if (tokens->content[i] == '"'
+				&& ++tokens->quotes)
 				tokens->content = ft_rmv_double_quotes(tokens->content, &i);
-			}
-			if (tokens->content[i] == '\'')
-			{
-				tokens->quotes = 2;
+			if (tokens->content[i] == '\'' && ++tokens->quotes
+				&& ++tokens->quotes)
 				tokens->content = ft_rmv_single_quotes(tokens->content, &i);
-			}
 		}
 		tokens = tokens->next;
 	}

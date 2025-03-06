@@ -11,10 +11,12 @@
 /* ************************************************************************** */
 
 #include "ft_builtins.h"
+#include <unistd.h>
 
-int	ft_export(t_data *data, t_bin_token *token, int	exit)
+int	ft_export(t_data *data, t_bin_token *token, int exit)
 {
 	int		status;	
+
 	if (!token->args[1])
 	{
 		if (!exit)
@@ -44,25 +46,24 @@ void	ft_print_export(t_data *data)
 {
 	t_envp	*envp;
 
-	envp = data->ft_envp;
+	envp = data->envp;
 	while (envp)
 	{
 		if (envp->key)
 		{
-			ft_putstr_fd("declare -x ", STDOUT_FILENO);
-			ft_putstr_fd(envp->key, STDOUT_FILENO);
+			ft_special_putstr("declare -x");
+			ft_special_putstr(envp->key);
 			if (envp->value)
 			{
-				ft_putchar_fd('=', STDOUT_FILENO);
-				ft_putchar_fd('"', STDOUT_FILENO);
-				ft_putstr_fd(envp->value, STDOUT_FILENO);
-				ft_putchar_fd('"', STDOUT_FILENO);
+				ft_special_putstr("=");
+				ft_special_putstr("\"");
+				ft_special_putstr(envp->value);
+				ft_special_putstr("\"");
 			}
-			ft_putchar_fd('\n', STDOUT_FILENO);
+			ft_special_putstr("\n");
 		}
 		envp = envp->next;
 	}
-	
 }
 
 int	ft_size_struct(t_envp *envp)
@@ -80,15 +81,14 @@ int	ft_size_struct(t_envp *envp)
 
 void	ft_sort_envp(t_data *data)
 {
-	int	length;
-	int	i;
+	int		length;
+	int		i;
 	t_envp	*tmp;
 
-	length = ft_size_struct(data->ft_envp);
-	
-	while(length > 0)
+	length = ft_size_struct(data->envp);
+	while (length > 0)
 	{
-		tmp = data->ft_envp;
+		tmp = data->envp;
 		i = 0;
 		while (i < length - 1)
 		{
@@ -114,5 +114,4 @@ void	ft_swap_envp(t_envp *first, t_envp *second)
 	first->value = second->value;
 	second->key = key;
 	second->value = value;
-
 }

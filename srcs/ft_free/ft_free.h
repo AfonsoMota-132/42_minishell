@@ -13,9 +13,7 @@
 #ifndef FT_FREE_H
 # define FT_FREE_H
 
-# ifndef MINISHELL_H
-#  include "../../incs/minishell.h"
-# endif
+# include "../../incs/minishell.h"
 
 //		ft_free		//
 

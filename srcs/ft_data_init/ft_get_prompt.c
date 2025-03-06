@@ -69,15 +69,24 @@ char	*ft_get_path(t_data *data)
 void	ft_prompt_init(t_data *data)
 {
 	if (data->prompt)
+	{
 		free(data->prompt);
+		data->prompt = NULL;
+	}
 	if (data->path)
 	{
 		free(data->path);
 		data->path = ft_get_path(data);
+		if (!data->path)
+			data->path = ft_strdup("unknown_path");
+		if (!data->user)
+			data->user = ft_strdup("unknown_user");
+		if (!data->hostname)
+			data->hostname = ft_strdup("unknown_hostname");
+		data->prompt = ft_strjoin(data->user, "@");
+		data->prompt = ft_strjoin_gnl(data->prompt, data->hostname);
+		data->prompt = ft_strjoin_gnl(data->prompt, ":");
+		data->prompt = ft_strjoin_gnl(data->prompt, data->path);
+		data->prompt = ft_strjoin_gnl(data->prompt, "$ ");
 	}
-	data->prompt = ft_strjoin(data->user, "@");
-	data->prompt = ft_strjoin_gnl(data->prompt, data->hostname);
-	data->prompt = ft_strjoin_gnl(data->prompt, ":");
-	data->prompt = ft_strjoin_gnl(data->prompt, data->path);
-	data->prompt = ft_strjoin_gnl(data->prompt, "$ ");
 }

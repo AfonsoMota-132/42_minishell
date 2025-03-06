@@ -67,7 +67,7 @@ int	ft_redir_short_in_single2(t_token *tokens, t_token **tmp, t_token *head)
 {
 	if ((tokens->next->content[0] == '$' && tokens->next->quotes == 0)
 		|| (access(tokens->next->content, F_OK) == -1
-		|| access(tokens->next->content, R_OK) == -1))
+			|| access(tokens->next->content, R_OK) == -1))
 	{
 		(*tmp) = ft_rmv_ris_before(tokens, head);
 		return (1);

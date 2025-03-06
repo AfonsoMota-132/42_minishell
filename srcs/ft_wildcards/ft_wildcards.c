@@ -40,6 +40,7 @@ int	ft_substitution(t_data *data, t_token **tokens)
 	t_token	*new;
 	t_token	*tmp;
 
+	new = NULL;
 	files = ft_get_files();
 	ft_organize_files(files);
 	if ((*tokens) && (*tokens)->content
@@ -66,8 +67,8 @@ int	ft_wildcards(t_data *data)
 	while (data->tokens)
 	{
 		if (data->tokens->type != HERE_DOC
-		&& data->tokens->type != FILENAME
-		&& ft_strchr(data->tokens->content, '*'))
+			&& data->tokens->type != FILENAME
+			&& ft_strchr(data->tokens->content, '*'))
 			ft_substitution(data, &data->tokens);
 		if (data->tokens)
 			data->tokens = data->tokens->next;

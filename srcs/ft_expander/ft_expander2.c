@@ -81,7 +81,7 @@ void	ft_expander(t_token *tokens, t_data *data)
 {
 	size_t	i;
 
-	if (data->ft_envp == NULL)
+	if (data->envp == NULL)
 		return ;
 	while (tokens)
 	{

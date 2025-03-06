@@ -13,9 +13,7 @@
 #ifndef FT_RMV_QUOTES_H
 # define FT_RMV_QUOTES_H
 
-# ifndef MINISHELL_H
-#  include "../../incs/minishell.h"
-# endif
+# include "../../incs/minishell.h"
 
 int		ft_quote_rm_len(char const *s, char quote);
 char	*ft_rmv_single_quotes(char *str, int *start);

@@ -6,49 +6,11 @@
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 05:56:27 by afogonca          #+#    #+#             */
-/*   Updated: 2025/02/28 11:40:26 by afogonca         ###   ########.fr       */
+/*   Updated: 2025/03/06 10:31:48 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_executer.h"
-	
-int	ft_handle_redirects_ne(t_bin_token *tokens, char *path);
-int	ft_run_single_builtins(t_bin_token *tokens, t_data *data)
-{
-	int	status;
-
-	status = -1;
-	if (!tokens->args[0])
-		return (0);
-	if (ft_strcmp("exit", tokens->args[0]) == 0)
-	{
-		status = ft_handle_redirects_ne(tokens, NULL);
-		if (status == 0)
-			status = ft_exit(data, tokens, 0);
-		else
-			data->exit_status = 1;
-	}
-	if (ft_strcmp("cd", tokens->args[0]) == 0)
-	{
-		status = ft_handle_redirects_ne(tokens, NULL);
-		if (status == 0)
-			status = ft_cd(data, tokens, 0);
-		else
-			data->exit_status = 1;
-	}
-	if (ft_strcmp("export", tokens->args[0]) == 0)
-	{
-		status = ft_handle_redirects_ne(tokens, NULL);
-		if (status == 0)
-			status = ft_export(data, tokens, 0);
-		else
-			data->exit_status = 1;
-	}
-	if (status == -1)
-		return (0);
-	data->exit_status = status;
-	return (1);
-}
 
 void	ft_run_cmds(t_data *data)
 {
@@ -87,29 +49,6 @@ char	*ft_execve_get_path(char *cmd, t_data *data)
 	}
 	ft_free_matrix(paths);
 	return (NULL);
-}
-
-int	ft_handle_builtins(t_bin_token *tokens, t_data *data, int i, int exit)
-{
-	int	status;
-
-	status = 0;
-	if (!tokens->args[i])
-		return (status);
-	if (ft_strcmp("echo", tokens->args[0]) == 0)
-		status = ft_echo(data, tokens, exit);
-	if (ft_strcmp("pwd", tokens->args[0]) == 0)
-		status = ft_pwd(data, tokens, exit);
-	if (ft_strcmp("exit", tokens->args[0]) == 0)
-		status = ft_exit(data, tokens, exit);
-	if (ft_strcmp("export", tokens->args[0]) == 0)
-		status = ft_export(data, tokens, 1);
-	if (ft_strcmp("env", tokens->args[0]) == 0)
-	{
-		ft_print_envp(data);
-		ft_free(0, NULL, data, 0);
-	}
-	return (status);
 }
 
 void	ft_execute_node(t_bin_token *tokens, t_data *data)
@@ -171,7 +110,7 @@ void	ft_execve(t_bin_token *tokens, t_data *data)
 		path = ft_strdup(tokens->args[i]);
 	if (path)
 	{
-		envp = ft_envp_list2array(data->ft_envp);
+		envp = ft_envp_list2array(data->envp);
 		i = execve(path, tokens->args, envp);
 		if (i == -1)
 			ft_command_not_found(data, path, envp);

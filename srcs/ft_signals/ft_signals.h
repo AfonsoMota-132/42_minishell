@@ -13,9 +13,7 @@
 #ifndef FT_SIGNALS_H
 # define FT_SIGNALS_H
 
-# ifndef MINISHELL_H
-#  include "../../incs/minishell.h"
-# endif
+# include "../../incs/minishell.h"
 
 void	ft_signals_handler(int sig);
 void	ft_signals(void);

@@ -6,16 +6,14 @@
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 11:59:15 by afogonca          #+#    #+#             */
-/*   Updated: 2025/03/02 12:15:42 by afogonca         ###   ########.fr       */
+/*   Updated: 2025/03/06 11:12:44 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_BIN_TOKENS_H
 # define FT_BIN_TOKENS_H
 
-# ifndef MINISHELL_H
-#  include "../../incs/minishell.h"
-# endif
+# include "../../incs/minishell.h"
 
 //		ft_update_bin_tokens	//
 

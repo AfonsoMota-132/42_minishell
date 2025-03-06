@@ -13,10 +13,7 @@
 #ifndef FT_REDIRECTS_H
 # define FT_REDIRECTS_H
 
-# ifndef MINISHELL_H
-#  include "../../incs/minishell.h"
-# endif
-
+# include "../../incs/minishell.h"
 # include "ft_heredoc/ft_heredoc.h"
 
 //		ft_redir_short_in_single		//

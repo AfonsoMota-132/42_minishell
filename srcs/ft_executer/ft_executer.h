@@ -13,9 +13,7 @@
 #ifndef FT_EXECUTER_H
 # define FT_EXECUTER_H
 
-# ifndef MINiSHELL_H
-#  include "../../incs/minishell.h"
-# endif
+# include "../../incs/minishell.h"
 
 //		ft_error_executer		//
 void	ft_command_not_found(t_data *data, char *path, char **array);
@@ -37,4 +35,5 @@ void	ft_execve(t_bin_token *tokens, t_data *data);
 //			ft_redirects_exec	//
 void	ft_handle_redirects2(t_data *data, t_bin_token *tokens, char *path);
 void	ft_handle_redirects(t_data *data, t_bin_token *tokens, char *path);
+int		ft_handle_redirects_ne(t_bin_token *tokens, char *path);;
 #endif

@@ -13,9 +13,7 @@
 #ifndef FT_TOKENS_H
 # define FT_TOKENS_H
 
-# ifndef MINISHELL_H
-#  include "../../incs/minishell.h"
-# endif
+# include "../../incs/minishell.h"
 
 //		ft_split_ms		//
 
