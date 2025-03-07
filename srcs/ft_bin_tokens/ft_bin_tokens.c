@@ -34,8 +34,7 @@ int	ft_bin_count_args(t_token *tokens)
 	i = 0;
 	while (tokens)
 	{
-		if (tokens->content || i == 0)
-			i++;
+		i++;
 		tokens = tokens->next;
 	}
 	return (i);

@@ -104,8 +104,6 @@ void	ft_update_bin_token2(t_bin_token *bin_token, t_token *tokens)
 			break ;
 		tokens = tmp;
 	}
-	if (tokens)
-		ft_free_tokens(tokens, 0);
 }
 
 void	ft_update_bin_token(t_bin_token	*bin_token, t_token *tokens)
