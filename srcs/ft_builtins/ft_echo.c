@@ -43,7 +43,8 @@ int	ft_echo(t_data *data, t_bin_token *token, int exit)
 
 	n = 1;
 	flag = 1;
-	if (ft_flag_check(token) != 1)
+	if (ft_flag_check(token) != 1
+		&& token->args[1])
 	{
 		flag = ft_flag_check(token);
 		n = flag;
