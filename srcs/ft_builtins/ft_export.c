@@ -51,7 +51,7 @@ void	ft_print_export(t_data *data)
 	{
 		if (envp->key)
 		{
-			ft_special_putstr("declare -x");
+			ft_special_putstr("declare -x ");
 			ft_special_putstr(envp->key);
 			if (envp->value)
 			{
