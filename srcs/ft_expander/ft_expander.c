@@ -54,7 +54,8 @@ void	ft_expander3(t_token *tokens, size_t *i)
 	if (tokens->content[(*i) + 1] && tokens->content[(*i) + 1] != ' '
 		&& tokens->content[(*i) + 1] != '"')
 	{
-		if (tokens->type == FILENAME && tokens->content[0] == '$')
+		if ((tokens->type == FILENAME && tokens->content[0] == '$')
+			|| !ft_isalnum(tokens->content[(*i) + 1]))
 			(*i)++;
 		else
 		{

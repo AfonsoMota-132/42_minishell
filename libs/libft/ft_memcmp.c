@@ -1,34 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_wildcards_begin.c                               :+:      :+:    :+:   */
+/*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/05 19:39:09 by afogonca          #+#    #+#             */
-/*   Updated: 2025/03/05 19:46:43 by afogonca         ###   ########.fr       */
+/*   Created: 2024/10/26 12:08:34 by afogonca          #+#    #+#             */
+/*   Updated: 2024/10/26 12:25:32 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_wildcards.h"
+#include "libft.h"
 
-t_token	*ft_wildcards_begin(t_token *tokens, char **files, size_t pos)
+int	ft_memcmp(const void *s1, const void *s2, size_t n)
 {
-	size_t	i;
-	size_t	size;
-	t_token	*new;
+	size_t			i;
+	unsigned char	*ss1;
+	unsigned char	*ss2;
 
-	new = NULL;
+	if (n == 0)
+		return (0);
+	ss1 = (unsigned char *)s1;
+	ss2 = (unsigned char *)s2;
 	i = 0;
-	size = ft_strchr_len(tokens->content, '*');
-	while (files[i])
-	{
-		if (ft_strlen(files[i]) > size
-			&& ft_strncmp(files[i],
-				tokens->content, size) == 0)
-			ft_tokenadd_back(&new, ft_token_new(ft_strdup(files[i])));
+	while (ss1[i] == ss2[i] && i < (n - 1))
 		i++;
-	}
-	return (new);
-	(void) pos;
+	return (ss1[i] - ss2[i]);
 }

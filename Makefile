@@ -10,9 +10,9 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = minishell_bonus
-LIBS = libs/libft/libft.a
-#CFLAGS = -Wall -Wextra -Werror
+NAME = minishell
+LIBS = libs/libft/libft.a 
+CFLAGS = -Wall -Wextra -Werror
 CC = cc
 RM = rm -f
 
@@ -89,12 +89,12 @@ VAL_RULES = --leak-check=full --show-leak-kinds=all --suppressions=readline.supp
 #--trace-children=yes
 all: deps $(NAME)
 
-libft:
-	@if [ -d libs/libft ]; then \
-		echo "Already cloned"; \
-	else \
-		git clone git@github.com:AfonsoMota-132/42_libft.git libs/libft; \
-	fi
+# libft:
+# 	@if [ -d libs/libft ]; then \
+# 		echo "Already cloned"; \
+# 	else \
+# 		git clone git@github.com:AfonsoMota-132/42_libft.git libs/libft; \
+# 	fi
 
 valgrind: all
 	@echo > readline.supp "{\n\
@@ -111,7 +111,7 @@ valgrind: all
 }"
 	valgrind $(VAL_RULES) ./$(NAME)
 
-deps: libft
+deps:
 	$(MAKE) -C libs/libft/
 
 $(NAME): $(OBJS)
@@ -121,11 +121,12 @@ clean:
 	$(RM) $(OBJS)
 	@if [ -d libs/libft ]; then \
 		$(MAKE) -C libs/libft/ clean; fi;
+	$(RM) readline.supp
 
 fclean: clean
 	$(RM) $(NAME)
 	@if [ -d libs/libft ]; then \
-		$(RM) -rf libs/libft; fi;
+		$(MAKE) -C libs/libft fclean; fi;
 
 re: fclean all
 

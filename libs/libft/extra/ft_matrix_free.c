@@ -1,20 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_utils2.c                                      :+:      :+:    :+:   */
+/*   ft_matrix_free.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/07 21:08:50 by afogonca          #+#    #+#             */
-/*   Updated: 2025/03/07 21:08:52 by afogonca         ###   ########.fr       */
+/*   Created: 2025/01/24 10:46:09 by afogonca          #+#    #+#             */
+/*   Updated: 2025/01/24 10:47:15 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/minishell.h"
+#include "../libft.h"
 
-void	ft_free_loop3(t_data *data)
+void	ft_matrix_free(void **matrix)
 {
-	ft_free_tokens(data->tokens, 1);
-	data->tokens_start = data->tokens_end;
-	data->tokens = data->tokens_start;
+	int	i;
+
+	i = -1;
+	while (matrix[++i])
+		free(matrix[i]);
+	free(matrix);
 }

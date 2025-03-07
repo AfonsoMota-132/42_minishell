@@ -1,34 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_wildcards_begin.c                               :+:      :+:    :+:   */
+/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/05 19:39:09 by afogonca          #+#    #+#             */
-/*   Updated: 2025/03/05 19:46:43 by afogonca         ###   ########.fr       */
+/*   Created: 2024/10/27 09:08:49 by afogonca          #+#    #+#             */
+/*   Updated: 2024/10/27 09:08:51 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_wildcards.h"
+#include "libft.h"
 
-t_token	*ft_wildcards_begin(t_token *tokens, char **files, size_t pos)
+void	ft_lstadd_back(t_list **lst, t_list *new)
 {
-	size_t	i;
-	size_t	size;
-	t_token	*new;
+	t_list	*temp;
 
-	new = NULL;
-	i = 0;
-	size = ft_strchr_len(tokens->content, '*');
-	while (files[i])
+	if (!*lst)
+		*lst = new;
+	else
 	{
-		if (ft_strlen(files[i]) > size
-			&& ft_strncmp(files[i],
-				tokens->content, size) == 0)
-			ft_tokenadd_back(&new, ft_token_new(ft_strdup(files[i])));
-		i++;
+		temp = ft_lstlast(*lst);
+		temp -> next = new;
 	}
-	return (new);
-	(void) pos;
 }

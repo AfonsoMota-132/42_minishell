@@ -1,34 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_wildcards_begin.c                               :+:      :+:    :+:   */
+/*   ft_printhex.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/05 19:39:09 by afogonca          #+#    #+#             */
-/*   Updated: 2025/03/05 19:46:43 by afogonca         ###   ########.fr       */
+/*   Created: 2024/10/30 12:16:16 by afogonca          #+#    #+#             */
+/*   Updated: 2024/10/30 12:16:57 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_wildcards.h"
+#include "../libft.h"
 
-t_token	*ft_wildcards_begin(t_token *tokens, char **files, size_t pos)
+int	ft_printfhex(unsigned int nbr, int uporlow)
 {
-	size_t	i;
-	size_t	size;
-	t_token	*new;
+	int				len;
 
-	new = NULL;
-	i = 0;
-	size = ft_strchr_len(tokens->content, '*');
-	while (files[i])
+	len = 0;
+	if (nbr < 16)
 	{
-		if (ft_strlen(files[i]) > size
-			&& ft_strncmp(files[i],
-				tokens->content, size) == 0)
-			ft_tokenadd_back(&new, ft_token_new(ft_strdup(files[i])));
-		i++;
+		if (uporlow == 0)
+			len += write(1, &"0123456789abcdef"[nbr], 1);
+		if (uporlow == 1)
+			len += write(1, &"0123456789ABCDEF"[nbr], 1);
 	}
-	return (new);
-	(void) pos;
+	if (nbr >= 16)
+	{
+		len += ft_printfhex(nbr / 16, uporlow);
+		len += ft_printfhex(nbr % 16, uporlow);
+	}
+	return (len);
 }

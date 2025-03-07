@@ -1,34 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_wildcards_begin.c                               :+:      :+:    :+:   */
+/*   ft_printfstr.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/05 19:39:09 by afogonca          #+#    #+#             */
-/*   Updated: 2025/03/05 19:46:43 by afogonca         ###   ########.fr       */
+/*   Created: 2024/10/30 12:17:18 by afogonca          #+#    #+#             */
+/*   Updated: 2024/10/30 12:17:35 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_wildcards.h"
+#include "../libft.h"
 
-t_token	*ft_wildcards_begin(t_token *tokens, char **files, size_t pos)
+int	ft_printfstr(char *str)
 {
-	size_t	i;
-	size_t	size;
-	t_token	*new;
+	int	i;
 
-	new = NULL;
 	i = 0;
-	size = ft_strchr_len(tokens->content, '*');
-	while (files[i])
+	if (!str)
 	{
-		if (ft_strlen(files[i]) > size
-			&& ft_strncmp(files[i],
-				tokens->content, size) == 0)
-			ft_tokenadd_back(&new, ft_token_new(ft_strdup(files[i])));
-		i++;
+		ft_putstr_fd("(null)", 1);
+		return (6);
 	}
-	return (new);
-	(void) pos;
+	ft_putstr_fd(str, 1);
+	while (str[i] != '\0')
+		i++;
+	return (i);
 }

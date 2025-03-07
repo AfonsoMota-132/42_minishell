@@ -1,34 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_wildcards_begin.c                               :+:      :+:    :+:   */
+/*   ft_printf_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/05 19:39:09 by afogonca          #+#    #+#             */
-/*   Updated: 2025/03/05 19:46:43 by afogonca         ###   ########.fr       */
+/*   Created: 2024/10/27 13:45:55 by afogonca          #+#    #+#             */
+/*   Updated: 2024/10/27 13:48:05 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_wildcards.h"
+#include "../libft.h"
 
-t_token	*ft_wildcards_begin(t_token *tokens, char **files, size_t pos)
+static int	ft_nbrlen(int n)
 {
-	size_t	i;
-	size_t	size;
-	t_token	*new;
+	int	len;
 
-	new = NULL;
-	i = 0;
-	size = ft_strchr_len(tokens->content, '*');
-	while (files[i])
+	len = 0;
+	if (n == 0)
+		return (1);
+	if (n == -2147483648)
 	{
-		if (ft_strlen(files[i]) > size
-			&& ft_strncmp(files[i],
-				tokens->content, size) == 0)
-			ft_tokenadd_back(&new, ft_token_new(ft_strdup(files[i])));
-		i++;
+		len += 2;
+		n = 147483648;
 	}
-	return (new);
-	(void) pos;
+	else if (n < 0)
+	{
+		len++;
+		n *= -1;
+	}
+	while (n > 0)
+	{
+		n /= 10;
+		len++;
+	}
+	return (len);
+}
+
+int	ft_printfnbr(int nbr)
+{
+	ft_putnbr_fd(nbr, 1);
+	return (ft_nbrlen(nbr));
 }

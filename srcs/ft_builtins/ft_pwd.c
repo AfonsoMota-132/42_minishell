@@ -54,8 +54,8 @@ int	ft_pwd(t_data *data, t_bin_token *tokens, int exit)
 			ft_free(exit, NULL, data, 0);
 		return (1);
 	}
-	if ((getcwd(path, 4096) || ft_getenv("PWD", data)
-			&& !ft_pwd2(data, path, exit)))
+	if ((getcwd(path, 4096) || ft_getenv("PWD", data))
+		&& !ft_pwd2(data, path, exit))
 		return (0);
 	else
 	{

@@ -1,20 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_utils2.c                                      :+:      :+:    :+:   */
+/*   ft_toupper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: afogonca <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/07 21:08:50 by afogonca          #+#    #+#             */
-/*   Updated: 2025/03/07 21:08:52 by afogonca         ###   ########.fr       */
+/*   Created: 2024/10/22 12:03:19 by afogonca          #+#    #+#             */
+/*   Updated: 2024/10/23 16:56:04 by passunca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/minishell.h"
+#include "libft.h"
 
-void	ft_free_loop3(t_data *data)
+int	ft_toupper(int c)
 {
-	ft_free_tokens(data->tokens, 1);
-	data->tokens_start = data->tokens_end;
-	data->tokens = data->tokens_start;
+	if (c >= 97 && c <= 122)
+		return (c - 32);
+	else
+		return (c);
 }

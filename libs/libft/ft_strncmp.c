@@ -1,20 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_utils2.c                                      :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: afogonca <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/07 21:08:50 by afogonca          #+#    #+#             */
-/*   Updated: 2025/03/07 21:08:52 by afogonca         ###   ########.fr       */
+/*   Created: 2024/10/22 13:01:36 by afogonca          #+#    #+#             */
+/*   Updated: 2024/10/22 13:04:09 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/minishell.h"
+#include "libft.h"
 
-void	ft_free_loop3(t_data *data)
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	ft_free_tokens(data->tokens, 1);
-	data->tokens_start = data->tokens_end;
-	data->tokens = data->tokens_start;
+	size_t	i;
+
+	if (n == 0)
+		return (0);
+	i = 0;
+	while (s1[1] && s2[i] && s1[i] == s2[i] && (i < n - 1))
+		i++;
+	return ((unsigned char )s1[i] - (unsigned char) s2[i]);
 }

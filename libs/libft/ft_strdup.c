@@ -1,20 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_utils2.c                                      :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/07 21:08:50 by afogonca          #+#    #+#             */
-/*   Updated: 2025/03/07 21:08:52 by afogonca         ###   ########.fr       */
+/*   Created: 2024/10/25 11:11:17 by afogonca          #+#    #+#             */
+/*   Updated: 2024/10/25 11:12:35 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/minishell.h"
+#include "libft.h"
 
-void	ft_free_loop3(t_data *data)
+char	*ft_strdup(const char *src)
 {
-	ft_free_tokens(data->tokens, 1);
-	data->tokens_start = data->tokens_end;
-	data->tokens = data->tokens_start;
+	char	*str;
+	size_t	len;
+
+	len = ft_strlen(src) + 1;
+	str = malloc(sizeof(char) * len);
+	if (str == NULL)
+		return (NULL);
+	ft_memcpy(str, src, len);
+	return (str);
 }

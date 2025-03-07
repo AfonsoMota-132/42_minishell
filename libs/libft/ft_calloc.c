@@ -1,20 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_utils2.c                                      :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/07 21:08:50 by afogonca          #+#    #+#             */
-/*   Updated: 2025/03/07 21:08:52 by afogonca         ###   ########.fr       */
+/*   Created: 2024/10/26 09:19:18 by afogonca          #+#    #+#             */
+/*   Updated: 2024/10/26 10:07:47 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/minishell.h"
+#include "libft.h"
 
-void	ft_free_loop3(t_data *data)
+void	*ft_calloc(size_t nmemb, size_t size)
 {
-	ft_free_tokens(data->tokens, 1);
-	data->tokens_start = data->tokens_end;
-	data->tokens = data->tokens_start;
+	void	*ptr;
+
+	ptr = malloc(nmemb * size);
+	if (!ptr)
+		return (NULL);
+	ft_bzero(ptr, (nmemb * size));
+	return ((void *) ptr);
 }

@@ -1,34 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_wildcards_begin.c                               :+:      :+:    :+:   */
+/*   ft_atol.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/05 19:39:09 by afogonca          #+#    #+#             */
-/*   Updated: 2025/03/05 19:46:43 by afogonca         ###   ########.fr       */
+/*   Created: 2024/11/30 14:59:15 by afogonca          #+#    #+#             */
+/*   Updated: 2024/11/30 15:08:58 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_wildcards.h"
-
-t_token	*ft_wildcards_begin(t_token *tokens, char **files, size_t pos)
+long	ft_atol(const char *str)
 {
-	size_t	i;
-	size_t	size;
-	t_token	*new;
+	long	num;
+	int		sign;
+	int		i;
 
-	new = NULL;
+	sign = 1;
+	num = 0;
 	i = 0;
-	size = ft_strchr_len(tokens->content, '*');
-	while (files[i])
+	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n'
+		|| str[i] == '\v' || str[i] == '\f' || str[i] == '\r')
+		i++;
+	if (str[i] == '-' || str[i] == '+')
 	{
-		if (ft_strlen(files[i]) > size
-			&& ft_strncmp(files[i],
-				tokens->content, size) == 0)
-			ft_tokenadd_back(&new, ft_token_new(ft_strdup(files[i])));
+		if (str[i] == '-')
+			sign *= -1;
 		i++;
 	}
-	return (new);
-	(void) pos;
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		num = num * 10 + (str[i] - '0');
+		i++;
+	}
+	return (num * sign);
 }

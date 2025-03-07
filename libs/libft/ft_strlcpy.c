@@ -1,20 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_utils2.c                                      :+:      :+:    :+:   */
+/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: afogonca <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/07 21:08:50 by afogonca          #+#    #+#             */
-/*   Updated: 2025/03/07 21:08:52 by afogonca         ###   ########.fr       */
+/*   Created: 2024/10/21 12:07:43 by afogonca          #+#    #+#             */
+/*   Updated: 2024/10/22 11:55:55 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/minishell.h"
+#include "libft.h"
 
-void	ft_free_loop3(t_data *data)
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
-	ft_free_tokens(data->tokens, 1);
-	data->tokens_start = data->tokens_end;
-	data->tokens = data->tokens_start;
+	size_t	i;
+
+	i = 0;
+	if (size <= 0)
+		return (ft_strlen(src));
+	while (src[i] && (i < size - 1))
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = '\0';
+	return (ft_strlen(src));
 }

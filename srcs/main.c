@@ -53,7 +53,6 @@ void	ft_loop2(t_data *data)
 void	ft_loop3(t_data *data, int run)
 {
 	t_token_type	type_tmp;
-	t_token			*tmp;
 
 	while (1)
 	{
