@@ -57,17 +57,17 @@ int	ft_syntax_con(t_token *tokens)
 			|| (tokens->type == AND && tokens->next->type == AND
 				&& tokens->next->type == OR && tokens->next->type == SEMI))
 			return (ft_putstr_fd("minishell: syntax error ", 2),
-				ft_putstr_fd("near unexpected token `;'\n", 2), 1);
+				ft_putstr_fd("near unexpected token `&&'\n", 2), 1);
 		if ((tokens->type == OR && tokens->next == NULL)
 			|| (tokens->type == OR && tokens->next->type == AND
 				&& tokens->next->type == OR && tokens->next->type == SEMI))
 			return (ft_putstr_fd("minishell: syntax error ", 2),
-				ft_putstr_fd("near unexpected token `&&'\n", 2), 1);
+				ft_putstr_fd("near unexpected token `||'\n", 2), 1);
 		if ((tokens->type == SEMI && tokens->next == NULL)
 			|| (tokens->type == SEMI && tokens->next->type == AND
 				&& tokens->next->type == OR && tokens->next->type == SEMI))
 			return (ft_putstr_fd("minishell: syntax error ", 2),
-				ft_putstr_fd("near unexpected token `||'\n", 2), 1);
+				ft_putstr_fd("near unexpected token `;'\n", 2), 1);
 		tokens = tokens->next;
 	}
 	return (0);

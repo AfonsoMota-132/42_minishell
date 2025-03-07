@@ -26,8 +26,10 @@ int	ft_quote_len(char const *s)
 			i++;
 			while (s[i] && s[i] != quote)
 				i++;
+			if (!s[i])
+				break ;
 			i++;
-			if (s[i] == ' ' || !s[i])
+			if (s[i] == ' ')
 				break ;
 		}
 		i--;

@@ -19,6 +19,7 @@
 int	ft_syntax_tokens2(t_token *tokens);
 int	ft_syntax_tokens3(t_token *tokens);
 int	ft_syntax_tokens(t_token *tokens);
+int	ft_syntax_tokens_quotes(t_token *tokens);
 
 //		ft_syntanx		//
 

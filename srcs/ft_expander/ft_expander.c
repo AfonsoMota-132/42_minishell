@@ -93,6 +93,71 @@ void	ft_expander3(t_token *tokens, size_t *i)
 		(*i)++;
 }
 
+
+int		ft_count_split(char **split)
+{
+	int	i;
+
+	i = 0;
+	while (split[i])
+		i++;
+	return (i);
+}
+
+t_token	*ft_token_maker_special(char **commands, t_token_type type)
+{
+	t_token	*token;
+	t_token	*start;
+	int		i;
+
+	i = -1;
+	token = ft_calloc(sizeof(t_token), 1);
+	if (!token)
+		return (NULL);
+	start = token;
+	while (commands[++i])
+	{
+		token->content = ft_strdup(commands[i]);
+		token->type = type;
+		token->heredoc = NULL;
+		if (ft_strchr(commands[i], '"') || ft_strchr(commands[i], '\''))
+			token->quotes = 1;
+		token->quotes = 0;
+		if (!commands[i + 1])
+			break ;
+		token->next = ft_calloc(sizeof(t_token), 1);
+		token = token->next;
+	}
+	token->next = NULL;
+	ft_free_matrix(commands);
+	return (start);
+}
+
+void	ft_expander_plus(t_data *data)
+{
+	char	**split;
+	t_token	*tmp;
+
+	data->tokens = data->tokens_start;
+	while(data->tokens)
+	{
+		if (data->tokens->quotes == 0
+			&& data->tokens->content)
+		{
+			split = ft_split_multi(data->tokens->content, " \t");
+			if (ft_count_split(split) > 1)
+			{
+				tmp = ft_token_maker_special(split, data->tokens->type);
+				ft_replace_node(&data->tokens_start, data->tokens, tmp);
+				data->tokens = data->tokens_start;
+			}
+			else
+				ft_free_matrix(split);
+		}
+		data->tokens = data->tokens->next;
+	}
+}
+
 void	ft_expander2(t_token *tokens, \
 		size_t *start, t_data *data)
 {

@@ -115,13 +115,22 @@ void	ft_tokens_cat(t_data **data)
 	(*data)->tokens = (*data)->tokens_start;
 }
 
-void	ft_token_start(char **commands, t_data *data)
+void	ft_expander_plus(t_data *data);
+int	ft_token_start(char **commands, t_data *data)
 {
 	if (data->tokens_start)
 		ft_free_tokens(data->tokens_start, 1);
 	data->tokens_start = ft_token_maker(commands);
 	data->tokens = data->tokens_start;
+	if (ft_syntax_tokens_quotes(data->tokens))
+	{
+		data->exit_status = 2;
+		return (1);
+	}
 	ft_tokens_cat(&data);
 	ft_expander(data->tokens, data);
 	ft_rmv_quotes(data->tokens);
+	ft_expander_plus(data);
+	data->tokens = data->tokens_start;
+	return (0);
 }

@@ -23,7 +23,8 @@ EXECUTER = srcs/ft_executer/ft_pipes.c \
 		   srcs/ft_executer/ft_error_exec.c \
 		   srcs/ft_executer/ft_redirects_exec.c \
 		   srcs/ft_executer/ft_redirects_exec_ne.c \
-		   srcs/ft_executer/ft_run_single_builtins.c
+		   srcs/ft_executer/ft_run_single_builtins.c \
+		   srcs/ft_executer/ft_executer_utils.c
 
 BIN_TOKENS = srcs/ft_bin_tokens/ft_bin_tokens.c \
 			srcs/ft_bin_tokens/ft_update_bin_tokens.c \
@@ -55,8 +56,7 @@ REDIRS = 	srcs/ft_redirects/ft_redirects.c \
 			srcs/ft_redirects/ft_redir_short_in_single.c \
 			$(HEREDOC)
 
-SYNTAX = srcs/ft_syntax/ft_syntax.c \
-		srcs/ft_syntax/ft_syntax_tokens.c
+SYNTAX = srcs/ft_syntax/ft_syntax_tokens.c
 
 EXPANDER = srcs/ft_expander/ft_expander.c \
 		srcs/ft_expander/ft_expander2.c \
@@ -79,7 +79,7 @@ WILDCARDS = srcs/ft_wildcards/ft_wildcards.c \
 TOKENS = srcs/ft_tokens/ft_split_ms.c \
 		srcs/ft_tokens/ft_tokens.c
 
-SRCS =	srcs/main.c srcs/main_utils.c  ./print.c \
+SRCS =	srcs/main.c srcs/main_utils.c \
 		$(WILDCARDS) $(DATA_INIT) $(FREE) $(TOKENS) \
 		$(BUILTINS) $(REDIRS) $(SIGNALS) $(RMV_QUOTES) \
 		$(BIN_TOKENS) $(EXECUTER) $(SYNTAX) $(EXPANDER)

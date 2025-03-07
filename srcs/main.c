@@ -60,8 +60,7 @@ void	ft_loop3(t_data *data, int run)
 		data->tokens_end = ft_tokens_end(type_tmp, data);
 		if (run == 1)
 		{
-			if (ft_syntax_tokens(data->tokens)
-				|| ft_wildcards(data)
+			if (ft_syntax_tokens(data->tokens) || ft_wildcards(data)
 				|| ft_redirects(data->tokens, &data))
 			{
 				data->exit_status = 2;
@@ -74,6 +73,7 @@ void	ft_loop3(t_data *data, int run)
 		if (type_tmp == NON)
 			break ;
 		run = ft_get_run(data, type_tmp);
+		ft_free_tokens(data->tokens_start, 1);
 		data->tokens_start = data->tokens_end;
 		data->tokens = data->tokens_start;
 	}
@@ -93,7 +93,8 @@ void	ft_loop(t_data *data)
 		}
 		if (!commands)
 			continue ;
-		ft_token_start(commands, data);
+		if (ft_token_start(commands, data))
+			continue ;
 		data->tokens_start = data->tokens;
 		if (ft_syntax_con(data->tokens))
 		{

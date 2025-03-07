@@ -6,7 +6,7 @@
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 11:08:29 by afogonca          #+#    #+#             */
-/*   Updated: 2025/02/26 11:13:04 by afogonca         ###   ########.fr       */
+/*   Updated: 2025/03/07 09:39:13 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,12 @@ char	*ft_execve_get_path(char *cmd, t_data *data);
 int		ft_handle_builtins(t_bin_token *tokens, t_data *data, int i, int exit);
 void	ft_execute_node(t_bin_token *tree, t_data *data);
 void	ft_execve(t_bin_token *tokens, t_data *data);
+char	*ft_execve_get_path(char *cmd, t_data *data);
+char	**ft_envp_list2array(t_envp *env);
 
 //			ft_redirects_exec	//
 void	ft_handle_redirects2(t_data *data, t_bin_token *tokens, char *path);
 void	ft_handle_redirects(t_data *data, t_bin_token *tokens, char *path);
-int		ft_handle_redirects_ne(t_bin_token *tokens, char *path);;
+int		ft_handle_redirects_ne(t_bin_token *tokens, char *path);
+
 #endif

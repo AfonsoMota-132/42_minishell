@@ -28,6 +28,6 @@ t_token	*ft_token_maker(char **commands);
 int		ft_tokens_cat2(t_data **data, int check);
 void	ft_tokens_cat3(t_data **data);
 void	ft_tokens_cat(t_data **data);
-void	ft_token_start(char **commands, t_data *data);
+int		ft_token_start(char **commands, t_data *data);
 
 #endif

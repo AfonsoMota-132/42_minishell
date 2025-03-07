@@ -55,6 +55,34 @@ int	ft_syntax_tokens3(t_token *tokens)
 	return (0);
 }
 
+int	ft_syntax_tokens_quotes(t_token *tokens)
+{
+	int		i;
+	char	quotes;
+
+	while (tokens)
+	{
+		i = 0;
+		while (tokens->content && tokens->content[i])
+		{
+			if (tokens->content[i] == '\'' || tokens->content[i] == '\"')
+			{
+				quotes = tokens->content[i++];
+				while (tokens->content[i]
+					&& tokens->content[i] != quotes)
+					i++;
+				if ((tokens->content[i] && tokens->content[i] != quotes)
+					|| !tokens->content[i])
+					return (ft_putstr_fd("minishell: syntax error ", 2),
+						ft_putstr_fd("unclosed quotes\n", 2), 1);
+			}
+			i++;
+		}
+		tokens = tokens->next;
+	}
+	return (0);
+}
+
 int	ft_syntax_tokens(t_token *tokens)
 {
 	if (tokens->type == PIPE)
