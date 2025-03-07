@@ -14,22 +14,25 @@
 
 extern int	g_signal_received;
 
-void	ft_del_pseudo_heredocs(t_token *tokens)
+void	ft_del_pseudo_heredocs(t_token *tokens, t_data *data)
 {
 	t_token	*tmp2;
 
 	while (tokens)
 	{
-		if (tokens->next
-			&& tokens->next->type == D_REDIRECT_IN
-			&& tokens->next->next && !tokens->next->next->heredoc)
+		if (tokens
+			&& tokens->type == D_REDIRECT_IN
+			&& tokens->next && !tokens->next->heredoc)
 		{
 			tmp2 = tokens->next;
-			tokens->next = tokens->next->next->next;
-			ft_free_token(tmp2);
+			tokens->next = tokens->next->next;
+			ft_replace_node(&data->tokens_start, tokens, NULL);
+			tmp2->next = NULL;
+			ft_free_tokens(tmp2, 1);
 		}
 		tokens = tokens->next;
 	}
+	(void) data;
 }
 
 void	ft_pseudo_heredoc_loop(t_token *tokens, t_data *data, t_token *str)

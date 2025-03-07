@@ -27,6 +27,20 @@ t_bin_token	*ft_calloc_bin_token(t_bin_token_type type)
 	return (new);
 }
 
+t_token	*ft_bin_redir2_heredoc(t_token **tokens)
+{
+	t_token	*tmp;
+
+	if ((*tokens)->type == D_REDIRECT_IN)
+	{
+		tmp = (*tokens);
+		(*tokens) = (*tokens)->next;
+		tmp->next = NULL;
+		ft_free_tokens(tmp, 1);
+	}
+	return (*tokens);
+}
+
 t_token	*ft_bin_redir2(t_token **tokens, t_token_type redir_1
 			, t_token_type redir_2)
 {
@@ -36,6 +50,7 @@ t_token	*ft_bin_redir2(t_token **tokens, t_token_type redir_1
 	if ((*tokens) && ((*tokens)->type == redir_1
 			|| (*tokens)->type == redir_2))
 	{
+		(*tokens) = (*tokens)->next;
 		tmp_token = (*tokens);
 		tmp = ((*tokens)->next);
 		if ((*tokens)->next->next)

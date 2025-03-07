@@ -92,7 +92,7 @@ int	ft_heredoc(t_token *tokens, t_data *data)
 	else
 		waitpid(-1, &exit, 0);
 	ft_signals();
-	ft_del_pseudo_heredocs(tokens);
+	ft_del_pseudo_heredocs(tokens, data);
 	data->exit_status = WEXITSTATUS(exit);
 	return ((data->exit_status == 130) * 130);
 }

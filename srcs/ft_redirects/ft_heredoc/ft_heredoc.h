@@ -22,7 +22,7 @@ void	ft_heredoc_child_process(t_data *data, t_token *tokens, t_token *tmp);
 int		ft_heredoc(t_token *tokens, t_data *data);
 
 //		ft_pseudo_heredoc	//
-void	ft_del_pseudo_heredocs(t_token *tokens);
+void	ft_del_pseudo_heredocs(t_token *tokens, t_data *data);
 void	ft_pseudo_heredoc(t_token *tokens, t_data *data);
 
 //		ft_actual_heredoc	//
