@@ -27,6 +27,13 @@ int	ft_verify_pwd(t_bin_token *tokens, int print)
 
 int	ft_pwd2(t_data *data, char *path, int exit)
 {
+	if (!path || ft_strlen(path) == 0)
+	{
+		if (path)
+			free(path);
+		if (ft_getenv("PWD", data))
+			path = ft_strdup(ft_getenv("PWD", data));
+	}
 	ft_putstr_fd(path, 1);
 	ft_putchar_fd('\n', 1);
 	free(path);
@@ -47,13 +54,15 @@ int	ft_pwd(t_data *data, t_bin_token *tokens, int exit)
 			ft_free(exit, NULL, data, 0);
 		return (1);
 	}
-	if (getcwd(path, 4096) && !ft_pwd2(data, path, exit))
+	if ((getcwd(path, 4096) || ft_getenv("PWD", data)
+			&& !ft_pwd2(data, path, exit)))
 		return (0);
 	else
 	{
 		free(path);
+		ft_putstr_fd("Minishell: pwd error\n", 2);
 		if (exit)
 			ft_free(1, NULL, data, 0);
-		return (ft_putstr_fd("Minishell: pwd error\n", 2), 1);
+		return (1);
 	}
 }

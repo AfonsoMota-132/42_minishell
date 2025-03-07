@@ -53,6 +53,7 @@ void	ft_loop2(t_data *data)
 void	ft_loop3(t_data *data, int run)
 {
 	t_token_type	type_tmp;
+	t_token			*tmp;
 
 	while (1)
 	{
@@ -73,9 +74,7 @@ void	ft_loop3(t_data *data, int run)
 		if (type_tmp == NON)
 			break ;
 		run = ft_get_run(data, type_tmp);
-		ft_free_tokens(data->tokens_start, 1);
-		data->tokens_start = data->tokens_end;
-		data->tokens = data->tokens_start;
+		ft_free_loop3(data);
 	}
 }
 

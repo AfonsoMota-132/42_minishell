@@ -115,7 +115,6 @@ void	ft_tokens_cat(t_data **data)
 	(*data)->tokens = (*data)->tokens_start;
 }
 
-void	ft_expander_plus(t_data *data);
 int	ft_token_start(char **commands, t_data *data)
 {
 	if (data->tokens_start)

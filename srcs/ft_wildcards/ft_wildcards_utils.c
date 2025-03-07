@@ -63,6 +63,8 @@ void	ft_replace_node(t_token **head, t_token *target, t_token *new_nodes)
 	t_token	*prev;
 	t_token	*curr;
 
+	if (!*head || !head || !target || !new_nodes)
+		return ;
 	prev = NULL;
 	curr = (*head);
 	while (curr && curr != target)

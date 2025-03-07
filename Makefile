@@ -12,7 +12,7 @@
 
 NAME = minishell_bonus
 LIBS = libs/libft/libft.a
-CFLAGS = -Wall -Wextra -Werror
+#CFLAGS = -Wall -Wextra -Werror
 CC = cc
 RM = rm -f
 
@@ -60,7 +60,8 @@ SYNTAX = srcs/ft_syntax/ft_syntax_tokens.c
 
 EXPANDER = srcs/ft_expander/ft_expander.c \
 		srcs/ft_expander/ft_expander2.c \
-		srcs/ft_expander/ft_expander_replace.c
+		srcs/ft_expander/ft_expander_replace.c \
+		srcs/ft_expander/ft_expander_utils.c
 
 RMV_QUOTES = srcs/ft_rmv_quotes/ft_rmv_quotes.c
 
@@ -79,7 +80,7 @@ WILDCARDS = srcs/ft_wildcards/ft_wildcards.c \
 TOKENS = srcs/ft_tokens/ft_split_ms.c \
 		srcs/ft_tokens/ft_tokens.c
 
-SRCS =	srcs/main.c srcs/main_utils.c \
+SRCS =	srcs/main.c srcs/main_utils.c srcs/main_utils2.c \
 		$(WILDCARDS) $(DATA_INIT) $(FREE) $(TOKENS) \
 		$(BUILTINS) $(REDIRS) $(SIGNALS) $(RMV_QUOTES) \
 		$(BIN_TOKENS) $(EXECUTER) $(SYNTAX) $(EXPANDER)
@@ -96,6 +97,18 @@ libft:
 	fi
 
 valgrind: all
+	@echo > readline.supp "{\n\
+	leak readline\n\
+    Memcheck:Leak\n\
+    ...\n\
+    fun:readline\n\
+}\n\
+{\n\
+    leak add_history\n\
+    Memcheck:Leak\n\
+    ...\n\
+    fun:add_history\n\
+}"
 	valgrind $(VAL_RULES) ./$(NAME)
 
 deps: libft
@@ -113,16 +126,6 @@ fclean: clean
 	$(RM) $(NAME)
 	@if [ -d libs/libft ]; then \
 		$(RM) -rf libs/libft; fi;
-
-tester:
-	@if [ -d minishell_tester ]; then \
-		echo "Already cloned"; \
-	else \
-		git clone https://github.com/LucasKuhn/minishell_tester.git; \
-	fi
-
-rm_tester:
-	rm -fr minishell_tester;
 
 re: fclean all
 

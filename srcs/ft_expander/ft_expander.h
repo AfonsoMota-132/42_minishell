@@ -33,4 +33,7 @@ void	ft_expander_reset(char *str, size_t *i);
 void	ft_skip_single_quote(char *str, size_t *i);
 int		ft_len_env(char *str);
 void	ft_expander(t_token *tokens, t_data *data);
+
+t_token	*ft_token_maker_special(char **commands, t_token_type type);
+int		ft_count_split(char **split);
 #endif

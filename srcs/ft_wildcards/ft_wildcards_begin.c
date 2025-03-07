@@ -20,7 +20,7 @@ t_token	*ft_wildcards_begin(t_token *tokens, char **files, size_t pos)
 
 	new = NULL;
 	i = 0;
-	size = ft_strchr_len(&tokens->content[pos + 1], '*');
+	size = ft_strchr_len(tokens->content, '*');
 	while (files[i])
 	{
 		if (ft_strlen(files[i]) > size

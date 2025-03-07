@@ -62,7 +62,6 @@ void	ft_execve2(t_bin_token *tokens, t_data *data, char *path, int i)
 			i = -1;
 		else
 			i = execve(path, tokens->args, envp);
-		dprintf(2, "past execve\n");
 		if (i == -1)
 			ft_command_not_found(data, path, envp);
 		ft_free(0, NULL, data, 0);
