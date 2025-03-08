@@ -12,7 +12,7 @@
 
 NAME = minishell
 LIBS = libs/libft/libft.a 
-CFLAGS = -Wall -Wextra -Werror
+#CFLAGS = -Wall -Wextra -Werror
 CC = cc
 RM = rm -f
 
@@ -83,7 +83,7 @@ TOKENS = srcs/ft_tokens/ft_split_ms.c \
 SRCS =	srcs/main.c srcs/main_utils.c srcs/main_utils2.c \
 		$(WILDCARDS) $(DATA_INIT) $(FREE) $(TOKENS) \
 		$(BUILTINS) $(REDIRS) $(SIGNALS) $(RMV_QUOTES) \
-		$(BIN_TOKENS) $(EXECUTER) $(SYNTAX) $(EXPANDER)
+		$(BIN_TOKENS) $(EXECUTER) $(SYNTAX) $(EXPANDER) print.c
 
 VAL_RULES = --leak-check=full --show-leak-kinds=all --suppressions=readline.supp
 #--trace-children=yes

@@ -51,4 +51,8 @@ int				ft_syntax_con(t_token *tokens);
 t_token_type	ft_return_con_type(t_token *tokens);
 t_token			*ft_return_after_con(t_token *tokens);
 void			ft_free_loop3(t_data *data);
+
+
+void	ft_print_tokens(t_token *tokens, t_data *data, int	tab);
+void treeprint(t_bin_token *cur, int depth);
 #endif

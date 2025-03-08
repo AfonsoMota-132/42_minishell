@@ -47,6 +47,7 @@ void	ft_handle_redirects_in(t_data *data, t_bin_token *tokens, char *path)
 		fd = open(tokens->redir_in->content, O_RDONLY, 0);
 		dup2(fd, STDIN_FILENO);
 	}
+	ft_handle_redirects_in2(data, tokens, path);
 }
 
 void	ft_handle_redirects_out(t_data *data, t_bin_token *tokens, char *path)

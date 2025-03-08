@@ -21,7 +21,7 @@ char	**ft_command_init(t_data *data)
 	char	**command_list;
 
 	ft_prompt_init(data);
-	command_in = readline(data->prompt);
+	command_in = readline("minishell: ");
 	if (!command_in)
 		ft_free(0, NULL, data, 1);
 	command = ft_strtrim(command_in, " \t\n");

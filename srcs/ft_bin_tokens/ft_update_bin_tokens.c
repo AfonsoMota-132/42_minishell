@@ -50,7 +50,11 @@ t_token	*ft_bin_redir2(t_token **tokens, t_token_type redir_1
 	if ((*tokens) && ((*tokens)->type == redir_1
 			|| (*tokens)->type == redir_2))
 	{
-		(*tokens) = (*tokens)->next;
+		if ((*tokens)->type == D_REDIRECT_IN)
+		{
+			free((*tokens)->content);
+			(*tokens)->content = NULL;
+		}
 		tmp_token = (*tokens);
 		tmp = ((*tokens)->next);
 		if ((*tokens)->next->next)
@@ -81,8 +85,7 @@ t_token	*ft_bin_redir(t_token **tokens, t_token_type redir_1
 	while (head)
 	{
 		tmp_token = head->next;
-		if (head && head->next
-			&& (head->next->type == redir_1
+		if (head && head->next && (head->next->type == redir_1
 				|| head->next->type == redir_2))
 			break ;
 		head = head->next;
