@@ -87,6 +87,12 @@ void	ft_tokens_cat3(t_data **data)
 		&& (*data)->tokens->type != CMD && (*data)->tokens->type != HERE_DOC
 		&& (*data)->tokens->type != FILENAME)
 		(*data)->tokens->type = ARG;
+	if ((*data)->tokens->content[0] == '('
+		&& ft_strlen((*data)->tokens->content) == 1)
+		(*data)->tokens->type = IN_PAR;
+	if ((*data)->tokens->content[0] == ')'
+		&& ft_strlen((*data)->tokens->content) == 1)
+		(*data)->tokens->type = OUT_PAR;
 }
 
 void	ft_tokens_cat(t_data **data)

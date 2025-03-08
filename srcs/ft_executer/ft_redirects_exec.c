@@ -18,9 +18,6 @@ void	ft_handle_redirects_in2(t_data *data, t_bin_token *tokens, char *path)
 
 	if (tokens->redir_in && tokens->redir_in->type == HERE_DOC)
 	{
-		if (ft_strchr(tokens->redir_in->content, '*') != NULL
-			&& !tokens->redir_in->quotes)
-			ft_error_msg_redir(data, 2, tokens->redir_in->content, path);
 		if (access(tokens->redir_in->heredoc, F_OK) == -1)
 			ft_error_msg_redir(data, 1, tokens->redir_in->heredoc, path);
 		if (access(tokens->redir_in->heredoc, R_OK) == -1)

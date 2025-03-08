@@ -43,6 +43,10 @@ void	ft_print_tokens(t_token *tokens, t_data *data, int	tab)
 			printf("And");
 		else if (tokens->type == OR)
 			printf("Or");
+		else if (tokens->type == IN_PAR)
+			printf("In Par");
+		else if (tokens->type == OUT_PAR)
+			printf("Out Par");
 		if (tokens->heredoc)
 			printf("\thmmm\t%s\n",tokens->heredoc);
 		else

@@ -38,10 +38,6 @@ int	ft_handle_redirects_in_ne2(t_bin_token *tokens, char *path)
 {
 	if (tokens->redir_in && tokens->redir_in->type == HERE_DOC)
 	{
-		if (ft_strchr(tokens->redir_in->content, '*') != NULL
-			&& tokens->redir_in->quotes == 0)
-			return (ft_error_msg_redir_ne(2,
-					tokens->redir_in->content, path), 1);
 		if (access(tokens->redir_in->heredoc, F_OK) == -1)
 			return (ft_error_msg_redir_ne(1,
 					tokens->redir_in->heredoc, path), 1);

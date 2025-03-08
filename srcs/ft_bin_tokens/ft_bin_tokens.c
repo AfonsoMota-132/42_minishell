@@ -72,3 +72,18 @@ t_bin_token	*ft_bin_tokens(t_data *data)
 	data->tokens_start = NULL;
 	return (start);
 }
+
+t_bin_token	*ft_calloc_bin_token(t_bin_token_type type)
+{
+	t_bin_token	*new;
+
+	new = malloc(sizeof(t_bin_token));
+	new->nbr_args = 0;
+	new->args = NULL;
+	new->redir_in = NULL;
+	new->redir_out = NULL;
+	new->right = NULL;
+	new->left = NULL;
+	new->type = type;
+	return (new);
+}

@@ -44,10 +44,8 @@ int	ft_syntax_tokens3(t_token *tokens)
 			ft_putstr_fd("near unexpected token `<'\n", 2), 1);
 	if ((tokens->type == PIPE && tokens->next == NULL)
 		|| (tokens->type == REDIRECT_IN && tokens->next->type == PIPE)
-		|| (tokens->type == D_REDIRECT_IN && tokens->next == NULL
-			&& tokens->next->type == PIPE)
-		|| (tokens->type == D_REDIRECT_OUT && tokens->next == NULL
-			&& tokens->next->type == PIPE)
+		|| (tokens->type == D_REDIRECT_IN && tokens->next->type == PIPE)
+		|| (tokens->type == D_REDIRECT_OUT && tokens->next->type == PIPE)
 		|| (tokens->type == REDIRECT_OUT && tokens->next->type == PIPE)
 		|| (tokens->type == PIPE && tokens->next->type == PIPE))
 		return (ft_putstr_fd("minishell: syntax error ", 2),

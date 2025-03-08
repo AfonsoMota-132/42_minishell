@@ -12,21 +12,6 @@
 
 #include "ft_bin_tokens.h"
 
-t_bin_token	*ft_calloc_bin_token(t_bin_token_type type)
-{
-	t_bin_token	*new;
-
-	new = malloc(sizeof(t_bin_token));
-	new->nbr_args = 0;
-	new->args = NULL;
-	new->redir_in = NULL;
-	new->redir_out = NULL;
-	new->right = NULL;
-	new->left = NULL;
-	new->type = type;
-	return (new);
-}
-
 t_token	*ft_bin_redir2_heredoc(t_token **tokens)
 {
 	t_token	*tmp;

@@ -19,7 +19,7 @@ void	ft_del_pseudo_heredocs_help(t_token **tokens)
 	t_token	*tmp;
 
 	if ((*tokens) && (*tokens)->type == D_REDIRECT_IN
-			&& (*tokens)->next && !(*tokens)->next->heredoc)
+		&& (*tokens)->next && !(*tokens)->next->heredoc)
 	{
 		free((*tokens)->content);
 		(*tokens)->content = NULL;

@@ -12,7 +12,7 @@
 
 NAME = minishell
 LIBS = libs/libft/libft.a 
-#CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 CC = cc
 RM = rm -f
 
@@ -56,7 +56,8 @@ REDIRS = 	srcs/ft_redirects/ft_redirects.c \
 			srcs/ft_redirects/ft_redir_short_in_single.c \
 			$(HEREDOC)
 
-SYNTAX = srcs/ft_syntax/ft_syntax_tokens.c
+SYNTAX = srcs/ft_syntax/ft_syntax_tokens.c \
+		 srcs/ft_syntax/ft_syntax_bonus.c
 
 EXPANDER = srcs/ft_expander/ft_expander.c \
 		srcs/ft_expander/ft_expander2.c \

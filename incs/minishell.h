@@ -43,16 +43,16 @@
 # include "../srcs/ft_tokens/ft_tokens.h"
 # include "../srcs/ft_wildcards/ft_wildcards.h"
 
-void			treeprint(t_bin_token *cur, int depth);
-void			ft_print_tokens(t_token *tokens, t_data *data, int tab);
 t_token			*ft_tokens_end(t_token_type type_tmp, t_data *data);
 int				ft_get_run(t_data *data, t_token_type type_tmp);
-int				ft_syntax_con(t_token *tokens);
 t_token_type	ft_return_con_type(t_token *tokens);
 t_token			*ft_return_after_con(t_token *tokens);
 void			ft_free_loop3(t_data *data);
+int				ft_skip_par2(t_token **tokens, t_token *head);
+int				ft_skip_par(t_token **tokens);
+void			ft_take_out_par(t_token **tokens, int run);
 
+void			ft_print_tokens(t_token *tokens, t_data *data, int tab);
+void			treeprint(t_bin_token *cur, int depth);
 
-void	ft_print_tokens(t_token *tokens, t_data *data, int	tab);
-void treeprint(t_bin_token *cur, int depth);
 #endif

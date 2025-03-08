@@ -37,7 +37,9 @@ typedef enum e_token_type
 	SEMI,
 	AND,
 	OR,
-	NON
+	NON,
+	IN_PAR,
+	OUT_PAR
 }	t_token_type;
 
 typedef enum e_bin_token_type

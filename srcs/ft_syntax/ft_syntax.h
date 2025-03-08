@@ -6,7 +6,7 @@
 /*   By: afogonca <afogonca@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 14:30:01 by afogonca          #+#    #+#             */
-/*   Updated: 2025/03/02 14:30:37 by afogonca         ###   ########.fr       */
+/*   Updated: 2025/03/08 20:01:01 by afogonca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,8 @@ int	ft_quote_syntax(char *command);
 int	ft_pipe_syntax(char *command);
 int	ft_redirect_syntax(char *command);
 int	ft_syntax(char *command);
+
+int	ft_ver_close_par(t_token *tokens);
+int	ft_syntax_par(t_token *tokens);
+int	ft_syntax_con(t_token *tokens);
 #endif
