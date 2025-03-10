@@ -76,6 +76,8 @@ t_token	*ft_put_cmd_first(t_token *tokens)
 int	ft_redirects(t_token *tokens, t_data **data)
 {
 	tokens = ft_put_cmd_first(tokens);
+	(*data)->tokens_start = tokens;
+	(*data)->tokens = tokens;
 	ft_redir_short_out_single(tokens);
 	ft_redir_short_out_double(tokens);
 	ft_redir_short_out(tokens);

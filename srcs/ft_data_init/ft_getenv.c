@@ -21,7 +21,7 @@ char	*ft_getenv(char *env, t_data *data)
 		return (NULL);
 	while (tmp)
 	{
-		if (ft_strncmp(tmp->key, env, ft_strlen(env) + 1) == 0)
+		if (ft_strcmp(tmp->key, env) == 0)
 			return (tmp->value);
 		tmp = tmp->next;
 	}

@@ -16,8 +16,13 @@ void	ft_append_env(t_data	*data, char *key, char *dir)
 {
 	char	*new_value;
 
-	new_value = ft_strdup(ft_getenv(key, data));
-	new_value = ft_strjoin_gnl(new_value, dir);
+	if (ft_getenv(key, data) != NULL)
+	{
+		new_value = ft_strdup(ft_getenv(key, data));
+		new_value = ft_strjoin_gnl(new_value, dir);
+	}
+	else
+		new_value = ft_strdup(dir);
 	if (!new_value)
 	{
 		ft_putstr_fd("Failed to allocate memory for new_value\n", 2);
@@ -62,9 +67,9 @@ int	ft_export_simple(t_data *data, t_bin_token *token,
 	value = ft_export_get_value(token, i, tmp);
 	if (ft_check_key(key))
 	{
-		if (ft_find_key(data, key))
+		if (ft_find_key(data, key) && value)
 			ft_replace_env(data, key, value);
-		else
+		else if (!ft_find_key(data, key))
 			ft_add_env(data, key, value);
 	}
 	else

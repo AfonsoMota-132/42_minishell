@@ -23,18 +23,15 @@ int	ft_export(t_data *data, t_bin_token *token, int exit)
 			return (-1);
 		ft_sort_envp(data);
 		ft_print_export(data);
-		if (exit)
-			ft_free(0, NULL, data, 0);
-		return (0);
+		return ((exit && ft_free(0, NULL, data, 0)) || 0);
 	}
-	if (token->args[1][0] == '-' && token->args[1][1])
+	if ((token->args[1][0] == '-' && token->args[1][1])
+		|| (ft_strchr(token->args[1], '+') && !ft_strchr(token->args[1], '=')))
 	{
 		ft_putstr_fd("minishell: export: `", STDERR_FILENO);
 		ft_putstr_fd(token->args[1], STDERR_FILENO);
 		ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
-		if (exit)
-			ft_free(1, NULL, data, 0);
-		return (1);
+		return ((exit && ft_free(1, NULL, data, 0)) || 1);
 	}
 	status = ft_export_loop(data, token);
 	if (exit)

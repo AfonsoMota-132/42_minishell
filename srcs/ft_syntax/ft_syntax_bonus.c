@@ -41,12 +41,15 @@ int	ft_syntax_par(t_token *tokens)
 	while (tokens)
 	{
 		if ((tokens->type == AND || tokens->type == OR
-				|| tokens->type == SEMI || tokens->type == PIPE)
+				|| tokens->type == SEMI || tokens->type == PIPE
+				|| tokens->type == IN_PAR || tokens->type == REDIRECT_IN
+				|| tokens->type == D_REDIRECT_IN || tokens->type == REDIRECT_OUT
+				|| tokens->type == D_REDIRECT_OUT)
 			&& tokens->next && tokens->next->type == OUT_PAR)
 			return (ft_putstr_fd("minishell: syntax error ", 2),
 				ft_putstr_fd("near unexpected token `)'\n", 2), 1);
-		if ((tokens->type == AND || tokens->type == OR
-				|| tokens->type == SEMI || tokens->type == PIPE)
+		if ((tokens->type != AND && tokens->type != OR
+				&& tokens->type != SEMI)
 			&& tokens->next && tokens->next->type == IN_PAR)
 			return (ft_putstr_fd("minishell: syntax error ", 2),
 				ft_putstr_fd("near unexpected token `('\n", 2), 1);
