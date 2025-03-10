@@ -28,7 +28,8 @@ char	*ft_expander_replace(char *str, char *env, int start)
 		&& str[i + j] != '\t' && str[i + j] != '\n'
 		&& str[i + j] != '$' && str[i + j] != '"'
 		&& str[i + j] != '\'' && str[i + j] != '.'
-		&& str[i + j] != '\\')
+		&& str[i + j] != '\\' && str[i] != '/'
+		&& str[i + j] != '=')
 		j++;
 	new = ft_substr(str, 0, i - 1);
 	new = ft_strjoin_gnl(new, env);
@@ -53,7 +54,7 @@ char	*ft_expander_replace_null(char *str, int start)
 			&& str[i] != '\n' && str[i] != '$'
 			&& str[i] != '"' && str[i] != '\''
 			&& str[i] != '.' && str[i] != '\\'
-			&& i++);
+			&& str[i] != '/' && str[i] != '=' && i++);
 	else
 		i++;
 	if (start != 1)
