@@ -17,6 +17,7 @@ int	ft_update_pwd(t_data *data, char *last_path)
 	char	pwd[PATH_MAX];
 	char	*current_pwd;
 	t_envp	*found;
+
 	current_pwd = getcwd(pwd, PATH_MAX);
 	if (current_pwd == NULL)
 		return (-1);
@@ -40,28 +41,30 @@ int	ft_go_to_path(t_data *data, int option, char *last_path)
 
 	if (option == 0)
 	{
-		path = ft_getenv("HOME", data);
+		path = ft_strdup(ft_getenv("HOME", data));
 		return_value = chdir(path);
 		ft_update_pwd(data, last_path);
 		if (!path)
 			return (ft_putstr_fd("minishell: cd: HOME not set\n", 2), 1);
+		free(path);
 		return (return_value);
 	}
 	if (option == 1)
 	{
-		path = ft_getenv("OLDPWD", data);
-		printf("path: %s\n", path);
+		path = ft_strdup(ft_getenv("OLDPWD", data));
+		ft_update_pwd(data, last_path);
 		if (!path)
 			return (ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2), 1);
 	}
 	return_value = chdir(path);
+	free (path);
 	return (return_value);
 }
 
 int	ft_cd_return_value(t_bin_token *token, t_data *data, char *last_path)
 {
 	int	return_value;
-	
+
 	return_value = chdir(token->args[1]);
 	ft_update_pwd(data, last_path);
 	if (return_value < 0)

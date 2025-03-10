@@ -12,6 +12,48 @@
 
 #include "ft_expander.h"
 
+int	ft_inside_quotes(char *str, int c)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (str[i] != '\0')
+	{
+		if (i == c && count)
+			return (1);
+		if (i == c && !count)
+			return (0);
+		if (str[i] == '"' && !count)
+			count++;
+		else if (str[i] == '"' && count)
+			count--;
+		i++;
+	}
+	return (0);
+}
+
+char	*ft_env_rep_sq_special(char	*str, char *env, int i, int j)
+{
+	char	*new;
+	char	*tmp;
+
+	new = ft_substr(str, 0, i - 1);
+	if (ft_strchr(env, '\'') != NULL
+		&& !ft_inside_quotes(str, i))
+	{
+		tmp = ft_strjoin("\"", env);
+		tmp = ft_strjoin_gnl(tmp, "\"");
+		new = ft_strjoin_gnl(new, tmp);
+		free(tmp);
+	}
+	else
+		new = ft_strjoin_gnl(new, env);
+	new = ft_strjoin_gnl(new, &str[i + j]);
+	return (new);
+}
+
 char	*ft_expander_replace(char *str, char *env, int start)
 {
 	int		i;
@@ -31,9 +73,7 @@ char	*ft_expander_replace(char *str, char *env, int start)
 		&& str[i + j] != '\\' && str[i] != '/'
 		&& str[i + j] != '=')
 		j++;
-	new = ft_substr(str, 0, i - 1);
-	new = ft_strjoin_gnl(new, env);
-	new = ft_strjoin_gnl(new, &str[i + j]);
+	new = ft_env_rep_sq_special(str, env, i, j);
 	free(str);
 	return (new);
 }

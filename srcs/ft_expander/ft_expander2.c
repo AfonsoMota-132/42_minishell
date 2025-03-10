@@ -65,8 +65,7 @@ int	ft_len_env(char *str)
 		&& str[i] != '\t' && str[i] != '\n'
 		&& str[i] != '$' && str[i] != '"'
 		&& str[i] != '\'' && str[i] != '.'
-		&& str[i] != '/' && str[i] != '='
-)
+		&& str[i] != '/' && str[i] != '=')
 	{
 		if (str[i] == '\'' && !check)
 		{
