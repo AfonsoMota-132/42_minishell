@@ -23,7 +23,7 @@ char	*ft_getenv(char *env, t_data *data)
 	{
 		if (ft_strcmp(tmp->key, env) == 0)
 			return (tmp->value);
-		tmp = tmp->next;
+	tmp = tmp->next;
 	}
 	return (NULL);
 }
