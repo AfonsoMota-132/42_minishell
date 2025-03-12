@@ -61,11 +61,9 @@ int	ft_len_env(char *str)
 	j = 0;
 	if (str[i++] == '$')
 		j += 1;
-	while (str[i] != '\0' && str[i] != ' '
-		&& str[i] != '\t' && str[i] != '\n'
-		&& str[i] != '$' && str[i] != '"'
-		&& str[i] != '\'' && str[i] != '.'
-		&& str[i] != '/' && str[i] != '=')
+	while (str[i] && (ft_isalnum(str[i])
+			|| str[i] == '_' || str[i] == '?'
+			|| str[i] == '$'))
 	{
 		if (str[i] == '\'' && !check)
 		{

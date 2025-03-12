@@ -19,6 +19,7 @@ int	ft_handle_builtins(t_bin_token *tokens, t_data *data, int i, int exit)
 	status = 0;
 	if (!tokens->args[i])
 		return (status);
+	signal(SIGPIPE, SIG_IGN);
 	if (ft_strcmp("echo", tokens->args[0]) == 0)
 		status = ft_echo(data, tokens, exit);
 	if (ft_strncmp("cd", tokens->args[0], 2) == 0)
@@ -36,6 +37,7 @@ int	ft_handle_builtins(t_bin_token *tokens, t_data *data, int i, int exit)
 	}
 	if (ft_strcmp("exit", tokens->args[0]) == 0)
 		status = ft_exit(data, tokens, exit);
+	signal(SIGPIPE, SIG_DFL);
 	return (status);
 }
 

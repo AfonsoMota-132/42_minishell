@@ -80,7 +80,6 @@ int	ft_heredoc(t_token *tokens, t_data *data)
 		return (0);
 	ft_define_heredoc_paths(tokens, data);
 	signal(SIGINT, SIG_IGN);
-	signal(127, SIG_IGN);
 	c_pid = fork();
 	g_signal_received = 0;
 	if (c_pid == 0)

@@ -10,11 +10,58 @@
 #                                                                              #
 # **************************************************************************** #
 
+define HEADER
+
+ 		 	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⠀⠀⣀⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+ 		 	⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡴⠦⣤⣴⡟⠉⠉⡗⠚⡇⠀⠈⡷⢤⠖⠒⠲⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+ 		 	⠀⠀⠀⠀⠀⠀⠀⢀⣀⡇⠀⠀⢸⠀⡇⠀⠀⠇⠀⡇⠀⠀⡇⢸⠀⠀⢠⠋⡝⠉⠓⢦⠀⠀⠀⠀⠀⠀⠀⠀
+ 		 	⠀⠀⠀⠀⠀⢠⠊⠁⢣⢰⠀⠀⠈⡆⢳⠀⠀⠀⠀⡇⠀⢸⠀⡇⠀⠀⡜⢰⠃⠀⠀⡜⢦⢤⣀⠀⠀⠀⠀⠀
+ 		 	⠀⠀⠀⡠⢴⠻⡀⠀⠈⡎⡇⠀⠀⢃⢸⠀⠀⢸⠀⡇⠀⢸⢀⡇⠀⢠⠃⡎⠀⠀⡼⢡⠃⠀⠙⡆⠀⠀⠀⠀
+ 		 	⠀⠀⢸⠁⠀⢣⢱⡀⠀⢸⣸⡀⠀⢸⠈⡄⠀⢸⠀⡇⠀⠘⢸⠀⠀⡸⢰⠁⠀⢰⢡⠏⠀⠀⡜⡿⢤⡀⠀⠀
+ 		 	⠀⣠⠞⣷⡄⠀⢣⢣⠀⠀⢧⢇⠀⠈⡆⡇⠀⢸⠀⡇⠀⡇⡼⠀⢀⠇⡏⠀⢠⢇⠎⠀⢀⡜⡜⠁⠀⢳⠀⠀
+ 		 	⢸⡁⠀⠈⢻⣦⠀⢫⢧⠀⠘⡾⡄⠀⣇⢡⠀⢸⠀⡇⠀⡇⡇⠀⣸⢸⠀⢀⠏⡜⠀⢀⢎⠞⠀⢀⡴⡻⡄⠀
+ 		 	⣰⠻⣆⠀⠀⠻⣷⡀⢻⣇⠀⢹⢧⠀⢸⢸⠀⢸⠀⡇⢠⢿⠃⠀⡇⡇⠀⡜⡾⠀⢠⢾⠎⠀⡰⢫⠞⠀⡟⠀
+ 		 	⢹⣅⠙⢷⣄⠀⠙⣷⡀⢻⡄⠈⣿⡄⠘⡞⡆⢸⠀⡇⢸⢸⠀⢸⣸⠀⡸⡽⠁⢠⣯⠋⣠⣾⡖⢁⡠⠚⣿⡄
+ 		 	⠘⣏⠳⣄⠙⣦⡀⠘⢧⠀⢻⡄⠸⣧⠀⠇⡇⢸⠀⡇⢸⡌⠀⣇⠇⢰⣱⠁⣠⡻⢃⡴⡷⢋⡴⢋⡤⣺⠇⠀
+ 		 	⠀⢹⡕⢄⠑⢌⠛⢦⠈⢣⡀⢻⡀⢳⠀⢸⢳⢸⠀⡇⣎⡇⢸⠽⢠⠇⠁⣰⡿⢡⣾⢞⣴⣯⡔⣫⢴⠟⠀⠀
+ 		 	⠀⠀⠙⢦⣝⢦⡑⢄⠳⣌⠳⡈⢧⠈⡆⠸⣼⠸⡀⡇⡏⠁⡏⢀⠎⠀⡰⠉⡱⠋⡡⣫⣞⣽⣋⣴⠟⠀⠀⠀
+ 		 	⠀⠀⠀⠀⠉⠻⢿⣮⡳⣌⢦⡱⡌⣆⢸⠀⡟⡆⡇⡇⡇⢸⠁⡜⠀⡼⠁⡜⠁⣪⠞⣿⡵⠟⠉⠀⠀⠀⠀⠀
+ 		 	⠀⠀⠀⠀⠀⠀⠀⠙⡾⣾⣷⣵⡜⡜⡄⠇⢣⡇⡇⢳⠁⡎⠀⠀⡼⢁⠞⠠⢾⡵⠟⠉⠀⠀⠀⠀⠀⠀⠀⠀
+ 		 	⠀⠀⠀⠀⠀⠀⠀⠀⣷⠈⠛⢿⣾⣾⣾⠘⠈⠁⠇⠀⠀⠁⠀⠾⠁⢀⣤⠞⢫⡗⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+ 		 	⠀⠀⠀⠀⠀⠀⠀⠀⠘⢧⣄⠀⠙⠿⣟⠀⠀⠀⠀⠀⠀⠀⠀⢀⡴⠛⣡⡴⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+ 		 	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠒⠦⠬⠷⢄⡀⠀⠀⠀⣠⠴⠟⠚⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+ 		 	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠒⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+ 		 	
+ 		 	
+ 	 	___  ___ __ __  __ __  __  __  __  ____ __    __   
+ 	 	||\\\\//|| || ||\\ || || (( \\ ||  || ||    ||    ||   
+ 	 	|| \/ || || ||\\\\|| ||  \\\\  ||==|| ||==  ||    ||   
+ 	 	||    || || || \|| || \\_)) ||  || ||___ ||__| ||__|
+                                                 
+
+endef
+export HEADER
+
+# Colors
+RESET = \033[0m
+BOLD = \033[1m
+GREEN = \033[32m
+BLUE = \033[34m
+CYAN = \033[36m
+YELLOW = \033[33m
+RED = \033[31m
+
+# Symbols
+CHECK = \033[32m✔\033[0m
+CROSS = \033[31m✖\033[0m
+INFO = \033[36mℹ\033[0m
+
 NAME = minishell
 LIBS = libs/libft/libft.a 
 CFLAGS = -Wall -Wextra -Werror
 CC = cc
 RM = rm -f
+
 
 OBJS = $(SRCS:.c=.o)
 
@@ -84,18 +131,18 @@ TOKENS = srcs/ft_tokens/ft_split_ms.c \
 SRCS =	srcs/main.c srcs/main_utils.c srcs/main_utils2.c \
 		$(WILDCARDS) $(DATA_INIT) $(FREE) $(TOKENS) \
 		$(BUILTINS) $(REDIRS) $(SIGNALS) $(RMV_QUOTES) \
-		$(BIN_TOKENS) $(EXECUTER) $(SYNTAX) $(EXPANDER) print.c
+		$(BIN_TOKENS) $(EXECUTER) $(SYNTAX) $(EXPANDER)
 
 VAL_RULES = --leak-check=full --show-leak-kinds=all --suppressions=readline.supp
 #--trace-children=yes
 all: deps $(NAME)
 
-# libft:
-# 	@if [ -d libs/libft ]; then \
-# 		echo "Already cloned"; \
-# 	else \
-# 		git clone git@github.com:AfonsoMota-132/42_libft.git libs/libft; \
-# 	fi
+%.o: %.c
+	@clear
+	@echo "$(INFO) $(YELLOW)Compiling $<...$(RESET)"
+	@echo "$(CHECK) $(GREEN)Done!$(RESET)"
+	@$(CC) $(CFLAGS) -c $< -o $@
+	@echo "$(CYAN) $$HEADER $(RESET)"
 
 valgrind: all
 	@echo > readline.supp "{\n\
@@ -113,21 +160,34 @@ valgrind: all
 	valgrind $(VAL_RULES) ./$(NAME)
 
 deps:
-	$(MAKE) -C libs/libft/
+	@echo "$(INFO) $(YELLOW)Compiling Libft $<...$(RESET)"
+	@make -C libs/libft/ --no-print-directory
+	@echo "$(CHECK) $(GREEN)Done!$(RESET)"
 
+
+# Compilation rule
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME) -lreadline
+	@echo "$(INFO) $(CYAN)Linking $(NAME)...$(RESET)"
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBS) -lreadline
+	@echo "$(CHECK) $(GREEN)Build complete!$(RESET)"
+	
+# $(NAME): $(OBJS)
+# 	$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME) -lreadline
 
 clean:
-	$(RM) $(OBJS)
+	@echo "$(INFO) $(RED)Cleaning object files...$(RESET)"
+	@$(RM) $(OBJS)
 	@if [ -d libs/libft ]; then \
-		$(MAKE) -C libs/libft/ clean; fi;
-	$(RM) readline.supp
+		$(MAKE) -C libs/libft/ clean --no-print-directory; fi;
+	@$(RM) readline.supp
+	@echo "$(CHECK) $(GREEN)Cleanup completed!$(RESET)"
 
 fclean: clean
-	$(RM) $(NAME)
+	@echo "$(INFO) $(RED)Cleaning $(NAME)...$(RESET)"
+	@$(RM) $(NAME)
 	@if [ -d libs/libft ]; then \
-		$(MAKE) -C libs/libft fclean; fi;
+		$(MAKE) -C libs/libft fclean --no-print-directory; fi;
+	@echo "$(CHECK) $(GREEN)Executable done!$(RESET)"
 
 re: fclean all
 

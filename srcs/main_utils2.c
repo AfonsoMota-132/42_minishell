@@ -19,7 +19,7 @@ void	ft_free_loop3(t_data *data)
 	data->tokens = data->tokens_start;
 }
 
-int	ft_skip_par2(t_token **tokens, t_token *head)
+int	ft_skip_par2(t_token **tokens)
 {
 	t_token	*tmp;
 	int		ret;
@@ -35,7 +35,6 @@ int	ft_skip_par2(t_token **tokens, t_token *head)
 			ret = 1;
 		tmp = (*tokens)->next;
 		(*tokens) = (*tokens)->next->next;
-		ft_free_tokens(head, 1);
 		tmp->next = NULL;
 	}
 	else
@@ -57,7 +56,7 @@ int	ft_skip_par(t_token **tokens)
 		if ((*tokens)->type == OUT_PAR && count)
 			count++;
 		if ((*tokens)->type == OUT_PAR && !count)
-			return (ft_skip_par2(tokens, head));
+			return (ft_skip_par2(tokens));
 		(*tokens) = (*tokens)->next;
 	}
 	return (-1);

@@ -54,6 +54,7 @@ int	ft_loop2(t_data *data)
 			ft_free_tree(data->bin_tokens, 1);
 		data->bin_tokens = ft_bin_tokens(data);
 		ft_run_cmds(data);
+		ft_signals();
 		dup2(1, STDOUT_FILENO);
 		dup2(0, STDIN_FILENO);
 	}
@@ -71,6 +72,7 @@ void	ft_loop3(t_data *data, int run)
 		if (data->tokens->type == IN_PAR && !run)
 		{
 			run = ft_skip_par(&data->tokens);
+			ft_free_tokens(data->tokens_start, 1);
 			data->tokens_start = data->tokens;
 			if (run == -1 || !data->tokens)
 				break ;

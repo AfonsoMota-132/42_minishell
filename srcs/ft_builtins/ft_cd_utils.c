@@ -34,27 +34,46 @@ int	ft_update_pwd(t_data *data, char *last_path)
 	return (1);
 }
 
-int	ft_go_to_path(t_data *data, int option, char *last_path)
+void	ft_print_path_minus(char *path, t_bin_token *tokens)
+{
+	int	fd;
+
+	if (tokens->redir_out && tokens->redir_out->type == FILENAME)
+	{
+		fd = open(tokens->redir_out->content, O_WRONLY | O_APPEND, 0);
+		ft_putstr_fd(path, fd);
+		ft_putstr_fd("\n", fd);
+		close (fd);
+	}
+	else
+	{
+		ft_putstr_fd(path, 1);
+		ft_putstr_fd("\n", 1);
+	}
+}
+
+int	ft_go_to_path(t_data *data, int option, char *last_path, t_bin_token *token)
 {
 	char	*path;
 	int		return_value;
 
+	path = NULL;
 	if (option == 0)
 	{
 		path = ft_strdup(ft_getenv("HOME", data));
 		return_value = chdir(path);
 		ft_update_pwd(data, last_path);
 		if (!path)
-			return (ft_putstr_fd("minishell: cd: HOME not set\n", 2), 1);
-		free(path);
-		return (return_value);
+			return (ft_putstr_fd("minishell: cd: HOME not set\n", 2), 2);
+		return (free(path), return_value);
 	}
 	if (option == 1)
 	{
 		path = ft_strdup(ft_getenv("OLDPWD", data));
+		ft_print_path_minus(path, token);
 		ft_update_pwd(data, last_path);
 		if (!path)
-			return (ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2), 1);
+			return (ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2), 2);
 	}
 	return_value = chdir(path);
 	free (path);

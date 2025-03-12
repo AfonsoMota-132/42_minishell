@@ -102,10 +102,11 @@ int	ft_cd(t_data *data, t_bin_token *token, int exit)
 		return (ft_putstr_fd("cd : too many arguments\n", 2),
 			(exit && ft_free(1, NULL, data, 0)) || 1);
 	if (!token->args[1])
-		return ((exit && ft_free(ft_go_to_path(data, 0, last_path),
-					NULL, data, 0)) || ft_go_to_path(data, 0, last_path));
+		return ((exit && ft_free(ft_go_to_path(data, 0, last_path, token),
+					NULL, data, 0)) || ft_go_to_path(data,
+				0, last_path, token));
 	else if (ft_strcmp(token->args[1], "-") == 0)
-		return_value = ft_go_to_path(data, 1, last_path);
+		return_value = ft_go_to_path(data, 1, last_path, token);
 	else
 		return_value = ft_cd_return_value(token, data, last_path);
 	return ((exit && ft_free(return_value, NULL, data, 0))

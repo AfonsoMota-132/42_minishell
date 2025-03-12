@@ -66,12 +66,9 @@ char	*ft_expander_replace(char *str, char *env, int start)
 		i++;
 	if (str[i] == '$')
 		i++;
-	while (str[i + j] && str[i + j] != ' '
-		&& str[i + j] != '\t' && str[i + j] != '\n'
-		&& str[i + j] != '$' && str[i + j] != '"'
-		&& str[i + j] != '\'' && str[i + j] != '.'
-		&& str[i + j] != '\\' && str[i] != '/'
-		&& str[i + j] != '=')
+	while (str[i + j] && (ft_isalnum(str[i + j])
+			|| str[i + j] == '_' || str[i + j] == '?'
+			|| str[i + j] == '$'))
 		j++;
 	new = ft_env_rep_sq_special(str, env, i, j);
 	free(str);
@@ -90,11 +87,8 @@ char	*ft_expander_replace_null(char *str, int start)
 		i++;
 	start = i;
 	if (str[i] && !ft_isdigit(str[i]) && str[i] != '$')
-		while (str[i] && str[i] != ' ' && str[i] != '\t'
-			&& str[i] != '\n' && str[i] != '$'
-			&& str[i] != '"' && str[i] != '\''
-			&& str[i] != '.' && str[i] != '\\'
-			&& str[i] != '/' && str[i] != '=' && i++);
+		while (str[i] && str[i] != '$' &&(ft_isalnum(str[i])
+				|| str[i] == '_' || str[i] == '?') && i++);
 	else
 		i++;
 	if (start != 1)

@@ -12,6 +12,8 @@
 
 #include "ft_executer.h"
 
+extern int	g_signal_received;
+
 void	ft_run_cmds(t_data *data)
 {
 	if (!data->bin_tokens->right && !data->bin_tokens->left)
@@ -27,7 +29,7 @@ void	ft_run_cmds(t_data *data)
 	{
 		signal(SIGINT, SIG_IGN);
 		ft_create_pipe(data->bin_tokens, data);
-		raise (SIGINT);
+		signal(SIGINT, SIG_DFL);
 	}
 }
 
@@ -46,8 +48,12 @@ void	ft_execute_node(t_bin_token *tokens, t_data *data)
 
 void	ft_signals_handler_exec(int sig)
 {
-	if (sig == SIGINT)
+	if (sig == SIGINT || sig == SIGQUIT)
+	{
+			ft_putstr_fd("wtf\n", 2);
+		g_signal_received = sig;
 		close(STDIN_FILENO);
+	}
 }
 
 void	ft_execve2(t_bin_token *tokens, t_data *data, char *path, int i)
@@ -57,6 +63,7 @@ void	ft_execve2(t_bin_token *tokens, t_data *data, char *path, int i)
 	if (path)
 	{
 		signal(SIGINT, &ft_signals_handler_exec);
+		signal(SIGQUIT, &ft_signals_handler_exec);
 		envp = ft_envp_list2array(data->envp);
 		if (ft_getenv("PATH", data) && !ft_strchr(path, '/'))
 			i = -1;

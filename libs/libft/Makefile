@@ -42,19 +42,21 @@ NAME = libft.a
 
 # Rules
 
-all: ${NAME}
+# Silent compilation
+%.o: %.c
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 bonus: ${OBJS} ${BONUS_OBJS}
-	ar rc ${NAME} ${BONUS_OBJS} ${OBJS}
+	@ar rc ${NAME} ${BONUS_OBJS} ${OBJS}
 
 ${NAME}: ${OBJS}
-	ar rc ${NAME} ${OBJS}	
+	@ar rc ${NAME} ${OBJS}	
 
 clean:
-	${RM} ${OBJS} ${BONUS_OBJS}
+	@${RM} ${OBJS} ${BONUS_OBJS}
 
 fclean: clean
-		${RM} ${NAME}
+	@${RM} ${NAME}
 
 re:	fclean all
 
