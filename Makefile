@@ -133,7 +133,7 @@ SRCS =	srcs/main.c srcs/main_utils.c srcs/main_utils2.c \
 		$(BUILTINS) $(REDIRS) $(SIGNALS) $(RMV_QUOTES) \
 		$(BIN_TOKENS) $(EXECUTER) $(SYNTAX) $(EXPANDER)
 
-VAL_RULES = --leak-check=full --show-leak-kinds=all --suppressions=readline.supp
+VAL_RULES = --leak-check=full --show-leak-kinds=all --suppressions=readline.supp --track-fds=yes
 #--trace-children=yes
 all: deps $(NAME)
 
