@@ -71,8 +71,7 @@ void	ft_loop3(t_data *data, int run)
 	{
 		if (data->tokens->type == IN_PAR && !run)
 		{
-			run = ft_skip_par(&data->tokens);
-			ft_free_tokens(data->tokens_start, 1);
+			run = ft_skip_par(&data->tokens, data);
 			data->tokens_start = data->tokens;
 			if (run == -1 || !data->tokens)
 				break ;

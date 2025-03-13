@@ -48,9 +48,8 @@ void	ft_execute_node(t_bin_token *tokens, t_data *data)
 
 void	ft_signals_handler_exec(int sig)
 {
-	if (sig == SIGINT || sig == SIGQUIT)
+	if (sig == SIGINT)
 	{
-			ft_putstr_fd("wtf\n", 2);
 		g_signal_received = sig;
 		close(STDIN_FILENO);
 	}
@@ -63,7 +62,7 @@ void	ft_execve2(t_bin_token *tokens, t_data *data, char *path, int i)
 	if (path)
 	{
 		signal(SIGINT, &ft_signals_handler_exec);
-		signal(SIGQUIT, &ft_signals_handler_exec);
+		signal(SIGQUIT, SIG_DFL);
 		envp = ft_envp_list2array(data->envp);
 		if (ft_getenv("PATH", data) && !ft_strchr(path, '/'))
 			i = -1;
